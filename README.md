@@ -35,7 +35,11 @@ Here are some things that clearly need attention:
 The source directory contains the core of the project. Here is a description of the various sub-directories:
 
 `floorplanner` - 2D view/controller for editing the floorplan
+
 `items` - Various types of items that can go in rooms
+
 `model` - Data model representing both the 2D floorplan and all of the items in it
+
 `three` - 3D view/controller for viewing and modifying item placement
+
 `utils` - some shared functions that are mostly deprecated in favor of functionality provided by various npm modules
