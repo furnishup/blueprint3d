@@ -1,0 +1,131 @@
+/*
+ * General Formatting
+ */
+
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+div {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Sidebar
+ */
+
+.main-row {
+  padding: 0;
+}
+
+.sidebar {
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto; 
+  border-right: 1px solid #eee;
+}
+
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 0;
+}
+
+/*
+ * "Loading" modal
+ */
+
+#loading-modal {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: rgba(50, 50, 50, 0.9);
+}
+
+#loading-modal  h1 {
+  text-align: center; 
+  margin-top: 30%;
+  color: #fff;
+}
+
+/*
+ * Design
+ */
+
+#viewer {
+  display: none;
+}
+
+#floorplanner {
+  display: none;
+}
+
+#add-items {
+  display: none;
+  padding: 20px;
+}
+
+
+#camera-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 0;
+  padding: 0 20px;  
+  text-align: right;
+}
+
+#floorplanner-controls {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 20px 0;
+  padding: 0 20px; 
+  width: 100%;
+}
+
+#draw-walls-hint {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  background-color: rgba(0, 0, 0, 0.50);
+  color: #ffffff;
+  padding: 5px 10px;
+  z-index: 10;
+  display: none;
+}
+
+.add-item {
+  cursor: pointer;
+}
+
