@@ -6,6 +6,8 @@ A project built on three.js to design a home or apartment. For instance, helpful
 
 The repository includes an example application. There is a considerable amount of html, css, glue javascript etc. that needs to be in place to utilize blueprint-3d, which the example shows.
 
+http://pshaw.github.io/blueprint3d/example/
+
 ## Get Started
 
 To get started, run:
