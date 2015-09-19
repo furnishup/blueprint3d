@@ -12,8 +12,8 @@ http://pshaw.github.io/blueprint3d/example/
 
 To get started, run:
 
-  npm update
-  npm run-script build
+    npm update
+    npm run-script build
 
 The latter command generates `build/blueprint3d.js` and also copies it to `example/js`
 
