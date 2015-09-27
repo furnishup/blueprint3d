@@ -37,6 +37,7 @@ var Model = function(textureDir) {
     for ( var i = 0; i < objects.length; i++ ) {
       var object = objects[i];
       items_arr[i] = {
+        item_name: object.metadata.itemName,
         item_type: object.metadata.itemType,
         model_url: object.metadata.modelUrl,
         xpos: object.position.x,
