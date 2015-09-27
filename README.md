@@ -6,12 +6,14 @@ A project built on three.js to design a home or apartment. For instance, helpful
 
 The repository includes an example application. There is a considerable amount of html, css, glue javascript etc. that needs to be in place to utilize blueprint-3d, which the example shows.
 
+http://pshaw.github.io/blueprint3d/example/
+
 ## Get Started
 
 To get started, run:
 
-  npm update
-  npm run-script build
+    npm update
+    npm run-script build
 
 The latter command generates `build/blueprint3d.js` and also copies it to `example/js`
 
@@ -35,7 +37,11 @@ Here are some things that clearly need attention:
 The source directory contains the core of the project. Here is a description of the various sub-directories:
 
 `floorplanner` - 2D view/controller for editing the floorplan
+
 `items` - Various types of items that can go in rooms
+
 `model` - Data model representing both the 2D floorplan and all of the items in it
+
 `three` - 3D view/controller for viewing and modifying item placement
+
 `utils` - some shared functions that are mostly deprecated in favor of functionality provided by various npm modules
