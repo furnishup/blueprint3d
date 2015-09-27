@@ -12,40 +12,33 @@ var Model = function(textureDir) {
   this.floorplan = new Floorplan();
   this.scene = new Scene(scope, textureDir);
 
-  this.roomName = "";
-  this.roomId = 0;
-  this.roomCode = "";
-
   this.roomLoadingCallbacks = JQUERY.Callbacks();
   this.roomLoadedCallbacks = JQUERY.Callbacks(); // name
   this.roomSavedCallbacks = JQUERY.Callbacks(); // success (bool), copy (bool)
   this.roomDeletedCallbacks = JQUERY.Callbacks();
 
-  this.loadSerialized = function(data) {
-    // TODO: better documentation on serialization format
-    var saveCopy = saveCopy || false;
+  this.loadSerialized = function(data_json) {
+    // TODO: better documentation on serialization format.
+    // TODO: a much better serialization format.
     this.roomLoadingCallbacks.fire();
 
+    data = JSON.parse(data_json)
     scope.newRoom(
-      JSON.parse(data.floorplan),
-      data.room_items
+      data.floorplan,
+      data.items
     );
 
-    scope.roomName = data.name;
-    scope.roomCode = data.code;
-    scope.roomId = data.id;
-
-    scope.roomLoadedCallbacks.fire(data.name);
+    scope.roomLoadedCallbacks.fire();
   }
 
   this.exportSerialized = function() {
-
-    var room_item_attributes = [];
+    var items_arr = [];
     var objects = scope.scene.getItems();
     for ( var i = 0; i < objects.length; i++ ) {
       var object = objects[i];
-      room_item_attributes[i] = {
-        item_configuration_id: object.metadata.itemId,
+      items_arr[i] = {
+        item_type: object.metadata.itemType,
+        model_url: object.metadata.modelUrl,
         xpos: object.position.x,
         ypos: object.position.y,
         zpos: object.position.z,
@@ -58,12 +51,11 @@ var Model = function(textureDir) {
     }
 
     var room = {
-      name: scope.roomName,
-      floorplan: JSON.stringify(scope.floorplan.saveFloorplan()),
-      room_items_attributes: room_item_attributes
+      floorplan: (scope.floorplan.saveFloorplan()),
+      items: items_arr
     };
 
-    return room;
+    return JSON.stringify(room);
   }
 
   this.newRoom = function(floorplan, items) {
@@ -73,11 +65,10 @@ var Model = function(textureDir) {
       position = new THREE.Vector3(
         item.xpos, item.ypos, item.zpos)    
       var metadata = {
-        itemId: item.item_configuration_id,
-        price: item.price,
-        manufacturer: item.manufacturer,
         itemName: item.item_name,
-        resizable: item.resizable
+        resizable: item.resizable,
+        itemType: item.item_type,
+        modelUrl: item.model_url
       }
       var scale = {
         x: item.scale_x,

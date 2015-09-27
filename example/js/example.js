@@ -119,8 +119,6 @@ var ContextMenu = function(blueprint3d) {
     selectedItem = item;
 
     $("#context-menu-name").text(item.metadata.itemName);
-    $("#context-menu-price").text("$" + parseFloat(item.metadata.price).toFixed(0));
-    $("#context-menu-manufacturer").text(item.metadata.manufacturer);
 
     $("#item-width").val(cmToIn(selectedItem.getWidth()).toFixed(0));
     $("#item-height").val(cmToIn(selectedItem.getHeight()).toFixed(0));
@@ -325,15 +323,14 @@ var SideMenu = function(blueprint3d, floorplanControls, modalEffects) {
   // TODO: this doesn't really belong here
   function initItems() {
     $("#add-items").find(".add-item").mousedown(function(e) {
-      var metadata = {
-        itemName: $(this).attr("model-name"),
-        price: 0,
-        itemId: 0,
-        manufacturer: "",
-        resizable: true
-      }
       var modelUrl = $(this).attr("model-url");
       var itemType = parseInt($(this).attr("model-type"));
+      var metadata = {
+        itemName: $(this).attr("model-name"),
+        resizable: true,
+        modelUrl: modelUrl,
+        itemType: itemType
+      }
 
       blueprint3d.model.scene.addItem(itemType, modelUrl, metadata);
       setCurrentState(scope.states.DEFAULT);
@@ -490,13 +487,13 @@ $(document).ready(function() {
   var textureSelector = new TextureSelector(blueprint3d, sideMenu);        
   var cameraButtons = new CameraButtons(blueprint3d);
 
-
+  // Simple hack for exporting rooms.
   $(window).dblclick(function() {
     console.log(blueprint3d.model.exportSerialized())
   })
 
   // This serialization format needs work
   // Load a simple rectangle room
-  floorplan = {"corners":{"aeea31f6-ebd3-1468-7591-2febf9529a6a":{"x":125.98400000000004,"y":232.664},"c1a85d89-dc25-cfa1-79be-7cc30f486343":{"x":745.7439999999998,"y":232.664},"56d9ebd1-91b2-875c-799d-54b3785fca1f":{"x":745.7439999999998,"y":-265.1760000000001},"d3f804a0-f711-d093-1522-99fea4f4c335":{"x":125.98400000000004,"y":-265.1760000000001}},"walls":[{"corner1":"d3f804a0-f711-d093-1522-99fea4f4c335","corner2":"aeea31f6-ebd3-1468-7591-2febf9529a6a","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}},{"corner1":"aeea31f6-ebd3-1468-7591-2febf9529a6a","corner2":"c1a85d89-dc25-cfa1-79be-7cc30f486343","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}},{"corner1":"c1a85d89-dc25-cfa1-79be-7cc30f486343","corner2":"56d9ebd1-91b2-875c-799d-54b3785fca1f","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}},{"corner1":"56d9ebd1-91b2-875c-799d-54b3785fca1f","corner2":"d3f804a0-f711-d093-1522-99fea4f4c335","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}}],"wallTextures":[],"floorTextures":{},"newFloorTextures":{}}
-  blueprint3d.model.newRoom(floorplan, {});
+  data = '{"floorplan":{"corners":{"aeea31f6-ebd3-1468-7591-2febf9529a6a":{"x":125.98400000000004,"y":232.664},"c1a85d89-dc25-cfa1-79be-7cc30f486343":{"x":745.7439999999998,"y":232.664},"56d9ebd1-91b2-875c-799d-54b3785fca1f":{"x":745.7439999999998,"y":-265.1760000000001},"d3f804a0-f711-d093-1522-99fea4f4c335":{"x":125.98400000000004,"y":-265.1760000000001}},"walls":[{"corner1":"d3f804a0-f711-d093-1522-99fea4f4c335","corner2":"aeea31f6-ebd3-1468-7591-2febf9529a6a","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}},{"corner1":"aeea31f6-ebd3-1468-7591-2febf9529a6a","corner2":"c1a85d89-dc25-cfa1-79be-7cc30f486343","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}},{"corner1":"c1a85d89-dc25-cfa1-79be-7cc30f486343","corner2":"56d9ebd1-91b2-875c-799d-54b3785fca1f","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}},{"corner1":"56d9ebd1-91b2-875c-799d-54b3785fca1f","corner2":"d3f804a0-f711-d093-1522-99fea4f4c335","frontTexture":{"url":"images/wallmap.png","stretch":true,"scale":0},"backTexture":{"url":"images/wallmap.png","stretch":true,"scale":0}}],"wallTextures":[],"floorTextures":{},"newFloorTextures":{}},"items":[{"item_type":1,"model_url":"https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/723/ik-ekero-orange_baked.js","xpos":283.3493781034445,"ypos":37.50235073007,"zpos":-50.53803884288831,"rotation":0,"scale_x":1,"scale_y":1,"scale_z":1,"fixed":false}]}'
+  blueprint3d.model.loadSerialized(data);
 });
