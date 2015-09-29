@@ -14,7 +14,17 @@ $(document).ready(function() {
       "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/722/ik-ekero-blue_baked.js",
       "type" : "1"
     }
+    
+    {
+      "name" : "Dresser - Dark Wood",
+      "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/240/thumbnail_matera_dresser_5.png",
+      "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/189/DWR_MATERA_DRESSER2.js",
+      "type" : "1"
+    }
+
   ]
+
+
 
   var itemsDiv = $("#items-wrapper")
   for (var i = 0; i < items.length; i++) {
