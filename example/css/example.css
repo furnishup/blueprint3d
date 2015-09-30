@@ -94,6 +94,7 @@ div {
 #add-items {
   display: none;
   padding: 20px;
+  overflow-y: auto; 
 }
 
 
