@@ -48,7 +48,7 @@ $(document).ready(function() {
       "name" : "Dresser - White",
       "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/500/thumbnail_img25o.jpg",
       "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/478/we-narrow6white_baked.js",
-      "type" : "2"
+      "type" : "1"
     },  
     {
       "name" : "Bedside table - Shale",
