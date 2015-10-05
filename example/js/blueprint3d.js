@@ -44177,6 +44177,7 @@ var Floorplanner = function(canvas, floorplan) {
   }
 
   this.reset = function() {
+    scope.resizeView();
     scope.setMode(scope.modes.MOVE);
     resetOrigin();
     view.draw();
@@ -48563,8 +48564,8 @@ ThreeSkybox = function(scene) {
   var scene = scene;
 
   var topColor = 0xffffff;//0xD8ECF9
-  var bottomColor = 0xf9f9f9;//0x565e63
-  var verticalOffset = 200
+  var bottomColor = 0xe9e9e9; //0xf9f9f9;//0x565e63
+  var verticalOffset = 500
   var sphereRadius = 4000
   var widthSegments = 32
   var heightSegments = 15

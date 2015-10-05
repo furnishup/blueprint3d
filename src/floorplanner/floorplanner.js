@@ -197,6 +197,7 @@ var Floorplanner = function(canvas, floorplan) {
   }
 
   this.reset = function() {
+    scope.resizeView();
     scope.setMode(scope.modes.MOVE);
     resetOrigin();
     view.draw();
