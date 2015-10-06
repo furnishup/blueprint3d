@@ -1,4 +1,4 @@
-## See it in Action!
+## Example!
 
 This repository includes an example application built using blueprint3d:
 
