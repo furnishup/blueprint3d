@@ -8,7 +8,7 @@ This repository includes an example application built using blueprint3d:
 
 This is a customizable application built on three.js that allows users to to design an interior space such as a home or apartment.
 
-## Get Started
+## Get started
 
 To get started, run:
 
@@ -17,7 +17,7 @@ To get started, run:
 
 The latter command generates `build/blueprint3d.js` and also copies it to `example/js`
 
-## /src Directory
+## /src directory
 
 The `src` directory contains the core of the project. Here is a description of the various sub-directories:
 
