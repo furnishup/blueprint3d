@@ -6,7 +6,7 @@ This repository includes an example application built using blueprint3d:
 
 ## What is this?
 
-This is a customizable application built on three.js that allows users to to design an interior space such as a home or apartment.
+This is a customizable application built on three.js that allows users to design an interior space such as a home or apartment.
 
 ## Get started
 
