@@ -1,6 +1,6 @@
 ## See it in Action!
 
-This repository includes an example application built using blueprint3d.
+This repository includes an example application built using blueprint3d:
 
 ### http://pshaw.github.io/blueprint3d/example/
 
