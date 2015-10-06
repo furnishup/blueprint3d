@@ -2,7 +2,7 @@
 
 This repository includes an example application built using blueprint3d:
 
-### http://pshaw.github.io/blueprint3d/example/
+### http://furnishup.github.io/blueprint3d/example/
 
 ## What is this?
 
