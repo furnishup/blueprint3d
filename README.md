@@ -41,7 +41,7 @@ This project requires a lot more work. In general, it was rushed through various
 
 - Better documentation
 - Test suite
-- Make it easier to build an example application (cleaner API, more inclusive base)
+- Make it easier to build a complete application using blueprint3d (cleaner API, more inclusive base, easier integration with a backend)
 - Better serialization format for saving/loading "designs"
 - Remove the dependency on jquery from the core source!
 - Better use of npm conventions and packaging
