@@ -17,21 +17,6 @@ To get started, run:
 
 The latter command generates `build/blueprint3d.js` and also copies it to `example/js`
 
-## TODO
-
-This project requires a lot more work. In general, it was rushed through various prototype stages, and never refactored as much as it probably should be.
-
-Here are some things that clearly need attention:
-
-- Better documentation
-- Test suite
-- Make it easier to build an example application (cleaner API, more inclusive base)
-- Better serialization format for saving/loading "designs"
-- Remove the dependency on jquery from the core source!
-- Clean up metadata for items to be less rigid
-- Figure out if this project is using any npm conventions correctly 
-- Various bug fixes
-
 ## /src Directory
 
 The `src` directory contains the core of the project. Here is a description of the various sub-directories:
@@ -48,4 +33,16 @@ The `src` directory contains the core of the project. Here is a description of t
 
 ## License
 
-This project is open-source! See license.txt for more information.
+This project is open-source! See LICENSE.txt for more information.
+
+## TODO
+
+This project requires a lot more work. In general, it was rushed through various prototype stages, and never refactored as much as it probably should be. Here are some things that clearly need attention:
+
+- Better documentation
+- Test suite
+- Make it easier to build an example application (cleaner API, more inclusive base)
+- Better serialization format for saving/loading "designs"
+- Remove the dependency on jquery from the core source!
+- Better use of npm conventions and packaging
+- Various bug fixes
