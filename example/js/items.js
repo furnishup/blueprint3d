@@ -3,10 +3,16 @@
 $(document).ready(function() {
   var items = [
    {
-      "name" : "Door",
+      "name" : "Closed Door",
       "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/646/thumbnail_Screen_Shot_2014-10-27_at_8.04.12_PM.png",
       "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/617/closed-door28x80_baked.js",
-      "type" : "3"
+      "type" : "7"
+    }, 
+    {
+      "name" : "Open Door",
+      "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/617/thumbnail_Screen_Shot_2014-10-27_at_8.22.46_PM.png",
+      "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/174/open_door.js",
+      "type" : "7"
     }, 
     {
       "name" : "Window",
@@ -39,12 +45,6 @@ $(document).ready(function() {
       "type" : "1"
     }, 
     {
-      "name" : "Dresser - Light Wood ",
-      "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/365/thumbnail_Blu-Dot-Shale-2-Drawer-2-Door-Dresser.jpg",
-      "model" : "",
-      "type" : "1"
-    }, 
-    {
       "name" : "Dresser - White",
       "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/500/thumbnail_img25o.jpg",
       "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/478/we-narrow6white_baked.js",
@@ -60,12 +60,6 @@ $(document).ready(function() {
       "name" : "Bedside table - White",
       "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/382/thumbnail_arch-white-oval-nightstand.jpg",
       "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/353/cb-archnight-white_baked.js",
-      "type" : "1"
-    }, 
-    {
-      "name" : "Bedside table - Wood",
-      "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/384/thumbnail_osborn-nightstand.jpg",
-      "model" : "",
       "type" : "1"
     }, 
     {
@@ -152,6 +146,18 @@ $(document).ready(function() {
       "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/143/thumbnail_Screen_Shot_2014-01-28_at_6.49.33_PM.png",
       "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/100/BlakeAvenuejoshuatreecheftable.js",
       "type" : "1"
+    },
+    {
+      "name" : "Blue Rug",
+      "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/467/thumbnail_cb-blue-block60x96.png",
+      "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/440/cb-blue-block-60x96.js",
+      "type" : "8"
+    },
+    {
+      "name" : "NYC Poster",
+      "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/111/thumbnail_nyc2.jpg",
+      "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/77/nyc-poster2.js",
+      "type" : "2"
     }
    /*     
    {
