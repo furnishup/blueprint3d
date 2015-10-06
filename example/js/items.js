@@ -68,13 +68,6 @@ $(document).ready(function() {
       "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/717/ik-kivine_baked.js",
       "type" : "1"
     }, 
-
-    {
-      "name" : "Queen Bed",
-      "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/365/thumbnail_Blu-Dot-Shale-2-Drawer-2-Door-Dresser.jpg",
-      "model" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_model/model/322/gus-carmichael-ink_baked.js",
-      "type" : "1"
-    }, 
     {
       "name" : "Full Bed",
       "image" : "https://blueprint-dev.s3.amazonaws.com/uploads/item_picture/image/72/thumbnail_nordli-bed-frame__0159270_PE315708_S4.JPG",
