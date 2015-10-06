@@ -1,12 +1,12 @@
-## What is this
+## See it in Action!
 
-A project built on three.js to design a home or apartment. For instance, helpful when moving to determine how to use a new space.
+This repository includes an example application built using blueprint3d.
 
-## Example
+### http://pshaw.github.io/blueprint3d/example/
 
-The repository includes an example application. There is a considerable amount of html, css, glue javascript etc. that needs to be in place to utilize blueprint-3d, which the example shows.
+## What is this?
 
-http://pshaw.github.io/blueprint3d/example/
+This is a customizable application built on three.js that allows users to to design an interior space such as a home or apartment.
 
 ## Get Started
 
@@ -34,7 +34,7 @@ Here are some things that clearly need attention:
 
 ## /src Directory
 
-The source directory contains the core of the project. Here is a description of the various sub-directories:
+The `src` directory contains the core of the project. Here is a description of the various sub-directories:
 
 `floorplanner` - 2D view/controller for editing the floorplan
 
@@ -45,3 +45,7 @@ The source directory contains the core of the project. Here is a description of 
 `three` - 3D view/controller for viewing and modifying item placement
 
 `utils` - some shared functions that are mostly deprecated in favor of functionality provided by various npm modules
+
+## License
+
+This project is open-source! See license.txt for more information.
