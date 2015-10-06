@@ -6,7 +6,14 @@ This repository includes an example application built using blueprint3d:
 
 ## What is this?
 
-This is a customizable application built on three.js that allows users to design an interior space such as a home or apartment.
+This is a customizable application built on three.js that allows users to design an interior space such as a home or apartment. Below are screenshots from our Example App (link above). 
+
+1) Create 2D floorplan:
+![floorplan](https://s3.amazonaws.com/furnishup/floorplan.png)
+2) Add items:
+![add_items](https://s3.amazonaws.com/furnishup/add_items.png)
+3) Design in 3D:
+![3d_design](https://s3.amazonaws.com/furnishup/design.png)
 
 ## Get started
 
