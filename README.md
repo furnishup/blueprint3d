@@ -8,31 +8,34 @@ The repository includes an example application. There is a considerable amount o
 
 http://pshaw.github.io/blueprint3d/example/
 
-## Get Started
+## Developing and Running Locally
 
-To get started, run:
+To get started, clone the repository and ensure you npm installed, then run:
 
     npm update
     npm run-script build
 
-The latter command generates `build/blueprint3d.js` and also copies it to `example/js`
+The latter command generates `example/js/blueprint3d.js` from `src`.
 
-## TODO
+The easiest way to run locally is to run a local server from the `example` directory. There are plenty of options. One uses Python's built in webserver:
 
-This project requires a lot more work. In general, it was rushed through various prototype stages, and never refactored as much as it probably should be.
+    cd example
 
-Here are some things that clearly need attention:
+    # Python 2.x
+    python -m SimpleHTTPServer
 
-- Better documentation
-- Test suite
-- Make it easier to build an example application (cleaner API, more inclusive base)
-- Better serialization format for saving/loading "designs"
-- Remove the dependency on jquery from the core source!
-- Clean up metadata for items to be less rigid
-- Figure out if this project is using any npm conventions correctly 
-- Various bug fixes
+    # Python 3.x
+    python -m http.server
 
-## /src Directory
+## Contribute!
+
+This project requires a lot more work. In general, it was rushed through various prototype stages, and never refactored as much as it probably should be. We need your help!
+
+Please contact us if you are interested in contributing.
+
+## Directory Structure
+
+### `src/` Directory
 
 The source directory contains the core of the project. Here is a description of the various sub-directories:
 
@@ -45,3 +48,8 @@ The source directory contains the core of the project. Here is a description of 
 `three` - 3D view/controller for viewing and modifying item placement
 
 `utils` - some shared functions that are mostly deprecated in favor of functionality provided by various npm modules
+
+### `example/` Directory
+
+The example directory contains an application built using the core blueprint3d javascript building blocks. It adds html, css, models, textures, and more javascript to tie everything together.
+

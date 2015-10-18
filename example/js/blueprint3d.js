@@ -46201,7 +46201,7 @@ var Room = function(floorplan, corners) {
   this.customTexture = false;
 
   var defaultTexture = {
-    url: "images/hardwood.png",
+    url: "rooms/textures/hardwood.png",
     scale: 400
   }
 
@@ -46467,7 +46467,7 @@ var Wall = function(start, end) {
   var action_callbacks = JQUERY.Callbacks();
 
   var defaultTexture =  {
-    url: "images/wallmap.png",
+    url: "rooms/textures/wallmap.png",
     stretch: true,
     scale: 0
   }
@@ -47587,7 +47587,7 @@ var ThreeEdge = function(scene, edge, controls) {
   var basePlanes = []; // always visible
   var texture = null;
   
-  var lightMap = THREE.ImageUtils.loadTexture("images/walllightmap.png");
+  var lightMap = THREE.ImageUtils.loadTexture("rooms/textures/walllightmap.png");
   var fillerColor = 0xdddddd;
   var sideColor = 0xcccccc;
   var baseColor = 0xdddddd;

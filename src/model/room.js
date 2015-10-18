@@ -29,7 +29,7 @@ var Room = function(floorplan, corners) {
   this.customTexture = false;
 
   var defaultTexture = {
-    url: "images/hardwood.png",
+    url: "rooms/textures/hardwood.png",
     scale: 400
   }
 

@@ -18,7 +18,7 @@
     "browserify": "^8.0.2"
   },
   "scripts": {
-    "build": "browserify src/blueprint3d.js > build/blueprint3d.js --verbose; cp build/blueprint3d.js example/js/blueprint3d.js"
+    "build": "browserify src/blueprint3d.js > example/js/blueprint3d.js --verbose"
   },
   "author": "",
   "license": ""

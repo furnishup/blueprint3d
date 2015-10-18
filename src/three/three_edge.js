@@ -13,7 +13,7 @@ var ThreeEdge = function(scene, edge, controls) {
   var basePlanes = []; // always visible
   var texture = null;
   
-  var lightMap = THREE.ImageUtils.loadTexture("images/walllightmap.png");
+  var lightMap = THREE.ImageUtils.loadTexture("rooms/textures/walllightmap.png");
   var fillerColor = 0xdddddd;
   var sideColor = 0xcccccc;
   var baseColor = 0xdddddd;
