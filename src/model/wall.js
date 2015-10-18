@@ -29,7 +29,7 @@ var Wall = function(start, end) {
   var action_callbacks = JQUERY.Callbacks();
 
   var defaultTexture =  {
-    url: "images/wallmap.png",
+    url: "rooms/textures/wallmap.png",
     stretch: true,
     scale: 0
   }
