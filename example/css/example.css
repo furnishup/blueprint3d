@@ -97,6 +97,12 @@ div {
   overflow-y: auto; 
 }
 
+#main-controls {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 0;  
+}
 
 #camera-controls {
   position: absolute;
@@ -130,3 +136,21 @@ div {
   cursor: pointer;
 }
 
+.btn-file {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  cursor: inherit;
+  display: block;
+}
