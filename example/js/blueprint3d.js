@@ -48797,8 +48797,19 @@ utils.lineLineIntersect = function(x1,y1,x2,y2, x3,y3,x4,y4) {
 // corners is an array of points with x,y attributes
 // startX and startY are start coords for raycast
 utils.pointInPolygon = function(x,y,corners,startX,startY) {
-    startX = startX || 0;
-    startY = startY || 0;
+    //startX = startX || 0;
+    //startY = startY || 0;
+    //ensure that point(startX, startY) is outside the polygon consists of corners
+    var minx = 0,
+        miny = 0;
+    if(startX === undefined || startY === undefined){
+        for (var i = 0; i < corners.length; i++) {
+            minx = Math.min(minx, corners[i].x);
+            miny = Math.min(minx, corners[i].y);
+        }
+        startX = minx - 10;
+        startY = miny - 10;
+    }
 
     var intersects = 0;
     for (var i = 0; i < corners.length; i++) {
