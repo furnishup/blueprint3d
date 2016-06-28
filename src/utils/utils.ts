@@ -3,15 +3,15 @@ module BP3D {
   /** Collection of utility functions. */
   export class Utils {
 
-		/** Determines the distance of a point from a line.
-		 * @param x Point's x coordinate.
-		 * @param y Point's y coordinate.
-		 * @param x1 Line-Point 1's x coordinate.
-		 * @param y1 Line-Point 1's y coordinate.
-		 * @param x2 Line-Point 2's x coordinate.
-		 * @param y2 Line-Point 2's y coordinate.
-		 * @returns The distance.
-		 */
+    /** Determines the distance of a point from a line.
+     * @param x Point's x coordinate.
+     * @param y Point's y coordinate.
+     * @param x1 Line-Point 1's x coordinate.
+     * @param y1 Line-Point 1's y coordinate.
+     * @param x2 Line-Point 2's x coordinate.
+     * @param y2 Line-Point 2's y coordinate.
+     * @returns The distance.
+     */
     public static pointDistanceFromLine(x: number, y: number, x1: number, y1: number, x2: number, y2: number): number {
       var tPoint = this.closestPointOnLine(x, y, x1, y1, x2, y2);
       var tDx = x - tPoint.x;
@@ -19,15 +19,15 @@ module BP3D {
       return Math.sqrt(tDx * tDx + tDy * tDy);
     }
 
-		/** Gets the projection of a point onto a line.
-		 * @param x Point's x coordinate.
-		 * @param y Point's y coordinate.
-		 * @param x1 Line-Point 1's x coordinate.
-		 * @param y1 Line-Point 1's y coordinate.
-		 * @param x2 Line-Point 2's x coordinate.
-		 * @param y2 Line-Point 2's y coordinate.
-		 * @returns The point.
-		 */
+    /** Gets the projection of a point onto a line.
+     * @param x Point's x coordinate.
+     * @param y Point's y coordinate.
+     * @param x1 Line-Point 1's x coordinate.
+     * @param y1 Line-Point 1's y coordinate.
+     * @param x2 Line-Point 2's x coordinate.
+     * @param y2 Line-Point 2's y coordinate.
+     * @returns The point.
+     */
     static closestPointOnLine(x: number, y: number, x1: number, y1: number, x2: number, y2: number): { x: number, y: number } {
       // thanks, http://stackoverflow.com/a/6853926
       var tA = x - x1;
@@ -60,14 +60,22 @@ module BP3D {
       }
     }
 
-    /** */
+    /** Gets the distance of two points.
+     * @param x1 X part of first point.
+     * @param y1 Y part of first point.
+     * @param x2 X part of second point.
+     * @param y2 Y part of second point.
+     * @returns The distance.
+     */
     static distance(x1: number, y1: number, x2: number, y2: number): number {
       return Math.sqrt(
         Math.pow(x2 - x1, 2) +
         Math.pow(y2 - y1, 2));
     }
 
-    /** Angle between 0,0->x1,y1 and 0,0->x2,y2 (-pi to pi) */
+    /**  Gets the angle between 0,0 -> x1,y1 and 0,0 -> x2,y2 (-pi to pi)
+     * @returns The angle.
+     */
     static angle(x1: number, y1: number, x2: number, y2: number): number {
       var tDot = x1 * x2 + y1 * y2;
       var tDet = x1 * y2 - y1 * x2;
@@ -84,7 +92,10 @@ module BP3D {
       return tTheta;
     }
 
-    /** points is array of points with x,y attributes */
+    /** Checks if an array of points is clockwise.
+     * @param points Is array of points with x,y attributes
+     * @returns True if clockwise.
+     */
     static isClockwise(points): boolean {
       // make positive
       let tSubX = Math.min(0, Math.min.apply(null, this.map(points, function (p) {
@@ -118,9 +129,9 @@ module BP3D {
       return (tSum >= 0);
     }
 
-		/** Creates a Guid.
-		 * @returns A new Guid.
-		 */
+    /** Creates a Guid.
+     * @returns A new Guid.
+     */
     static guid(): () => string {
       var tS4 = function () {
         return Math.floor((1 + Math.random()) * 0x10000)
@@ -197,11 +208,11 @@ module BP3D {
       return (tCCW(tP1, tP3, tP4) != tCCW(tP2, tP3, tP4)) && (tCCW(tP1, tP2, tP3) != tCCW(tP1, tP2, tP4));
     }
 
-		/**
-		 @param corners Is an array of points with x,y attributes
-		 @param startX X start coord for raycast
-		 @param startY Y start coord for raycast
-		*/
+    /**
+     @param corners Is an array of points with x,y attributes
+      @param startX X start coord for raycast
+      @param startY Y start coord for raycast
+    */
     static pointInPolygon(x: number, y: number, corners, startX?: number, startY?: number): boolean {
       startX = startX || 0;
       startY = startY || 0;
@@ -279,7 +290,6 @@ module BP3D {
       return true;
     }
 
-
     // arrays
 
     static forEach(array, action) {
@@ -354,7 +364,7 @@ module BP3D {
       return false;
     }
 
-	/** Subtracts the elements in subArray from array */s
+    /** Subtracts the elements in subArray from array */s
     static subtract(array, subArray) {
       return this.removeIf(array, function (el) {
         return this.hasValue(subArray, el);
