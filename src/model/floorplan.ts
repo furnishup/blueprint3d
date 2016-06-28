@@ -104,7 +104,7 @@ module BP3D.Model {
       this.updated_rooms.add(callback);
     }
 
-    private newWall(start: Corner, end: Corner) {
+    public newWall(start: Corner, end: Corner) {
       var wall = new Wall(start, end);
       this.walls.push(wall)
       wall.fireOnDelete(this.removeWall);
@@ -265,7 +265,7 @@ module BP3D.Model {
     /** 
      * Update rooms
      */
-    private update() {
+    public update() {
       Utils.forEach(this.walls, function (wall) {
         wall.resetFrontBack();
       });

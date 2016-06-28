@@ -29,7 +29,7 @@ module BP3D.Model {
      * @param y Y coordinate.
      * @param id An optional unique id. If not set, created internally.
      */
-    constructor(private floorplan: any, public x: number, public y: number, public id?: string) {
+    constructor(private floorplan: Floorplan, public x: number, public y: number, public id?: string) {
       this.id = id || Utils.guid();
 
       this.wallStarts = []
@@ -274,26 +274,25 @@ module BP3D.Model {
       //console.log('mergeWithIntersected for object: ' + this.type);
       // check corners
       for (var i = 0; i < this.floorplan.getCorners().length; i++) {
-        var obj = this.floorplan.getCorners()[i];
-        if (this.distanceFromCorner(obj) < cornerTolerance && obj != this) {
-          this.combineWithCorner(obj);
+        var corner = this.floorplan.getCorners()[i];
+        if (this.distanceFromCorner(corner) < cornerTolerance && corner != this) {
+          this.combineWithCorner(corner);
           return true;
         }
       }
       // check walls
       for (var i = 0; i < this.floorplan.getWalls().length; i++) {
-        obj = this.floorplan.getWalls()[i];
-        if (this.distanceFromWall(obj) < cornerTolerance && !this.isWallConnected(obj)) {
+        var wall = this.floorplan.getWalls()[i];
+        if (this.distanceFromWall(wall) < cornerTolerance && !this.isWallConnected(wall)) {
           // update position to be on wall
           var intersection = Utils.closestPointOnLine(this.x, this.y,
-            obj.getStart().x, obj.getStart().y,
-            obj.getEnd().x, obj.getEnd().y);
+            wall.getStart().x, wall.getStart().y,
+            wall.getEnd().x, wall.getEnd().y);
           this.x = intersection.x;
           this.y = intersection.y;
           // merge this corner into wall by breaking wall into two parts
-          this.floorplan.newWall(
-            this, obj.getEnd());
-          obj.setEnd(this);
+          this.floorplan.newWall(this, wall.getEnd());
+          wall.setEnd(this);
           this.floorplan.update();
           return true;
         }
