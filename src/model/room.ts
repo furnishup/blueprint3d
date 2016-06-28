@@ -13,6 +13,8 @@ var Polygon = require('polygon')
 */
 
 module BP3D.Model {
+
+  /** Default texture to be used if nothing is provided. */
   const defaultTexture = {
     url: "rooms/textures/hardwood.png",
     scale: 400
@@ -21,15 +23,19 @@ module BP3D.Model {
   /** */
   export class Room {
 
+    /** */
     private interiorCorners = [];
 
+    /** */
     private edgePointer = null;
 
     /** floor plane for intersection testing */
     private floorPlane = null;
 
+    /** */
     private customTexture = false;
 
+    /** */
     private floorChangeCallbacks: JQueryCallback;
 
     /**

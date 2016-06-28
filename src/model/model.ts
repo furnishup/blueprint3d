@@ -5,34 +5,55 @@
 /// <reference path="scene.ts" />
 
 module BP3D.Model {
-  export var Model = function (textureDir) {
-    var scope = this;
+  /** */
+  export class Model {
 
-    this.floorplan = new Floorplan();
-    this.scene = new Scene(scope, textureDir);
+    /** */
+    private floorplan: Floorplan;
 
-    this.roomLoadingCallbacks = $.Callbacks();
-    this.roomLoadedCallbacks = $.Callbacks(); // name
-    this.roomSavedCallbacks = $.Callbacks(); // success (bool), copy (bool)
-    this.roomDeletedCallbacks = $.Callbacks();
+    /** */
+    private scene: Scene;
 
-    this.loadSerialized = function (data_json) {
+    /** */
+    private roomLoadingCallbacks: JQueryCallback;
+
+    /** */
+    private roomLoadedCallbacks: JQueryCallback;
+
+    /** */
+    private roomSavedCallbacks: JQueryCallback;
+
+    /** */
+    private roomDeletedCallbacks: JQueryCallback;
+
+    constructor(textureDir: string) {
+
+      this.floorplan = new Floorplan();
+      this.scene = new Scene(this, textureDir);
+
+      this.roomLoadingCallbacks = $.Callbacks();
+      this.roomLoadedCallbacks = $.Callbacks(); // name
+      this.roomSavedCallbacks = $.Callbacks(); // success (bool), copy (bool)
+      this.roomDeletedCallbacks = $.Callbacks();
+    }
+
+    private loadSerialized(json: string) {
       // TODO: better documentation on serialization format.
       // TODO: a much better serialization format.
       this.roomLoadingCallbacks.fire();
 
-      var data = JSON.parse(data_json)
-      scope.newRoom(
+      var data = JSON.parse(json)
+      this.newRoom(
         data.floorplan,
         data.items
       );
 
-      scope.roomLoadedCallbacks.fire();
+      this.roomLoadedCallbacks.fire();
     }
 
-    this.exportSerialized = function () {
+    private exportSerialized(): string {
       var items_arr = [];
-      var objects = scope.scene.getItems();
+      var objects = this.scene.getItems();
       for (var i = 0; i < objects.length; i++) {
         var object = objects[i];
         items_arr[i] = {
@@ -51,14 +72,14 @@ module BP3D.Model {
       }
 
       var room = {
-        floorplan: (scope.floorplan.saveFloorplan()),
+        floorplan: (this.floorplan.saveFloorplan()),
         items: items_arr
       };
 
       return JSON.stringify(room);
     }
 
-    this.newRoom = function (floorplan, items) {
+    private newRoom(floorplan: string, items) {
       this.scene.clearItems();
       this.floorplan.loadFloorplan(floorplan);
       Utils.forEach(items, function (item) {
@@ -75,7 +96,7 @@ module BP3D.Model {
           y: item.scale_y,
           z: item.scale_z
         }
-        scope.scene.addItem(
+        this.scene.addItem(
           item.item_type,
           item.model_url,
           metadata,

@@ -10,98 +10,118 @@
 /// <reference path="../items/wall_item.ts" />
 
 module BP3D.Model {
-  export var Scene = function (model, textureDir) {
-    var scope = this;
-    var model = model;
-    var textureDir = textureDir;
+  const item_types = {
+    1: Items.FloorItem,
+    2: Items.WallItem,
+    3: Items.InWallItem,
+    7: Items.InWallFloorItem,
+    8: Items.OnFloorItem,
+    9: Items.WallFloorItem
+  };
 
-    var scene = new THREE.Scene();
-    var items = [];
+  /** */
+  export class Scene {
 
-    this.needsUpdate = false;
+    /** */
+    private scene: THREE.Scene;
 
-    // init item loader
-    var loader = new THREE.JSONLoader();
-    loader.crossOrigin = "";
+    /** */
+    private items = [];
 
-    var item_types = {
-      1: Items.FloorItem,
-      2: Items.WallItem,
-      3: Items.InWallItem,
-      7: Items.InWallFloorItem,
-      8: Items.OnFloorItem,
-      9: Items.WallFloorItem
-    };
+    /** */
+    private needsUpdate = false;
 
-    // init callbacks
-    this.itemLoadingCallbacks = $.Callbacks();
-    this.itemLoadedCallbacks = $.Callbacks(); // Item
-    this.itemRemovedCallbacks = $.Callbacks(); // Item
+    /** */
+    private loader: THREE.JSONLoader;
 
-    this.add = function (mesh) {
+    /** */
+    private itemLoadingCallbacks: JQueryCallback;
+
+    /** */
+    private itemLoadedCallbacks: JQueryCallback;
+
+    /** */
+    private itemRemovedCallbacks: JQueryCallback;
+
+    constructor(private model: Model, private textureDir: string) {
+
+      this.scene = new THREE.Scene();
+
+      // init item loader
+      this.loader = new THREE.JSONLoader();
+      this.loader.crossOrigin = "";
+
+      // init callbacks
+      this.itemLoadingCallbacks = $.Callbacks();
+      this.itemLoadedCallbacks = $.Callbacks(); // Item
+      this.itemRemovedCallbacks = $.Callbacks(); // Item
+    }
+
+    private add(mesh) {
       // only use this for non-items
-      scene.add(mesh);
+      this.scene.add(mesh);
     }
 
-    this.remove = function (mesh) {
+    private remove(mesh) {
       // only use  this for non-items
-      scene.remove(mesh);
-      Utils.removeValue(items, mesh);
+      this.scene.remove(mesh);
+      Utils.removeValue(this.items, mesh);
     }
 
-    this.getScene = function () {
-      return scene;
+    public getScene() {
+      return this.scene;
     }
 
-    this.getItems = function () {
-      return items;
+    public getItems() {
+      return this.items;
     }
 
-    this.itemCount = function () {
-      return items.length
+    public itemCount() {
+      return this.items.length
     }
 
-    this.clearItems = function () {
-      var items_copy = items
-      Utils.forEach(items, function (item) {
+    public clearItems() {
+      var items_copy = this.items
+      var scope = this;
+      Utils.forEach(this.items, function (item) {
         scope.removeItem(item, true);
       });
-      items = []
+      this.items = []
     }
 
-    this.removeItem = function (item, dontRemove) {
+    private removeItem(item, dontRemove) {
       dontRemove = dontRemove || false;
       // use this for item meshes
       this.itemRemovedCallbacks.fire(item);
       item.removed();
-      scene.remove(item);
+      this.scene.remove(item);
       if (!dontRemove) {
-        Utils.removeValue(items, item);
+        Utils.removeValue(this.items, item);
       }
     }
 
-    this.addItem = function (itemType, fileName, metadata, position, rotation, scale, fixed) {
+    private addItem(itemType, fileName, metadata, position, rotation, scale, fixed) {
       itemType = itemType || 1;
 
       var loaderCallback = function (geometry, materials) {
         var item = new item_types[itemType](
-          model,
+          this.model,
           metadata, geometry,
           new THREE.MeshFaceMaterial(materials),
           position, rotation, scale
         );
         item.fixed = fixed || false;
-        items.push(item);
-        scope.add(item);
+        this.items.push(item);
+        this.scope.add(item);
         item.initObject();
-        scope.itemLoadedCallbacks.fire(item);
+        this.scope.itemLoadedCallbacks.fire(item);
       }
 
-      scope.itemLoadingCallbacks.fire();
-      loader.load(
+      this.itemLoadingCallbacks.fire();
+      this.loader.load(
         fileName,
         loaderCallback,
-        textureDir
+        undefined // TODO_Ekki this.textureDir
       );
     }
   }

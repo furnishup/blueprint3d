@@ -12,16 +12,32 @@ module BP3D.Model {
 
   export class Floorplan {
 
+    /** */
     private walls: any[] = [];
+
+    /** */
     private corners: Corner[] = [];
+
+    /** */
     private rooms: any[] = [];
 
+    /** */
     private new_wall_callbacks: JQueryCallback;
+
+    /** */
     private new_corner_callbacks: JQueryCallback;
+
+    /** */
     private redraw_callbacks: JQueryCallback;
+
+    /** */
     private updated_rooms: JQueryCallback;
+
+    /** */
     private roomLoadedCallbacks: JQueryCallback;
 
+
+    /** */
     private floorTextures: {};
 
     constructor() {

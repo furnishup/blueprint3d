@@ -8,11 +8,19 @@ module BP3D.Model {
   /** Corners are used to define walls. */
   export class Corner {
 
+    /** */
     private wallStarts: any[];
+
+    /** */
     private wallEnds: any[];
 
+    /** */
     private moved_callbacks: JQueryCallback;
+
+    /** */
     private deleted_callbacks: JQueryCallback;
+
+    /** */
     private action_callbacks: JQueryCallback;
 
     /** Constructs a corner. 
