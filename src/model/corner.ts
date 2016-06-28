@@ -143,7 +143,7 @@ module BP3D.Model {
     /**
      * 
      */
-    private adjacentCorners() {
+    public adjacentCorners() {
       var retArray = [];
       for (var i = 0; i < this.wallStarts.length; i++) {
         retArray.push(this.wallStarts[i].getEnd());

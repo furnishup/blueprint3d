@@ -266,12 +266,11 @@ module BP3D.Model {
      * Update rooms
      */
     private update() {
-
       Utils.forEach(this.walls, function (wall) {
         wall.resetFrontBack();
       });
 
-      var roomCorners = findRooms(this.corners);
+      var roomCorners = this.findRooms(this.corners);
       this.rooms = [];
       var scope = this;
       Utils.forEach(roomCorners, function (corners) {
@@ -340,134 +339,133 @@ module BP3D.Model {
 
     }
 
-  };
+    /*
+     * Find the "rooms" in our planar straight-line graph.
+     * Rooms are set of the smallest (by area) possible cycles in this graph.
+     */
+    // corners has attributes: id, x, y, adjacents
+    findRooms(corners: Corner[]) {
 
-  /*
-   * Find the "rooms" in our planar straight-line graph.
-   * Rooms are set of the smallest (by area) possible cycles in this graph.
-   */
-  // corners has attributes: id, x, y, adjacents
-  function findRooms(corners) {
-
-    function calculateTheta(previousCorner, currentCorner, nextCorner) {
-      var theta = Utils.angle2pi(
-        previousCorner.x - currentCorner.x,
-        previousCorner.y - currentCorner.y,
-        nextCorner.x - currentCorner.x,
-        nextCorner.y - currentCorner.y);
-      return theta;
-    }
-
-    function removeDuplicateRooms(roomArray) {
-      var results = [];
-      var lookup = {};
-      var hashFunc = function (corner) {
-        return corner.id
-      };
-      var sep = '-';
-      for (var i = 0; i < roomArray.length; i++) {
-        // rooms are cycles, shift it around to check uniqueness
-        var add = true;
-        var room = roomArray[i];
-        for (var j = 0; j < room.length; j++) {
-          var roomShift = Utils.cycle(room, j);
-          var str = Utils.map(roomShift, hashFunc).join(sep);
-          if (lookup.hasOwnProperty(str)) {
-            add = false;
-          }
-        }
-        if (add) {
-          results.push(roomArray[i]);
-          lookup[str] = true;
-        }
+      function calculateTheta(previousCorner, currentCorner, nextCorner) {
+        var theta = Utils.angle2pi(
+          previousCorner.x - currentCorner.x,
+          previousCorner.y - currentCorner.y,
+          nextCorner.x - currentCorner.x,
+          nextCorner.y - currentCorner.y);
+        return theta;
       }
-      return results;
-    }
 
-    function findTightestCycle(firstCorner, secondCorner) {
-      var stack = [];
-      var next = {
-        corner: secondCorner,
-        previousCorners: [firstCorner]
-      };
-      var visited = {};
-      visited[firstCorner.id] = true;
-
-      while (next) {
-        // update previous corners, current corner, and visited corners
-        var currentCorner = next.corner;
-        visited[currentCorner.id] = true;
-
-        // did we make it back to the startCorner?
-        if (next.corner === firstCorner && currentCorner !== secondCorner) {
-          return next.previousCorners;
+      function removeDuplicateRooms(roomArray) {
+        var results = [];
+        var lookup = {};
+        var hashFunc = function (corner) {
+          return corner.id
+        };
+        var sep = '-';
+        for (var i = 0; i < roomArray.length; i++) {
+          // rooms are cycles, shift it around to check uniqueness
+          var add = true;
+          var room = roomArray[i];
+          for (var j = 0; j < room.length; j++) {
+            var roomShift = Utils.cycle(room, j);
+            var str = Utils.map(roomShift, hashFunc).join(sep);
+            if (lookup.hasOwnProperty(str)) {
+              add = false;
+            }
+          }
+          if (add) {
+            results.push(roomArray[i]);
+            lookup[str] = true;
+          }
         }
+        return results;
+      }
 
-        var addToStack = [];
-        var adjacentCorners = next.corner.adjacentCorners();
-        for (var i = 0; i < adjacentCorners.length; i++) {
-          var nextCorner = adjacentCorners[i];
+      function findTightestCycle(firstCorner, secondCorner) {
+        var stack = [];
+        var next = {
+          corner: secondCorner,
+          previousCorners: [firstCorner]
+        };
+        var visited = {};
+        visited[firstCorner.id] = true;
 
-          // is this where we came from?
-          // give an exception if its the first corner and we aren't at the second corner
-          if (nextCorner.id in visited &&
-            !(nextCorner === firstCorner && currentCorner !== secondCorner)) {
-            continue;
+        while (next) {
+          // update previous corners, current corner, and visited corners
+          var currentCorner = next.corner;
+          visited[currentCorner.id] = true;
+
+          // did we make it back to the startCorner?
+          if (next.corner === firstCorner && currentCorner !== secondCorner) {
+            return next.previousCorners;
           }
 
-          // nope, throw it on the queue  
-          addToStack.push(nextCorner);
-        }
+          var addToStack = [];
+          var adjacentCorners = next.corner.adjacentCorners();
+          for (var i = 0; i < adjacentCorners.length; i++) {
+            var nextCorner = adjacentCorners[i];
 
-        var previousCorners = next.previousCorners.slice(0);
-        previousCorners.push(currentCorner);
-        if (addToStack.length > 1) {
-          // visit the ones with smallest theta first
-          var previousCorner = next.previousCorners[next.previousCorners.length - 1];
-          addToStack.sort(function (a, b) {
-            return (calculateTheta(previousCorner, currentCorner, b) -
-              calculateTheta(previousCorner, currentCorner, a));
-          });
-        }
+            // is this where we came from?
+            // give an exception if its the first corner and we aren't at the second corner
+            if (nextCorner.id in visited &&
+              !(nextCorner === firstCorner && currentCorner !== secondCorner)) {
+              continue;
+            }
 
-        if (addToStack.length > 0) {
-          // add to the stack
-          Utils.forEach(addToStack, function (corner) {
-            stack.push({
-              corner: corner,
-              previousCorners: previousCorners
+            // nope, throw it on the queue  
+            addToStack.push(nextCorner);
+          }
+
+          var previousCorners = next.previousCorners.slice(0);
+          previousCorners.push(currentCorner);
+          if (addToStack.length > 1) {
+            // visit the ones with smallest theta first
+            var previousCorner = next.previousCorners[next.previousCorners.length - 1];
+            addToStack.sort(function (a, b) {
+              return (calculateTheta(previousCorner, currentCorner, b) -
+                calculateTheta(previousCorner, currentCorner, a));
             });
-          });
+          }
+
+          if (addToStack.length > 0) {
+            // add to the stack
+            Utils.forEach(addToStack, function (corner) {
+              stack.push({
+                corner: corner,
+                previousCorners: previousCorners
+              });
+            });
+          }
+
+          // pop off the next one
+          next = stack.pop();
         }
-
-        // pop off the next one
-        next = stack.pop();
+        return [];
       }
-      return [];
-    }
 
-    // find tightest loops, for each corner, for each adjacent
-    // TODO: optimize this, only check corners with > 2 adjacents, or isolated cycles
-    var loops = [];
-    for (var i = 0; i < corners.length; i++) {
-      var firstCorner = corners[i];
-      var adjacentCorners = firstCorner.adjacentCorners();
-      for (var j = 0; j < adjacentCorners.length; j++) {
-        var secondCorner = adjacentCorners[j];
-        loops.push(findTightestCycle(firstCorner, secondCorner));
+      // find tightest loops, for each corner, for each adjacent
+      // TODO: optimize this, only check corners with > 2 adjacents, or isolated cycles
+      var loops = [];
+      for (var i = 0; i < corners.length; i++) {
+        var firstCorner = corners[i];
+        var adjacentCorners = firstCorner.adjacentCorners();
+        for (var j = 0; j < adjacentCorners.length; j++) {
+          var secondCorner = adjacentCorners[j];
+          loops.push(findTightestCycle(firstCorner, secondCorner));
+        }
       }
-    }
-    // remove duplicates
-    var uniqueLoops = removeDuplicateRooms(loops);
-    //remove CW loops
-    var uniqueCCWLoops = Utils.removeIf(uniqueLoops, Utils.isClockwise);
+      // remove duplicates
+      var uniqueLoops = removeDuplicateRooms(loops);
+      //remove CW loops
+      var uniqueCCWLoops = Utils.removeIf(uniqueLoops, Utils.isClockwise);
 
-    //Utils.forEach(uniqueCCWLoops, function(loop) {
-    //  console.log("LOOP");
-    //  Utils.forEach(loop, function(corner) {
-    //    console.log(corner.id);
-    //  });
-    //});
-    return uniqueCCWLoops;
+      //Utils.forEach(uniqueCCWLoops, function(loop) {
+      //  console.log("LOOP");
+      //  Utils.forEach(loop, function(corner) {
+      //    console.log(corner.id);
+      //  });
+      //});
+      return uniqueCCWLoops;
+    }
   }
 }
