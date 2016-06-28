@@ -2,160 +2,185 @@
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../utils/utils.ts" />
 /// <reference path="corner.ts" />
+/// <reference path="half_edge.ts" />
 
 module BP3D.Model {
-  /** start and end are Corner objects */
-  export var Wall = function (start, end) {
+  /** */
+  const defaultTexture = {
+    url: "rooms/textures/wallmap.png",
+    stretch: true,
+    scale: 0
+  }
 
-    this.id = getUuid();
+  /**  */
+  export class Wall {
 
-    var scope = this;
+    /** */
+    private id: string;
 
-    var start = start;
-    var end = end;
+    /** Front is the plane from start to end */
+    public frontEdge: HalfEdge = null;
 
-    this.thickness = 10;
-    this.height = 250;
+    /** */
+    public backEdge: HalfEdge = null;
 
-    // front is the plane from start to end
-    // these are of type HalfEdge
-    this.frontEdge = null;
-    this.backEdge = null;
-    this.orphan = false;
+    /** */
+    private orphan = false;
 
-    // items attached to this wall
-    this.items = [];
-    this.onItems = [];
+    /** Items attached to this wall */
+    private items = [];
 
-    var moved_callbacks = $.Callbacks();
-    var deleted_callbacks = $.Callbacks();
-    var action_callbacks = $.Callbacks();
+    /** */
+    private onItems = [];
 
-    var defaultTexture = {
-      url: "rooms/textures/wallmap.png",
-      stretch: true,
-      scale: 0
+    /** */
+    public frontTexture = defaultTexture;
+
+    /** */
+    public backTexture = defaultTexture;
+
+    /** */
+    public thickness = 10;
+
+    /** */
+    public height = 250;
+
+    /** */
+    private moved_callbacks: JQueryCallback;
+
+    /** */
+    private deleted_callbacks: JQueryCallback;
+
+    /** */
+    private action_callbacks: JQueryCallback;
+
+    /** */
+    constructor(private start: Corner, private end: Corner) {
+      this.id = this.getUuid();
+
+      this.moved_callbacks = $.Callbacks();
+      this.deleted_callbacks = $.Callbacks();
+      this.action_callbacks = $.Callbacks();
+
+      this.start.attachStart(this)
+      this.end.attachEnd(this);
     }
-    this.frontTexture = defaultTexture;
-    this.backTexture = defaultTexture;
 
-    start.attachStart(this)
-    end.attachEnd(this);
-
-    function getUuid() {
-      return [start.id, end.id].join();
+    private getUuid() {
+      return [this.start.id, this.end.id].join();
     }
 
-    this.resetFrontBack = function (func) {
+    private resetFrontBack(func) {
       this.frontEdge = null;
       this.backEdge = null;
       this.orphan = false;
     }
 
-    this.snapToAxis = function (tolerance) {
+    private snapToAxis(tolerance: number) {
       // order here is important, but unfortunately arbitrary
-      start.snapToAxis(tolerance);
-      end.snapToAxis(tolerance);
+      this.start.snapToAxis(tolerance);
+      this.end.snapToAxis(tolerance);
     }
 
-    this.fireOnMove = function (func) {
-      moved_callbacks.add(func);
+    public fireOnMove(func) {
+      this.moved_callbacks.add(func);
     }
 
-    this.fireOnDelete = function (func) {
-      deleted_callbacks.add(func);
+    public fireOnDelete(func) {
+      this.deleted_callbacks.add(func);
     }
 
-    this.dontFireOnDelete = function (func) {
-      deleted_callbacks.remove(func);
+    public dontFireOnDelete(func) {
+      this.deleted_callbacks.remove(func);
     }
 
-    this.fireOnAction = function (func) {
-      action_callbacks.add(func)
+    public fireOnAction(func) {
+      this.action_callbacks.add(func)
     }
 
-    this.fireAction = function (action) {
-      action_callbacks.fire(action)
+    public fireAction(action) {
+      this.action_callbacks.fire(action)
     }
 
-    this.getStart = function () {
-      return start;
+    public getStart(): Corner {
+      return this.start;
     }
 
-    this.relativeMove = function (dx, dy) {
-      start.relativeMove(dx, dy);
-      end.relativeMove(dx, dy);
+    private relativeMove(dx: number, dy: number) {
+      this.start.relativeMove(dx, dy);
+      this.end.relativeMove(dx, dy);
     }
 
-    this.fireMoved = function () {
-      moved_callbacks.fire();
+    public fireMoved() {
+      this.moved_callbacks.fire();
     }
 
-    this.fireRedraw = function () {
-      if (scope.frontEdge) {
-        scope.frontEdge.redrawCallbacks.fire();
+    public fireRedrawpublic() {
+      if (this.frontEdge) {
+        this.frontEdge.redrawCallbacks.fire();
       }
-      if (scope.backEdge) {
-        scope.backEdge.redrawCallbacks.fire();
+      if (this.backEdge) {
+        this.backEdge.redrawCallbacks.fire();
       }
     }
 
-    this.getEnd = function () {
-      return end;
+    public getEnd(): Corner {
+      return this.end;
     }
 
-    this.getStartX = function () {
-      return start.getX();
+    public getStartX(): number {
+      return this.start.getX();
     }
 
-    this.getEndX = function () {
-      return end.getX();
+    public getEndX(): number {
+      return this.end.getX();
     }
 
-    this.getStartY = function () {
-      return start.getY();
+    public getStartY(): number {
+      return this.start.getY();
     }
 
-    this.getEndY = function () {
-      return end.getY();
+    public getEndY(): number {
+      return this.end.getY();
     }
 
-    this.remove = function () {
-      start.detachWall(this);
-      end.detachWall(this);
-      deleted_callbacks.fire(this);
+    private remove() {
+      this.start.detachWall(this);
+      this.end.detachWall(this);
+      this.deleted_callbacks.fire(this);
     }
 
-    this.setStart = function (corner) {
-      start.detachWall(this);
+    public setStart(corner: Corner) {
+      this.start.detachWall(this);
       corner.attachStart(this);
-      start = corner;
+      this.start = corner;
       this.fireMoved();
     }
 
-    this.setEnd = function (corner) {
-      end.detachWall(this);
+    public setEnd(corner: Corner) {
+      this.end.detachWall(this);
       corner.attachEnd(this);
-      end = corner;
+      this.end = corner;
       this.fireMoved();
     }
 
-    this.distanceFrom = function (x, y) {
+    private distanceFrom(x: number, y: number): number {
       return Utils.pointDistanceFromLine(x, y,
         this.getStartX(), this.getStartY(),
         this.getEndX(), this.getEndY());
     }
 
-    // return the corner opposite of the one provided
-    this.oppositeCorner = function (corner) {
-      if (start === corner) {
-        return end;
-      } else if (end === corner) {
-        return start;
+    /** 
+     * return the corner opposite of the one provided
+     */
+    private oppositeCorner(corner: Corner): Corner {
+      if (this.start === corner) {
+        return this.end;
+      } else if (this.end === corner) {
+        return this.start;
       } else {
         console.log('Wall does not connect to corner');
       }
     }
-
   }
 }

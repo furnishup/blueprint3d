@@ -28,7 +28,7 @@ module BP3D.Model {
      * @param x X coordinate.
      * @param y Y coordinate.
     */
-    constructor(private floorplan: any, private x: number, private y: number, private id?: string) {
+    constructor(private floorplan: any, public x: number, public y: number, public id?: string) {
       this.id = id || Utils.guid();
 
       this.wallStarts = []
@@ -101,7 +101,7 @@ module BP3D.Model {
       return snapped;
     }
 
-    private relativeMove(dx: number, dy: number) {
+    public relativeMove(dx: number, dy: number) {
       this.move(this.x + dx, this.y + dy);
     }
 
@@ -196,7 +196,7 @@ module BP3D.Model {
     /**
      * 
      */
-    private detachWall(wall) {
+    public detachWall(wall) {
       Utils.removeValue(this.wallStarts, wall);
       Utils.removeValue(this.wallEnds, wall);
       if (this.wallStarts.length == 0 && this.wallEnds.length == 0) {
@@ -207,14 +207,14 @@ module BP3D.Model {
     /**
      * 
      */
-    private attachStart(wall) {
+    public attachStart(wall) {
       this.wallStarts.push(wall)
     }
 
     /**
      * 
      */
-    private attachEnd(wall) {
+    public attachEnd(wall) {
       this.wallEnds.push(wall)
     }
 

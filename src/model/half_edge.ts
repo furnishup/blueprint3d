@@ -10,52 +10,68 @@ module BP3D.Model {
    * A wall can have two half edges if it is visible
    * from both sides.
    */
-  export var HalfEdge = function (room, wall, front) {
+  export class HalfEdge {
 
-    var scope = this;
+    /** */
+    public next: HalfEdge;
 
-    this.room = room; // the room this fall faces
-    this.next;
-    this.prev;
-    this.front = front || false;
-    this.wall = wall;
+    /** */
+    public prev: HalfEdge;
 
-    // used for intersection testing... not convinced this belongs here
-    this.plane = null;
+    /** */
+    private offset: number;
 
-    // transform from world coords to wall planes (z=0)
-    this.interiorTransform = new THREE.Matrix4();
-    this.invInteriorTransform = new THREE.Matrix4();
-    this.exteriorTransform = new THREE.Matrix4();
-    this.invExteriorTransform = new THREE.Matrix4();
+    /** */
+    private height: number;
 
-    this.offset = wall.thickness / 2.0;
-    this.distane = null;
-    this.height = wall.height;
+    /** used for intersection testing... not convinced this belongs here */
+    private plane = null;
 
-    this.redrawCallbacks = $.Callbacks();
+    /** transform from world coords to wall planes (z=0) */
+    private interiorTransform = new THREE.Matrix4();
 
-    if (front) {
-      wall.frontEdge = this;
-    } else {
-      wall.backEdge = this;
-    }
+    /** transform from world coords to wall planes (z=0) */
+    private nvInteriorTransform = new THREE.Matrix4();
 
-    this.getTexture = function () {
-      if (front) {
-        return wall.frontTexture
+    /** transform from world coords to wall planes (z=0) */
+    private exteriorTransform = new THREE.Matrix4();
+
+    /** transform from world coords to wall planes (z=0) */
+    private invExteriorTransform = new THREE.Matrix4();
+
+    /** */
+    public redrawCallbacks: JQueryCallback;
+
+    constructor(private room: Room, private wall: Wall, private front: boolean) {
+      this.front = front || false;
+
+      this.offset = wall.thickness / 2.0;
+      this.height = wall.height;
+
+      this.redrawCallbacks = $.Callbacks();
+
+      if (this.front) {
+        this.wall.frontEdge = this;
       } else {
-        return wall.backTexture
+        this.wall.backEdge = this;
       }
     }
 
-    this.setTexture = function (textureUrl, textureStretch, textureScale) {
+    public getTexture() {
+      if (this.front) {
+        return this.wall.frontTexture;
+      } else {
+        return this.wall.backTexture;
+      }
+    }
+
+    public setTexture(textureUrl: string, textureStretch: boolean, textureScale: number) {
       var texture = {
         url: textureUrl,
         stretch: textureStretch,
         scale: textureScale
       }
-      if (front) {
+      if (this.front) {
         this.wall.frontTexture = texture;
       } else {
         this.wall.backTexture = texture;
@@ -63,8 +79,10 @@ module BP3D.Model {
       this.redrawCallbacks.fire();
     }
 
-    // this feels hacky, but need wall items
-    this.generatePlane = function () {
+    /** 
+     * this feels hacky, but need wall items
+     */
+    public generatePlane = function () {
 
       function transformCorner(corner) {
         return new THREE.Vector3(corner.x, 0, corner.y);
@@ -88,7 +106,7 @@ module BP3D.Model {
       this.plane = new THREE.Mesh(geometry,
         new THREE.MeshBasicMaterial());
       this.plane.visible = false;
-      this.plane.edge = scope; // js monkey patch
+      this.plane.edge = this; // js monkey patch
 
       this.computeTransforms(
         this.interiorTransform, this.invInteriorTransform,
@@ -96,16 +114,15 @@ module BP3D.Model {
       this.computeTransforms(
         this.exteriorTransform, this.invExteriorTransform,
         this.exteriorStart(), this.exteriorEnd());
-
     }
 
-    this.interiorDistance = function () {
+    private interiorDistance(): number {
       var start = this.interiorStart();
       var end = this.interiorEnd();
       return Utils.distance(start.x, start.y, end.x, end.y);
     }
 
-    this.computeTransforms = function (transform, invTransform, start, end) {
+    private computeTransforms(transform, invTransform, start, end) {
 
       var v1 = start;
       var v2 = end;
@@ -120,7 +137,7 @@ module BP3D.Model {
       invTransform.getInverse(transform);
     }
 
-    this.distanceTo = function (x, y) {
+    private distanceTo(x: number, y: number) {
       // x, y, x1, y1, x2, y2
       return Utils.pointDistanceFromLine(x, y,
         this.interiorStart().x,
@@ -129,7 +146,7 @@ module BP3D.Model {
         this.interiorEnd().y);
     }
 
-    this.getStart = function () {
+    private getStart() {
       if (this.front) {
         return this.wall.getStart();
       } else {
@@ -137,7 +154,7 @@ module BP3D.Model {
       }
     }
 
-    this.getEnd = function () {
+    private getEnd() {
       if (this.front) {
         return this.wall.getEnd();
       } else {
@@ -145,7 +162,7 @@ module BP3D.Model {
       }
     }
 
-    this.getOppositeEdge = function () {
+    private getOppositeEdge() {
       if (this.front) {
         return this.wall.backEdge;
       } else {
@@ -154,7 +171,7 @@ module BP3D.Model {
     }
 
     // these return an object with attributes x, y
-    this.interiorEnd = function () {
+    private interiorEnd = function () {
       var vec = this.halfAngleVector(this, this.next);
       return {
         x: this.getEnd().x + vec.x,
@@ -162,7 +179,7 @@ module BP3D.Model {
       }
     }
 
-    this.interiorStart = function () {
+    private interiorStart = function () {
       var vec = this.halfAngleVector(this.prev, this);
       return {
         x: this.getStart().x + vec.x,
@@ -170,14 +187,14 @@ module BP3D.Model {
       }
     }
 
-    this.interiorCenter = function () {
+    private interiorCenter() {
       return {
         x: (this.interiorStart().x + this.interiorEnd().x) / 2.0,
         y: (this.interiorStart().y + this.interiorEnd().y) / 2.0,
       }
     }
 
-    this.exteriorEnd = function () {
+    private exteriorEnd() {
       var vec = this.halfAngleVector(this, this.next);
       return {
         x: this.getEnd().x - vec.x,
@@ -185,7 +202,7 @@ module BP3D.Model {
       }
     }
 
-    this.exteriorStart = function () {
+    private exteriorStart() {
       var vec = this.halfAngleVector(this.prev, this);
       return {
         x: this.getStart().x - vec.x,
@@ -193,14 +210,15 @@ module BP3D.Model {
       }
     }
 
-    this.corners = function () {
+    private corners() {
       return [this.interiorStart(), this.interiorEnd(),
         this.exteriorEnd(), this.exteriorStart()];
     }
 
-    // CCW angle from v1 to v2
-    // v1 and v2 are HalfEdges
-    this.halfAngleVector = function (v1, v2) {
+    /** 
+     * Gets CCW angle from v1 to v2
+     */
+    private halfAngleVector(v1: HalfEdge, v2: HalfEdge): {x: number, y: number} {
       // make the best of things if we dont have prev or next
       if (!v1) {
         var v1startX = v2.getStart().x - (v2.getEnd().x - v2.getStart().x);
