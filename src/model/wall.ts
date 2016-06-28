@@ -54,7 +54,11 @@ module BP3D.Model {
     /** */
     private action_callbacks: JQueryCallback;
 
-    /** */
+    /** 
+     * Constructs a new wall.
+     * @param start Start corner.
+     * @param end End corner.
+     */
     constructor(private start: Corner, private end: Corner) {
       this.id = this.getUuid();
 

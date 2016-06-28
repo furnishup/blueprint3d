@@ -42,6 +42,12 @@ module BP3D.Model {
     /** */
     public redrawCallbacks: JQueryCallback;
 
+    /**
+     * Constructs a half edge.
+     * @param room The associated room.
+     * @param wall The corresponding wall.
+     * @param front True if front side.
+     */
     constructor(private room: Room, private wall: Wall, private front: boolean) {
       this.front = front || false;
 
@@ -57,6 +63,9 @@ module BP3D.Model {
       }
     }
 
+    /**
+     * 
+     */
     public getTexture() {
       if (this.front) {
         return this.wall.frontTexture;
@@ -65,6 +74,9 @@ module BP3D.Model {
       }
     }
 
+    /**
+     * 
+     */
     public setTexture(textureUrl: string, textureStretch: boolean, textureScale: number) {
       var texture = {
         url: textureUrl,
@@ -218,7 +230,7 @@ module BP3D.Model {
     /** 
      * Gets CCW angle from v1 to v2
      */
-    private halfAngleVector(v1: HalfEdge, v2: HalfEdge): {x: number, y: number} {
+    private halfAngleVector(v1: HalfEdge, v2: HalfEdge): { x: number, y: number } {
       // make the best of things if we dont have prev or next
       if (!v1) {
         var v1startX = v2.getStart().x - (v2.getEnd().x - v2.getStart().x);

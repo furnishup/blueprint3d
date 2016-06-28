@@ -44,6 +44,11 @@ module BP3D.Model {
     /** */
     private itemRemovedCallbacks: JQueryCallback;
 
+    /**
+     * Constructs a scene.
+     * @param model The associated model.
+     * @param textureDir The directory from which to load the textures.
+     */
     constructor(private model: Model, private textureDir: string) {
 
       this.scene = new THREE.Scene();

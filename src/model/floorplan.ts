@@ -37,10 +37,10 @@ module BP3D.Model {
     /** */
     private roomLoadedCallbacks: JQueryCallback;
 
-
     /** */
     private floorTextures: {};
 
+    /** Constructs a floorplan. */
     constructor() {
 
       // Track floor textures here, since rooms are destroyed and

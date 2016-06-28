@@ -26,7 +26,7 @@ module BP3D.Model {
     /** */
     private roomDeletedCallbacks: JQueryCallback;
 
-    /**
+    /** Constructs a new model.
      * @param textureDir The directory containing the textures.
      */
     constructor(textureDir: string) {

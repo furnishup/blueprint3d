@@ -27,7 +27,8 @@ module BP3D.Model {
      * @param floorplan The associated floorplan.
      * @param x X coordinate.
      * @param y Y coordinate.
-    */
+     * @param id An optional unique id. If not set, created internally.
+     */
     constructor(private floorplan: any, public x: number, public y: number, public id?: string) {
       this.id = id || Utils.guid();
 
