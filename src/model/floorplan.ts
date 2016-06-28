@@ -7,19 +7,20 @@
 /// <reference path="half_edge.ts" />
 
 module BP3D.Model {
-
+  /** */
   const defaultTolerance = 10.0;
 
+  /** */
   export class Floorplan {
 
     /** */
-    private walls: any[] = [];
+    private walls: Wall[] = [];
 
     /** */
     private corners: Corner[] = [];
 
     /** */
-    private rooms: any[] = [];
+    private rooms: Room[] = [];
 
     /** */
     private new_wall_callbacks: JQueryCallback;

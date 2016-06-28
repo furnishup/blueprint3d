@@ -10,6 +10,7 @@
 /// <reference path="../items/wall_item.ts" />
 
 module BP3D.Model {
+  /** */
   const item_types = {
     1: Items.FloorItem,
     2: Items.WallItem,
@@ -22,7 +23,7 @@ module BP3D.Model {
   /** */
   export class Scene {
 
-    /** */
+    /** The associated ThreeJS scene. */
     private scene: THREE.Scene;
 
     /** */
@@ -31,7 +32,7 @@ module BP3D.Model {
     /** */
     private needsUpdate = false;
 
-    /** */
+    /** The Json loader. */
     private loader: THREE.JSONLoader;
 
     /** */

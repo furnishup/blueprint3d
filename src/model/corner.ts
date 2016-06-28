@@ -2,17 +2,17 @@
 /// <reference path="../utils/utils.ts" />
 
 module BP3D.Model {
-
+  /** */
   const tolerance: number = 20;
 
   /** Corners are used to define walls. */
   export class Corner {
 
     /** */
-    private wallStarts: any[];
+    private wallStarts: Wall[];
 
     /** */
-    private wallEnds: any[];
+    private wallEnds: Wall[];
 
     /** */
     private moved_callbacks: JQueryCallback;

@@ -26,8 +26,10 @@ module BP3D.Model {
     /** */
     private roomDeletedCallbacks: JQueryCallback;
 
+    /**
+     * @param textureDir The directory containing the textures.
+     */
     constructor(textureDir: string) {
-
       this.floorplan = new Floorplan();
       this.scene = new Scene(this, textureDir);
 

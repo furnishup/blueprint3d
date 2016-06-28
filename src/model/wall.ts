@@ -15,7 +15,7 @@ module BP3D.Model {
   /**  */
   export class Wall {
 
-    /** */
+    /** The unique id of each wall. */
     private id: string;
 
     /** Front is the plane from start to end */
@@ -144,7 +144,7 @@ module BP3D.Model {
       return this.end.getY();
     }
 
-    private remove() {
+    public remove() {
       this.start.detachWall(this);
       this.end.detachWall(this);
       this.deleted_callbacks.fire(this);
@@ -164,7 +164,7 @@ module BP3D.Model {
       this.fireMoved();
     }
 
-    private distanceFrom(x: number, y: number): number {
+    public distanceFrom(x: number, y: number): number {
       return Utils.pointDistanceFromLine(x, y,
         this.getStartX(), this.getStartY(),
         this.getEndX(), this.getEndY());
