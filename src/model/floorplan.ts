@@ -7,30 +7,40 @@
 /// <reference path="half_edge.ts" />
 
 module BP3D.Model {
-  export var Floorplan = function () {
 
-    var scope = this;
+  const defaultTolerance = 10.0;
 
-    var walls = [];
-    var corners = [];
-    var rooms = [];
+  export class Floorplan {
 
-    // Track floor textures here, since rooms are destroyed and
-    // created each time we change the floorplan.
-    this.floorTextures = {}
+    private walls: any[] = [];
+    private corners: Corner[] = [];
+    private rooms: any[] = [];
 
-    var new_wall_callbacks = $.Callbacks();
-    var new_corner_callbacks = $.Callbacks();
-    var redraw_callbacks = $.Callbacks();
-    var updated_rooms = $.Callbacks();
-    this.roomLoadedCallbacks = $.Callbacks();
+    private new_wall_callbacks: JQueryCallback;
+    private new_corner_callbacks: JQueryCallback;
+    private redraw_callbacks: JQueryCallback;
+    private updated_rooms: JQueryCallback;
+    private roomLoadedCallbacks: JQueryCallback;
 
-    var defaultTolerance = 10.0;
+    private floorTextures: {};
+
+    constructor() {
+
+      // Track floor textures here, since rooms are destroyed and
+      // created each time we change the floorplan.
+      this.floorTextures = {};
+
+      this.new_wall_callbacks = $.Callbacks();
+      this.new_corner_callbacks = $.Callbacks();
+      this.redraw_callbacks = $.Callbacks();
+      this.updated_rooms = $.Callbacks();
+      this.roomLoadedCallbacks = $.Callbacks();
+    }
 
     // hack
-    this.wallEdges = function () {
+    private wallEdges() {
       var edges = []
-      Utils.forEach(walls, function (wall) {
+      Utils.forEach(this.walls, (wall) => {
         if (wall.frontEdge) {
           edges.push(wall.frontEdge);
         }
@@ -42,9 +52,9 @@ module BP3D.Model {
     }
 
     // hack
-    this.wallEdgePlanes = function () {
+    private wallEdgePlanes() {
       var planes = []
-      Utils.forEach(walls, function (wall) {
+      Utils.forEach(this.walls, (wall) => {
         if (wall.frontEdge) {
           planes.push(wall.frontEdge.plane);
         }
@@ -55,83 +65,82 @@ module BP3D.Model {
       return planes;
     }
 
-    this.floorPlanes = function () {
-      return Utils.map(rooms, function (room) {
+    private floorPlanes() {
+      return Utils.map(this.rooms, (room) => {
         return room.floorPlane;
       });
     }
 
-    this.fireOnNewWall = function (callback) {
-      new_wall_callbacks.add(callback);
+    public fireOnNewWall(callback) {
+      this.new_wall_callbacks.add(callback);
     }
 
-    this.fireOnNewCorner = function (callback) {
-      new_corner_callbacks.add(callback);
+    public fireOnNewCorner(callback) {
+      this.new_corner_callbacks.add(callback);
     }
 
-    this.fireOnRedraw = function (callback) {
-      redraw_callbacks.add(callback);
+    public fireOnRedraw(callback) {
+      this.redraw_callbacks.add(callback);
     }
 
-    this.fireOnUpdatedRooms = function (callback) {
-      updated_rooms.add(callback);
+    public fireOnUpdatedRooms(callback) {
+      this.updated_rooms.add(callback);
     }
 
-    this.newWall = function (start, end) {
+    private newWall(start: Corner, end: Corner) {
       var wall = new Wall(start, end);
-      walls.push(wall)
-      wall.fireOnDelete(removeWall);
-      new_wall_callbacks.fire(wall);
-      scope.update();
+      this.walls.push(wall)
+      wall.fireOnDelete(this.removeWall);
+      this.new_wall_callbacks.fire(wall);
+      this.update();
       return wall;
     }
 
-    function removeWall(wall) {
-      Utils.removeValue(walls, wall);
-      scope.update();
+    private removeWall(wall) {
+      Utils.removeValue(this.walls, wall);
+      this.update();
     }
 
-    this.newCorner = function (x, y, id) {
+    private newCorner(x: number, y: number, id: string) {
       var corner = new Corner(this, x, y, id);
-      corners.push(corner);
-      corner.fireOnDelete(removeCorner);
-      new_corner_callbacks.fire(corner);
+      this.corners.push(corner);
+      corner.fireOnDelete(this.removeCorner);
+      this.new_corner_callbacks.fire(corner);
       return corner;
     }
 
-    function removeCorner(corner) {
-      Utils.removeValue(corners, corner);
+    private removeCorner(corner: Corner) {
+      Utils.removeValue(this.corners, corner);
     }
 
-
-    this.getWalls = function () {
-      return walls;
+    public getWalls() {
+      return this.walls;
     }
 
-    this.getCorners = function () {
-      return corners;
+    public getCorners() {
+      return this.corners;
     }
 
-    this.getRooms = function () {
-      return rooms;
+    public getRooms() {
+      return this.rooms;
     }
 
-    this.overlappedCorner = function (x, y, tolerance) {
+    private overlappedCorner(x: number, y: number, tolerance: number): Corner {
       tolerance = tolerance || defaultTolerance;
-      for (var i = 0; i < corners.length; i++) {
-        if (corners[i].distanceFrom(x, y) < tolerance) {
+      for (var i = 0; i < this.corners.length; i++) {
+        if (this.corners[i].distanceFrom(x, y) < tolerance) {
           //console.log("got corner")
-          return corners[i];
+          return this.corners[i];
         }
       }
       return null;
     }
 
-    this.overlappedWall = function (x, y, tolerance) {
+    private overlappedWall(x: number, y: number, tolerance: number): any {
       tolerance = tolerance || defaultTolerance;
-      for (var i = 0; i < walls.length; i++) {
-        if (walls[i].distanceFrom(x, y) < tolerance) {
-          return walls[i];
+      for (var i = 0; i < this.walls.length; i++) {
+        if (this.walls[i].distanceFrom(x, y) < tolerance) {
+          return this.walls[i];
         }
       }
       return null;
@@ -139,21 +148,21 @@ module BP3D.Model {
 
     // import and export -- cleanup
 
-    this.saveFloorplan = function () {
+    public saveFloorplan() {
       var floorplan = {
         corners: {},
         walls: [],
         wallTextures: [],
         floorTextures: {},
-        newFloorTextures: []
+        newFloorTextures: {}
       }
-      Utils.forEach(corners, function (corner) {
+      Utils.forEach(this.corners, function (corner) {
         floorplan.corners[corner.id] = {
           'x': corner.x,
           'y': corner.y
         };
       });
-      Utils.forEach(walls, function (wall) {
+      Utils.forEach(this.walls, function (wall) {
         floorplan.walls.push({
           'corner1': wall.getStart().id,
           'corner2': wall.getEnd().id,
@@ -165,7 +174,7 @@ module BP3D.Model {
       return floorplan;
     }
 
-    this.loadFloorplan = function (floorplan) {
+    public loadFloorplan(floorplan) {
       this.reset();
 
       var corners = {};
@@ -176,6 +185,7 @@ module BP3D.Model {
         var corner = floorplan.corners[id];
         corners[id] = this.newCorner(corner.x, corner.y, id);
       }
+      var scope = this;
       Utils.forEach(floorplan.walls, function (wall) {
         var newWall = scope.newWall(
           corners[wall.corner1], corners[wall.corner2]);
@@ -195,7 +205,7 @@ module BP3D.Model {
       this.roomLoadedCallbacks.fire();
     }
 
-    this.getFloorTexture = function (uuid) {
+    public getFloorTexture(uuid: string) {
       if (uuid in this.floorTextures) {
         return this.floorTextures[uuid];
       } else {
@@ -203,7 +213,7 @@ module BP3D.Model {
       }
     }
 
-    this.setFloorTexture = function (uuid, url, scale) {
+    public setFloorTexture(uuid: string, url: string, scale) {
       this.floorTextures[uuid] = {
         url: url,
         scale: scale
@@ -211,65 +221,70 @@ module BP3D.Model {
     }
 
     // clear out obsolete floor textures
-    function updateFloorTextures() {
-      var uuids = Utils.map(rooms, function (room) {
+    private updateFloorTextures() {
+      var uuids = Utils.map(this.rooms, function (room) {
         return room.getUuid();
       });
-      for (var uuid in scope.floorTextures) {
+      for (var uuid in this.floorTextures) {
         if (!Utils.hasValue(uuids, uuid)) {
-          delete scope.floorTextures[uuid]
+          delete this.floorTextures[uuid]
         }
       }
     }
 
-    this.reset = function () {
-      var tmpCorners = corners.slice(0);
-      var tmpWalls = walls.slice(0);
+    private reset() {
+      var tmpCorners = this.corners.slice(0);
+      var tmpWalls = this.walls.slice(0);
       Utils.forEach(tmpCorners, function (c) {
         c.remove();
       })
       Utils.forEach(tmpWalls, function (w) {
         w.remove();
       })
-      corners = [];
-      walls = [];
+      this.corners = [];
+      this.walls = [];
     }
 
-    // update rooms
-    this.update = function () {
+    /** 
+     * Update rooms
+     */
+    private update() {
 
-      Utils.forEach(walls, function (wall) {
+      Utils.forEach(this.walls, function (wall) {
         wall.resetFrontBack();
       });
 
-      var roomCorners = findRooms(corners);
-      rooms = [];
+      var roomCorners = findRooms(this.corners);
+      this.rooms = [];
+      var scope = this;
       Utils.forEach(roomCorners, function (corners) {
-        rooms.push(new Room(scope, corners));
+        this.rooms.push(new Room(scope, corners));
       });
-      assignOrphanEdges();
+      this.assignOrphanEdges();
 
-      updateFloorTextures();
-      updated_rooms.fire();
+      this.updateFloorTextures();
+      this.updated_rooms.fire();
     }
 
-    // returns the center of the floorplan in the y-plane
-    this.getCenter = function () {
+    /** 
+     * Returns the center of the floorplan in the y plane
+     */
+    private getCenter() {
       return this.getDimensions(true);
     }
 
-    this.getSize = function () {
+    private getSize() {
       return this.getDimensions(false);
     }
 
-    this.getDimensions = function (center) {
+    private getDimensions(center) {
       center = center || false; // otherwise, get size
 
       var xMin = Infinity;
       var xMax = -Infinity;
       var zMin = Infinity;
       var zMax = -Infinity;
-      Utils.forEach(corners, function (c) {
+      Utils.forEach(this.corners, function (c) {
         if (c.x < xMin) xMin = c.x;
         if (c.x > xMax) xMax = c.x;
         if (c.y < zMin) zMin = c.y;
@@ -290,13 +305,12 @@ module BP3D.Model {
       return ret;
     }
 
-
-    function assignOrphanEdges() {
+    private assignOrphanEdges() {
       // kinda hacky
       // find orphaned wall segments (i.e. not part of rooms) and
       // give them edges
       var orphanWalls = []
-      Utils.forEach(walls, function (wall) {
+      Utils.forEach(this.walls, function (wall) {
         if (!wall.backEdge && !wall.frontEdge) {
           wall.orphan = true;
           var back = new HalfEdge(null, wall, false);

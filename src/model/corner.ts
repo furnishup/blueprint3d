@@ -165,7 +165,7 @@ module BP3D.Model {
     /**
      * 
      */
-    private distanceFrom(x: number, y: number): number {
+    public distanceFrom(x: number, y: number): number {
       var distance = Utils.distance(x, y, this.x, this.y);
       //console.log('x,y ' + x + ',' + y + ' to ' + this.getX() + ',' + this.getY() + ' is ' + distance);
       return distance;
@@ -174,14 +174,14 @@ module BP3D.Model {
     /**
      * 
      */
-    private distanceFromWall(wall): number {
+    public distanceFromWall(wall): number {
       return wall.distanceFrom(this.x, this.y);
     }
 
     /**
      * 
      */
-    private distanceFromCorner(corner): number {
+    public distanceFromCorner(corner): number {
       return this.distanceFrom(corner.x, corner.y);
     }
 
