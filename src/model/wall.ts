@@ -1,6 +1,7 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../utils/utils.ts" />
+/// <reference path="corner.ts" />
 
 module BP3D.Model {
   /** start and end are Corner objects */

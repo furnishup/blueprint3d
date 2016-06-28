@@ -1,6 +1,5 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
-
 /// <reference path="../utils/utils.ts" />
 /// <reference path="half_edge.ts" />
 

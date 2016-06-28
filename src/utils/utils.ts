@@ -132,17 +132,17 @@ module BP3D {
     /** Creates a Guid.
      * @returns A new Guid.
      */
-    static guid(): () => string {
+    static guid(): /* () => */ string {
       var tS4 = function () {
         return Math.floor((1 + Math.random()) * 0x10000)
           .toString(16)
           .substring(1);
       }
 
-      return function () {
+      // return function () {
         return tS4() + tS4() + '-' + tS4() + '-' + tS4() + '-' +
           tS4() + '-' + tS4() + tS4() + tS4();
-      };
+      // };
     }
 
     /** both arguments are arrays of corners with x,y attributes */

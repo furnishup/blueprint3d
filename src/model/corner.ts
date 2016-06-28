@@ -2,56 +2,85 @@
 /// <reference path="../utils/utils.ts" />
 
 module BP3D.Model {
-  // x and y are floats
-  export var Corner = function (floorplan, x, y, id) {
 
-    this.id = id || Utils.guid();
+  const tolerance: number = 20;
 
-    var scope = this;
+  /** Corners are used to define walls. */
+  export class Corner {
 
-    this.x = x;
-    this.y = y;
+    private wallStarts: any[];
+    private wallEnds: any[];
 
-    var floorplan = floorplan;
+    private moved_callbacks: JQueryCallback;
+    private deleted_callbacks: JQueryCallback;
+    private action_callbacks: JQueryCallback;
 
-    var tolerance = 20;
+    /** Constructs a corner. 
+     * @param floorplan The associated floorplan.
+     * @param x X coordinate.
+     * @param y Y coordinate.
+    */
+    constructor(private floorplan: any, private x: number, private y: number, private id?: string) {
+      this.id = id || Utils.guid();
 
-    this.wallStarts = []
-    this.wallEnds = []
+      this.wallStarts = []
+      this.wallEnds = []
 
-    var moved_callbacks = $.Callbacks();
-    var deleted_callbacks = $.Callbacks();
-    var action_callbacks = $.Callbacks();
-
-    this.fireOnMove = function (func) {
-      moved_callbacks.add(func);
+      this.moved_callbacks = $.Callbacks();
+      this.deleted_callbacks = $.Callbacks();
+      this.action_callbacks = $.Callbacks();
     }
 
-    this.fireOnDelete = function (func) {
-      deleted_callbacks.add(func);
+    /**
+     * 
+     */
+    public fireOnMove(func) {
+      this.moved_callbacks.add(func);
     }
 
-    this.fireOnAction = function (func) {
-      action_callbacks.add(func);
+    /**
+     * 
+     */
+    public fireOnDelete(func) {
+      this.deleted_callbacks.add(func);
     }
 
-    // TODO: deprecate
-    this.getX = function () {
+    /**
+     * 
+     */
+    public fireOnAction(func) {
+      this.action_callbacks.add(func);
+    }
+
+    /**
+     * @returns
+     * @deprecated
+     */
+    public getX(): number {
       return this.x;
     }
 
-    // TODO: deprecate
-    this.getY = function () {
+    /**
+     * @returns
+     * @deprecated
+     */
+    public getY(): number {
       return this.y;
     }
 
-    this.snapToAxis = function (tolerance) {
+    /**
+     * 
+     */
+    public snapToAxis(tolerance: number): { x: boolean, y: boolean } {
       // try to snap this corner to an axis
       var snapped = {
         x: false,
         y: false
       };
-      Utils.forEach(this.adjacentCorners(), function (corner) {
+
+      var scope = this;
+
+      Utils.forEach(this.adjacentCorners(), function (corner: Corner) {
         if (Math.abs(corner.x - scope.x) < tolerance) {
           scope.x = corner.x;
           snapped.x = true;
@@ -64,19 +93,19 @@ module BP3D.Model {
       return snapped;
     }
 
-    this.relativeMove = function (dx, dy) {
+    private relativeMove(dx: number, dy: number) {
       this.move(this.x + dx, this.y + dy);
     }
 
-    this.fireAction = function (action) {
-      action_callbacks.fire(action)
+    private fireAction(action) {
+      this.action_callbacks.fire(action)
     }
 
-    this.remove = function () {
-      deleted_callbacks.fire(this);
+    private remove() {
+      this.deleted_callbacks.fire(this);
     }
 
-    this.removeAll = function () {
+    private removeAll() {
       for (var i = 0; i < this.wallStarts.length; i++) {
         this.wallStarts[i].remove();
       }
@@ -86,11 +115,14 @@ module BP3D.Model {
       this.remove()
     }
 
-    this.move = function (newX, newY) {
+    /**
+     * 
+     */
+    private move(newX: number, newY: number) {
       this.x = newX;
       this.y = newY;
       this.mergeWithIntersected();
-      moved_callbacks.fire(this.x, this.y);
+      this.moved_callbacks.fire(this.x, this.y);
       Utils.forEach(this.wallStarts, function (wall) {
         wall.fireMoved();
       });
@@ -99,7 +131,10 @@ module BP3D.Model {
       });
     }
 
-    this.adjacentCorners = function () {
+    /**
+     * 
+     */
+    private adjacentCorners() {
       var retArray = [];
       for (var i = 0; i < this.wallStarts.length; i++) {
         retArray.push(this.wallStarts[i].getEnd());
@@ -110,7 +145,10 @@ module BP3D.Model {
       return retArray;
     }
 
-    this.isWallConnected = function (wall) {
+    /**
+     * 
+     */
+    private isWallConnected(wall): boolean {
       for (var i = 0; i < this.wallStarts.length; i++) {
         if (this.wallStarts[i] == wall) {
           return true;
@@ -124,21 +162,33 @@ module BP3D.Model {
       return false;
     }
 
-    this.distanceFrom = function (x, y) {
+    /**
+     * 
+     */
+    private distanceFrom(x: number, y: number): number {
       var distance = Utils.distance(x, y, this.x, this.y);
       //console.log('x,y ' + x + ',' + y + ' to ' + this.getX() + ',' + this.getY() + ' is ' + distance);
       return distance;
     }
 
-    this.distanceFromWall = function (wall) {
+    /**
+     * 
+     */
+    private distanceFromWall(wall): number {
       return wall.distanceFrom(this.x, this.y);
     }
 
-    this.distanceFromCorner = function (corner) {
+    /**
+     * 
+     */
+    private distanceFromCorner(corner): number {
       return this.distanceFrom(corner.x, corner.y);
     }
 
-    this.detachWall = function (wall) {
+    /**
+     * 
+     */
+    private detachWall(wall) {
       Utils.removeValue(this.wallStarts, wall);
       Utils.removeValue(this.wallEnds, wall);
       if (this.wallStarts.length == 0 && this.wallEnds.length == 0) {
@@ -146,16 +196,24 @@ module BP3D.Model {
       }
     }
 
-    this.attachStart = function (wall) {
+    /**
+     * 
+     */
+    private attachStart(wall) {
       this.wallStarts.push(wall)
     }
 
-    this.attachEnd = function (wall) {
+    /**
+     * 
+     */
+    private attachEnd(wall) {
       this.wallEnds.push(wall)
     }
 
-    // get wall to corner
-    this.wallTo = function (corner) {
+    /** 
+     * Get wall to corner.
+     */
+    private wallTo(corner: Corner) {
       for (var i = 0; i < this.wallStarts.length; i++) {
         if (this.wallStarts[i].getEnd() === corner) {
           return this.wallStarts[i];
@@ -164,7 +222,10 @@ module BP3D.Model {
       return null;
     }
 
-    this.wallFrom = function (corner) {
+    /**
+     * 
+     */
+    private wallFrom(corner: Corner) {
       for (var i = 0; i < this.wallEnds.length; i++) {
         if (this.wallEnds[i].getStart() === corner) {
           return this.wallEnds[i];
@@ -173,11 +234,17 @@ module BP3D.Model {
       return null;
     }
 
-    this.wallToOrFrom = function (corner) {
+    /**
+     * 
+     */
+    private wallToOrFrom(corner: Corner) {
       return this.wallTo(corner) || this.wallFrom(corner);
     }
 
-    this.combineWithCorner = function (corner) {
+    /**
+     * 
+     */
+    private combineWithCorner(corner: Corner) {
       // update position to other corner's
       this.x = corner.x;
       this.y = corner.y;
@@ -191,22 +258,22 @@ module BP3D.Model {
       // delete the other corner
       corner.removeAll();
       this.removeDuplicateWalls();
-      floorplan.update();
+      this.floorplan.update();
     }
 
-    this.mergeWithIntersected = function () {
+    private mergeWithIntersected(): boolean {
       //console.log('mergeWithIntersected for object: ' + this.type);
       // check corners
-      for (var i = 0; i < floorplan.getCorners().length; i++) {
-        var obj = floorplan.getCorners()[i];
+      for (var i = 0; i < this.floorplan.getCorners().length; i++) {
+        var obj = this.floorplan.getCorners()[i];
         if (this.distanceFromCorner(obj) < tolerance && obj != this) {
           this.combineWithCorner(obj);
           return true;
         }
       }
       // check walls
-      for (var i = 0; i < floorplan.getWalls().length; i++) {
-        obj = floorplan.getWalls()[i];
+      for (var i = 0; i < this.floorplan.getWalls().length; i++) {
+        obj = this.floorplan.getWalls()[i];
         if (this.distanceFromWall(obj) < tolerance && !this.isWallConnected(obj)) {
           // update position to be on wall
           var intersection = Utils.closestPointOnLine(this.x, this.y,
@@ -215,10 +282,10 @@ module BP3D.Model {
           this.x = intersection.x;
           this.y = intersection.y;
           // merge this corner into wall by breaking wall into two parts
-          floorplan.newWall(
+          this.floorplan.newWall(
             this, obj.getEnd());
           obj.setEnd(this);
-          floorplan.update();
+          this.floorplan.update();
           return true;
         }
       }
@@ -226,7 +293,7 @@ module BP3D.Model {
     }
 
     // ensure we do not have duplicate walls (i.e. same start and end points)
-    this.removeDuplicateWalls = function () {
+    private removeDuplicateWalls() {
       // delete the wall between these corners, if it exists
       var wallEndpoints = {};
       var wallStartpoints = {};
@@ -253,6 +320,5 @@ module BP3D.Model {
         }
       }
     }
-
-  };
+  }
 }
