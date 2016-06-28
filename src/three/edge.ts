@@ -195,9 +195,9 @@ module BP3D.Three {
 
       var shape = new THREE.Shape([
         new THREE.Vector2(points[0].x, points[0].y),
-          new THREE.Vector2(points[1].x, points[1].y),
-          new THREE.Vector2(points[2].x, points[2].y),
-          new THREE.Vector2(points[3].x, points[3].y)
+        new THREE.Vector2(points[1].x, points[1].y),
+        new THREE.Vector2(points[2].x, points[2].y),
+        new THREE.Vector2(points[3].x, points[3].y)
       ]);
 
       // add holes for each wall item
