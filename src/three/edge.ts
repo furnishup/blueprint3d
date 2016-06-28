@@ -193,7 +193,12 @@ module BP3D.Three {
         p.applyMatrix4(transform);
       });
 
-      var shape = new THREE.Shape(points); // TODO_Ekki
+      var shape = new THREE.Shape([
+        new THREE.Vector2(points[0].x, points[0].y),
+          new THREE.Vector2(points[1].x, points[1].y),
+          new THREE.Vector2(points[2].x, points[2].y),
+          new THREE.Vector2(points[3].x, points[3].y)
+      ]);
 
       // add holes for each wall item
       Utils.forEach(wall.items, function (item) {
@@ -206,13 +211,13 @@ module BP3D.Three {
         max.add(pos);
 
         var holePoints = [
-          new THREE.Vector3(min.x, min.y, 0),
-          new THREE.Vector3(max.x, min.y, 0),
-          new THREE.Vector3(max.x, max.y, 0),
-          new THREE.Vector3(min.x, max.y, 0)
+          new THREE.Vector2(min.x, min.y),
+          new THREE.Vector2(max.x, min.y),
+          new THREE.Vector2(max.x, max.y),
+          new THREE.Vector2(min.x, max.y)
         ];
 
-        shape.holes.push(new THREE.Path(holePoints)); // TODO_Ekki
+        shape.holes.push(new THREE.Path(holePoints));
       });
 
       var geometry = new THREE.ShapeGeometry(shape);
