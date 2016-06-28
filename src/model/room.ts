@@ -1,6 +1,8 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../utils/utils.ts" />
+/// <reference path="corner.ts" />
+/// <reference path="floorplan.ts" />
 /// <reference path="half_edge.ts" />
 
 /*
@@ -11,34 +13,37 @@ var Polygon = require('polygon')
 */
 
 module BP3D.Model {
-  export var Room = function (floorplan, corners) {
+  const defaultTexture = {
+    url: "rooms/textures/hardwood.png",
+    scale: 400
+  }
 
-    var scope = this;
+  /** */
+  export class Room {
 
-    // ordered CCW
-    var floorplan = floorplan;
-    this.corners = corners;
+    private interiorCorners = [];
 
-    this.interiorCorners = [];
-    this.edgePointer = null;
+    private edgePointer = null;
 
-    // floor plane for intersection testing
-    this.floorPlane = null;
+    /** floor plane for intersection testing */
+    private floorPlane = null;
 
-    this.customTexture = false;
+    private customTexture = false;
 
-    var defaultTexture = {
-      url: "rooms/textures/hardwood.png",
-      scale: 400
+    private floorChangeCallbacks: JQueryCallback;
+
+    /**
+     *  ordered CCW
+     */
+    constructor(private floorplan: Floorplan, private corners: Corner[]) {
+      this.floorChangeCallbacks = $.Callbacks();
+
+      this.updateWalls();
+      this.updateInteriorCorners();
+      this.generatePlane();
     }
 
-    var floorChangeCallbacks = $.Callbacks();
-
-    updateWalls();
-    updateInteriorCorners();
-    generatePlane();
-
-    this.getUuid = function () {
+    private getUuid(): string {
       var cornerUuids = Utils.map(this.corners, function (c) {
         return c.id;
       });
@@ -46,55 +51,57 @@ module BP3D.Model {
       return cornerUuids.join();
     }
 
-    this.fireOnFloorChange = function (callback) {
-      floorChangeCallbacks.add(callback);
+    public fireOnFloorChange(callback) {
+      this.floorChangeCallbacks.add(callback);
     }
 
-    this.getTexture = function () {
+    private getTexture() {
       var uuid = this.getUuid();
-      var tex = floorplan.getFloorTexture(uuid);
+      var tex = this.floorplan.getFloorTexture(uuid);
       return tex || defaultTexture;
     }
 
-    // textureStretch always true, just an argument for consistency with walls
-    this.setTexture = function (textureUrl, textureStretch, textureScale) {
+    /** 
+     * textureStretch always true, just an argument for consistency with walls
+     */
+    private setTexture(textureUrl: string, textureStretch, textureScale: number) {
       var uuid = this.getUuid();
-      floorplan.setFloorTexture(uuid, textureUrl, textureScale);
-      floorChangeCallbacks.fire();
+      this.floorplan.setFloorTexture(uuid, textureUrl, textureScale);
+      this.floorChangeCallbacks.fire();
     }
 
-    function generatePlane() {
+    private generatePlane() {
       var points = [];
-      Utils.forEach(scope.interiorCorners, function (corner) {
+      Utils.forEach(this.interiorCorners, function (corner) {
         points.push(new THREE.Vector2(
           corner.x,
           corner.y));
       });
       var shape = new THREE.Shape(points);
       var geometry = new THREE.ShapeGeometry(shape);
-      scope.floorPlane = new THREE.Mesh(geometry,
+      this.floorPlane = new THREE.Mesh(geometry,
         new THREE.MeshBasicMaterial({
           side: THREE.DoubleSide
         }));
-      scope.floorPlane.visible = false;
-      scope.floorPlane.rotation.set(Math.PI / 2, 0, 0);
-      scope.floorPlane.room = scope; // js monkey patch
+      this.floorPlane.visible = false;
+      this.floorPlane.rotation.set(Math.PI / 2, 0, 0);
+      this.floorPlane.room = this; // js monkey patch
     }
 
-    function cycleIndex(ind) {
-      if (ind < 0) {
-        return ind += scope.corners.length;
+    private cycleIndex(index) {
+      if (index < 0) {
+        return index += this.corners.length;
       } else {
-        return ind % scope.corners.length;
+        return index % this.corners.length;
       }
     }
 
-    function updateInteriorCorners() {
-      var edge = scope.edgePointer;
+    private updateInteriorCorners() {
+      var edge = this.edgePointer;
       while (true) {
-        scope.interiorCorners.push(edge.interiorStart());
+        this.interiorCorners.push(edge.interiorStart());
         edge.generatePlane();
-        if (edge.next === scope.edgePointer) {
+        if (edge.next === this.edgePointer) {
           break;
         } else {
           edge = edge.next;
@@ -102,26 +109,28 @@ module BP3D.Model {
       }
     }
 
-    // populates each wall's half edge relating to this room
-    // this creates a fancy doubly connected edge list (DCEL)
-    function updateWalls() {
+    /** 
+     * Populates each wall's half edge relating to this room
+     * this creates a fancy doubly connected edge list (DCEL)
+     */
+    private updateWalls() {
 
       var prevEdge = null;
       var firstEdge = null;
 
-      for (var i = 0; i < corners.length; i++) {
+      for (var i = 0; i < this.corners.length; i++) {
 
-        var firstCorner = corners[i];
-        var secondCorner = corners[(i + 1) % corners.length];
+        var firstCorner = this.corners[i];
+        var secondCorner = this.corners[(i + 1) % this.corners.length];
 
         // find if wall is heading in that direction
         var wallTo = firstCorner.wallTo(secondCorner);
         var wallFrom = firstCorner.wallFrom(secondCorner);
 
         if (wallTo) {
-          var edge = new HalfEdge(scope, wallTo, true);
+          var edge = new HalfEdge(this, wallTo, true);
         } else if (wallFrom) {
-          var edge = new HalfEdge(scope, wallFrom, false);
+          var edge = new HalfEdge(this, wallFrom, false);
         } else {
           // something horrible has happened
           console.log("corners arent connected by a wall, uh oh");
@@ -132,7 +141,7 @@ module BP3D.Model {
         } else {
           edge.prev = prevEdge;
           prevEdge.next = edge;
-          if (i + 1 == corners.length) {
+          if (i + 1 == this.corners.length) {
             firstEdge.prev = edge;
             edge.next = firstEdge;
           }
@@ -141,8 +150,7 @@ module BP3D.Model {
       }
 
       // hold on to an edge reference
-      scope.edgePointer = firstEdge;
+      this.edgePointer = firstEdge;
     }
-
   }
 }

@@ -213,7 +213,7 @@ module BP3D.Model {
     /** 
      * Get wall to corner.
      */
-    private wallTo(corner: Corner) {
+    public wallTo(corner: Corner) {
       for (var i = 0; i < this.wallStarts.length; i++) {
         if (this.wallStarts[i].getEnd() === corner) {
           return this.wallStarts[i];
@@ -225,7 +225,7 @@ module BP3D.Model {
     /**
      * 
      */
-    private wallFrom(corner: Corner) {
+    public wallFrom(corner: Corner) {
       for (var i = 0; i < this.wallEnds.length; i++) {
         if (this.wallEnds[i].getStart() === corner) {
           return this.wallEnds[i];
@@ -237,7 +237,7 @@ module BP3D.Model {
     /**
      * 
      */
-    private wallToOrFrom(corner: Corner) {
+    public wallToOrFrom(corner: Corner) {
       return this.wallTo(corner) || this.wallFrom(corner);
     }
 

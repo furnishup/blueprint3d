@@ -213,7 +213,7 @@ module BP3D.Model {
       }
     }
 
-    public setFloorTexture(uuid: string, url: string, scale) {
+    public setFloorTexture(uuid: string, url: string, scale: number) {
       this.floorTextures[uuid] = {
         url: url,
         scale: scale
