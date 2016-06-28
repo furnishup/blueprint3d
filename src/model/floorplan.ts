@@ -8,7 +8,7 @@
 
 module BP3D.Model {
   /** */
-  const defaultTolerance = 10.0;
+  const defaultFloorPlanTolerance = 10.0;
 
   /** */
   export class Floorplan {
@@ -143,7 +143,7 @@ module BP3D.Model {
     }
 
     private overlappedCorner(x: number, y: number, tolerance: number): Corner {
-      tolerance = tolerance || defaultTolerance;
+      tolerance = tolerance || defaultFloorPlanTolerance;
       for (var i = 0; i < this.corners.length; i++) {
         if (this.corners[i].distanceFrom(x, y) < tolerance) {
           //console.log("got corner")
@@ -154,7 +154,7 @@ module BP3D.Model {
     }
 
     private overlappedWall(x: number, y: number, tolerance: number): any {
-      tolerance = tolerance || defaultTolerance;
+      tolerance = tolerance || defaultFloorPlanTolerance;
       for (var i = 0; i < this.walls.length; i++) {
         if (this.walls[i].distanceFrom(x, y) < tolerance) {
           return this.walls[i];

@@ -6,7 +6,7 @@
 
 module BP3D.Model {
   /** */
-  const defaultTexture = {
+  const defaultWallTexture = {
     url: "rooms/textures/wallmap.png",
     stretch: true,
     scale: 0
@@ -34,10 +34,10 @@ module BP3D.Model {
     private onItems = [];
 
     /** */
-    public frontTexture = defaultTexture;
+    public frontTexture = defaultWallTexture;
 
     /** */
-    public backTexture = defaultTexture;
+    public backTexture = defaultWallTexture;
 
     /** */
     public thickness = 10;

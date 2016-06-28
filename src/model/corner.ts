@@ -3,7 +3,7 @@
 
 module BP3D.Model {
   /** */
-  const tolerance: number = 20;
+  const cornerTolerance: number = 20;
 
   /** Corners are used to define walls. */
   export class Corner {
@@ -275,7 +275,7 @@ module BP3D.Model {
       // check corners
       for (var i = 0; i < this.floorplan.getCorners().length; i++) {
         var obj = this.floorplan.getCorners()[i];
-        if (this.distanceFromCorner(obj) < tolerance && obj != this) {
+        if (this.distanceFromCorner(obj) < cornerTolerance && obj != this) {
           this.combineWithCorner(obj);
           return true;
         }
@@ -283,7 +283,7 @@ module BP3D.Model {
       // check walls
       for (var i = 0; i < this.floorplan.getWalls().length; i++) {
         obj = this.floorplan.getWalls()[i];
-        if (this.distanceFromWall(obj) < tolerance && !this.isWallConnected(obj)) {
+        if (this.distanceFromWall(obj) < cornerTolerance && !this.isWallConnected(obj)) {
           // update position to be on wall
           var intersection = Utils.closestPointOnLine(this.x, this.y,
             obj.getStart().x, obj.getStart().y,

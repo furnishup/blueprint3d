@@ -15,7 +15,7 @@ var Polygon = require('polygon')
 module BP3D.Model {
 
   /** Default texture to be used if nothing is provided. */
-  const defaultTexture = {
+  const defaultRoomTexture = {
     url: "rooms/textures/hardwood.png",
     scale: 400
   }
@@ -64,7 +64,7 @@ module BP3D.Model {
     private getTexture() {
       var uuid = this.getUuid();
       var tex = this.floorplan.getFloorTexture(uuid);
-      return tex || defaultTexture;
+      return tex || defaultRoomTexture;
     }
 
     /** 
