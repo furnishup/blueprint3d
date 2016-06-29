@@ -36,14 +36,12 @@ module BP3D.Model {
     private customTexture = false;
 
     /** */
-    private floorChangeCallbacks: JQueryCallback;
+    private floorChangeCallbacks = $.Callbacks();
 
     /**
      *  ordered CCW
      */
     constructor(private floorplan: Floorplan, private corners: Corner[]) {
-      this.floorChangeCallbacks = $.Callbacks();
-
       this.updateWalls();
       this.updateInteriorCorners();
       this.generatePlane();

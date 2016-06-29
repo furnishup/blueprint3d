@@ -46,13 +46,13 @@ module BP3D.Model {
     public height = 250;
 
     /** */
-    private moved_callbacks: JQueryCallback;
+    private moved_callbacks = $.Callbacks();
 
     /** */
-    private deleted_callbacks: JQueryCallback;
+    private deleted_callbacks = $.Callbacks();
 
     /** */
-    private action_callbacks: JQueryCallback;
+    private action_callbacks = $.Callbacks();
 
     /** 
      * Constructs a new wall.
@@ -61,10 +61,6 @@ module BP3D.Model {
      */
     constructor(private start: Corner, private end: Corner) {
       this.id = this.getUuid();
-
-      this.moved_callbacks = $.Callbacks();
-      this.deleted_callbacks = $.Callbacks();
-      this.action_callbacks = $.Callbacks();
 
       this.start.attachStart(this)
       this.end.attachEnd(this);

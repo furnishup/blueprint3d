@@ -36,13 +36,13 @@ module BP3D.Model {
     private loader: THREE.JSONLoader;
 
     /** */
-    private itemLoadingCallbacks: JQueryCallback;
+    private itemLoadingCallbacks = $.Callbacks();
 
-    /** */
-    private itemLoadedCallbacks: JQueryCallback;
+    /** Item */
+    private itemLoadedCallbacks = $.Callbacks();
 
-    /** */
-    private itemRemovedCallbacks: JQueryCallback;
+    /** Item */
+    private itemRemovedCallbacks = $.Callbacks();
 
     /**
      * Constructs a scene.
@@ -56,11 +56,6 @@ module BP3D.Model {
       // init item loader
       this.loader = new THREE.JSONLoader();
       this.loader.crossOrigin = "";
-
-      // init callbacks
-      this.itemLoadingCallbacks = $.Callbacks();
-      this.itemLoadedCallbacks = $.Callbacks(); // Item
-      this.itemRemovedCallbacks = $.Callbacks(); // Item
     }
 
     private add(mesh) {

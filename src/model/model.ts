@@ -15,16 +15,16 @@ module BP3D.Model {
     private scene: Scene;
 
     /** */
-    private roomLoadingCallbacks: JQueryCallback;
+    private roomLoadingCallbacks = $.Callbacks();
 
     /** */
-    private roomLoadedCallbacks: JQueryCallback;
+    private roomLoadedCallbacks = $.Callbacks();
 
-    /** */
-    private roomSavedCallbacks: JQueryCallback;
+    /** name */
+    private roomSavedCallbacks = $.Callbacks();
 
-    /** */
-    private roomDeletedCallbacks: JQueryCallback;
+    /** success (bool), copy (bool) */
+    private roomDeletedCallbacks = $.Callbacks();
 
     /** Constructs a new model.
      * @param textureDir The directory containing the textures.
@@ -32,11 +32,6 @@ module BP3D.Model {
     constructor(textureDir: string) {
       this.floorplan = new Floorplan();
       this.scene = new Scene(this, textureDir);
-
-      this.roomLoadingCallbacks = $.Callbacks();
-      this.roomLoadedCallbacks = $.Callbacks(); // name
-      this.roomSavedCallbacks = $.Callbacks(); // success (bool), copy (bool)
-      this.roomDeletedCallbacks = $.Callbacks();
     }
 
     private loadSerialized(json: string) {

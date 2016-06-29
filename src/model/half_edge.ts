@@ -40,7 +40,7 @@ module BP3D.Model {
     private invExteriorTransform = new THREE.Matrix4();
 
     /** */
-    public redrawCallbacks: JQueryCallback;
+    public redrawCallbacks = $.Callbacks();
 
     /**
      * Constructs a half edge.
@@ -53,8 +53,6 @@ module BP3D.Model {
 
       this.offset = wall.thickness / 2.0;
       this.height = wall.height;
-
-      this.redrawCallbacks = $.Callbacks();
 
       if (this.front) {
         this.wall.frontEdge = this;

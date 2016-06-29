@@ -23,35 +23,28 @@ module BP3D.Model {
     private rooms: Room[] = [];
 
     /** */
-    private new_wall_callbacks: JQueryCallback;
+    private new_wall_callbacks = $.Callbacks();
 
     /** */
-    private new_corner_callbacks: JQueryCallback;
+    private new_corner_callbacks = $.Callbacks();
 
     /** */
-    private redraw_callbacks: JQueryCallback;
+    private redraw_callbacks = $.Callbacks();
 
     /** */
-    private updated_rooms: JQueryCallback;
+    private updated_rooms = $.Callbacks();
 
     /** */
-    private roomLoadedCallbacks: JQueryCallback;
+    private roomLoadedCallbacks = $.Callbacks();
 
     /** */
-    private floorTextures: {};
+    private floorTextures = {};
 
     /** Constructs a floorplan. */
     constructor() {
 
       // Track floor textures here, since rooms are destroyed and
       // created each time we change the floorplan.
-      this.floorTextures = {};
-
-      this.new_wall_callbacks = $.Callbacks();
-      this.new_corner_callbacks = $.Callbacks();
-      this.redraw_callbacks = $.Callbacks();
-      this.updated_rooms = $.Callbacks();
-      this.roomLoadedCallbacks = $.Callbacks();
     }
 
     // hack

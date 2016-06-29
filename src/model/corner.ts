@@ -1,5 +1,7 @@
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../utils/utils.ts" />
+/// <reference path="floorplan.ts" />
+/// <reference path="wall.ts" />
 
 module BP3D.Model {
   /** */
@@ -9,19 +11,19 @@ module BP3D.Model {
   export class Corner {
 
     /** */
-    private wallStarts: Wall[];
+    private wallStarts: Wall[] = [];
 
     /** */
-    private wallEnds: Wall[];
+    private wallEnds: Wall[] = [];
 
     /** */
-    private moved_callbacks: JQueryCallback;
+    private moved_callbacks = $.Callbacks();
 
     /** */
-    private deleted_callbacks: JQueryCallback;
+    private deleted_callbacks = $.Callbacks();
 
     /** */
-    private action_callbacks: JQueryCallback;
+    private action_callbacks = $.Callbacks();
 
     /** Constructs a corner. 
      * @param floorplan The associated floorplan.
@@ -31,13 +33,6 @@ module BP3D.Model {
      */
     constructor(private floorplan: Floorplan, public x: number, public y: number, public id?: string) {
       this.id = id || Utils.guid();
-
-      this.wallStarts = []
-      this.wallEnds = []
-
-      this.moved_callbacks = $.Callbacks();
-      this.deleted_callbacks = $.Callbacks();
-      this.action_callbacks = $.Callbacks();
     }
 
     /**
