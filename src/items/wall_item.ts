@@ -1,18 +1,22 @@
 /// <reference path="../../lib/three.d.ts" />
+/// <reference path="../model/half_edge.ts" />
 /// <reference path="../model/model.ts" />
 /// <reference path="../utils/utils.ts" />
 /// <reference path="item.ts" />
 
 namespace BP3D.Items {
-  /** */
+  /**
+   * A Wall Item is an entity to be placed related to a wall.
+   */
   export abstract class WallItem extends Item {
-    /** TODO:
-     * This caused a huge headache.
-     * HalfEdges get destroyed/created every time floorplan is edited.
-     * This item should store a reference to a wall and front/back,
-     * and grab its edge reference dynamically whenever it needs it.
-     */
+    /** The currently applied wall edge. */
     protected currentWallEdge = null;
+    /* TODO:
+       This caused a huge headache.
+       HalfEdges get destroyed/created every time floorplan is edited.
+       This item should store a reference to a wall and front/back,
+       and grab its edge reference dynamically whenever it needs it.
+     */
 
     /** used for finding rotations */
     private refVec = new THREE.Vector2(0, 1.0);
@@ -44,8 +48,10 @@ namespace BP3D.Items {
       this.allowRotate = false;
     };
 
-    /** */
-    public closestWallEdge() {
+    /** Get the closet wall edge.
+     * @returns The wall edge.
+     */
+    public closestWallEdge(): Model.HalfEdge {
 
       var wallEdges = this.model.floorplan.wallEdges();
 
@@ -82,7 +88,7 @@ namespace BP3D.Items {
     }
 
     /** */
-    private updateEdgeVisibility(visible, front) {
+    private updateEdgeVisibility(visible: boolean, front: boolean) {
       if (front) {
         this.frontVisible = visible;
       } else {

@@ -43,7 +43,7 @@ module BP3D.Model {
     /**
      *  ordered CCW
      */
-    constructor(private floorplan: Floorplan, private corners: Corner[]) {
+    constructor(private floorplan: Floorplan, public corners: Corner[]) {
       this.updateWalls();
       this.updateInteriorCorners();
       this.generatePlane();

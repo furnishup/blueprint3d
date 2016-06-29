@@ -3,7 +3,7 @@
 /// <reference path="../utils/utils.ts" />
 
 module BP3D.Model {
-  /*
+  /**
    * Half Edges are created by Room.
    * 
    * Once rooms have been identified, Half Edges are created for each interior wall.
@@ -48,7 +48,7 @@ module BP3D.Model {
      * @param wall The corresponding wall.
      * @param front True if front side.
      */
-    constructor(private room: Room, private wall: Wall, private front: boolean) {
+    constructor(private room: Room, public wall: Wall, private front: boolean) {
       this.front = front || false;
 
       this.offset = wall.thickness / 2.0;

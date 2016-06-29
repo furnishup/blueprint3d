@@ -4,7 +4,10 @@
 /// <reference path="../utils/utils.ts" />
 
 module BP3D.Items {
-  /** */
+  /**
+   * An Item is an abstract entity for all things placed in the scene,
+   * e.g. at walls or on the floor.
+   */
   export abstract class Item extends THREE.Mesh {
 
     /** */

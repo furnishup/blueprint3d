@@ -47,7 +47,9 @@ module BP3D.Floorplanner {
   const cornerColor = "#cccccc"
   const cornerColorHover = "#008cba"
 
-  /** */
+  /**
+   * The View to be used by a Floorplanner to render in/interact with.
+   */
   export class FloorplannerView {
 
     /** The canvas element. */
@@ -178,7 +180,7 @@ module BP3D.Floorplanner {
     }
 
     /** */
-    private drawRoom(room) {
+    private drawRoom(room: Model.Room) {
       this.drawPolygon(
         Utils.map(room.corners, function (corner) {
           return this.viewmodel.convertX(corner.x);
@@ -192,7 +194,7 @@ module BP3D.Floorplanner {
     }
 
     /** */
-    private drawCorner(corner) {
+    private drawCorner(corner: Model.Corner) {
       var hover = (corner === this.viewmodel.activeCorner);
       var color = cornerColor;
       if (hover && this.viewmodel.mode == floorplannerModes.DELETE) {
@@ -260,7 +262,6 @@ module BP3D.Floorplanner {
         this.context.strokeStyle = strokeColor;
         this.context.stroke();
       }
-
     }
 
     /** */
