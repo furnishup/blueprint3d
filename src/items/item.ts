@@ -2,6 +2,7 @@
 /// <reference path="../model/model.ts" />
 /// <reference path="../model/scene.ts" />
 /// <reference path="../utils/utils.ts" />
+/// <reference path="metadata.ts" />
 
 module BP3D.Items {
   /**
@@ -64,13 +65,8 @@ module BP3D.Items {
      * @param rotation TODO
      * @param scale TODO 
      */
-    constructor(protected model: Model.Model, public metadata, geometry: THREE.Geometry, material: THREE.MeshFaceMaterial, position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
+    constructor(protected model: Model.Model, public metadata: Metadata, geometry: THREE.Geometry, material: THREE.MeshFaceMaterial, position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
       super();
-
-      //this.three = three;
-      //this.model = three.getModel();
-      //this.scene = three.getScene();
-      //this.controller = three.getController();
 
       this.scene = this.model.scene;
       this.geometry = geometry;
