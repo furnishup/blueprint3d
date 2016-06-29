@@ -107,10 +107,6 @@ module BP3D.Model {
       this.action_callbacks.fire(action)
     }
 
-    public getStart(): Corner {
-      return this.start;
-    }
-
     private relativeMove(dx: number, dy: number) {
       this.start.relativeMove(dx, dy);
       this.end.relativeMove(dx, dy);
@@ -127,6 +123,10 @@ module BP3D.Model {
       if (this.backEdge) {
         this.backEdge.redrawCallbacks.fire();
       }
+    }
+
+    public getStart(): Corner {
+      return this.start;
     }
 
     public getEnd(): Corner {
@@ -175,8 +175,9 @@ module BP3D.Model {
         this.getEndX(), this.getEndY());
     }
 
-    /** 
-     * return the corner opposite of the one provided
+    /** Return the corner opposite of the one provided.
+     * @param corner The given corner.
+     * @returns The opposite corner.
      */
     private oppositeCorner(corner: Corner): Corner {
       if (this.start === corner) {

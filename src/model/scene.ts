@@ -4,7 +4,7 @@
 /// <reference path="../items/floor_item.ts" />
 /// <reference path="../items/in_wall_floor_item.ts" />
 /// <reference path="../items/in_wall_item.ts" />
-/// <reference path="../items/Item.ts" />
+/// <reference path="../items/item.ts" />
 /// <reference path="../items/on_floor_item.ts" />
 /// <reference path="../items/wall_floor_item.ts" />
 /// <reference path="../items/wall_item.ts" />
@@ -59,32 +59,38 @@ module BP3D.Model {
       this.loader.crossOrigin = "";
     }
 
-    /**
-     * Only use this for non-items.
+    /** Adds a non-item, basically a mesh, to the scene.
+     * @param mesh The mesh to be added.
      */
-    public add(mesh) {
+    public add(mesh: THREE.Mesh) {
       this.scene.add(mesh);
     }
 
-    /**
-     * Only use this for non-items.
+    /** Removes a non-item, basically a mesh, from the scene.
+     * @param mesh The mesh to be removed.
      */
-    public remove(mesh) {
+    public remove(mesh: THREE.Mesh) {
       this.scene.remove(mesh);
       Utils.removeValue(this.items, mesh);
     }
 
-    /** Gets the scene. */
+    /** Gets the scene.
+     * @returns The scene.
+     */
     public getScene(): THREE.Scene {
       return this.scene;
     }
 
-    /** Gets the items. */
+    /** Gets the items.
+     * @returns The items.
+     */
     public getItems(): Items.Item[] {
       return this.items;
     }
 
-    /** Gets the count of items. */
+    /** Gets the count of items.
+     * @returns The count.
+     */
     public itemCount(): number {
       return this.items.length
     }
