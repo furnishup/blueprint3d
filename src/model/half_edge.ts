@@ -220,7 +220,10 @@ module BP3D.Model {
       }
     }
 
-    private corners() {
+    /** Get the corners of the half edge.
+     * @returns An array of x,y pairs.
+     */
+    public corners(): {x: number, y: number}[] {
       return [this.interiorStart(), this.interiorEnd(),
         this.exteriorEnd(), this.exteriorStart()];
     }

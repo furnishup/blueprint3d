@@ -10,19 +10,19 @@ module BP3D.Model {
   /** Corners are used to define walls. */
   export class Corner {
 
-    /** */
+    /** Array of start walls. */
     private wallStarts: Wall[] = [];
 
-    /** */
+    /** Array of end walls. */
     private wallEnds: Wall[] = [];
 
-    /** */
+    /** Callbacks to be fired on movement. */
     private moved_callbacks = $.Callbacks();
 
-    /** */
+    /** Callbacks to be fired on removal. */
     private deleted_callbacks = $.Callbacks();
 
-    /** */
+    /** Callbacks to be fired in case of action. */
     private action_callbacks = $.Callbacks();
 
     /** Constructs a corner. 
@@ -35,22 +35,22 @@ module BP3D.Model {
       this.id = id || Utils.guid();
     }
 
-    /**
-     * 
-     */
+    /** Add function to moved callbacks.
+     * @param func The function to be added.
+    */
     public fireOnMove(func) {
       this.moved_callbacks.add(func);
     }
 
-    /**
-     * 
+    /** Add function to deleted callbacks.
+     * @param func The function to be added.
      */
     public fireOnDelete(func) {
       this.deleted_callbacks.add(func);
     }
 
-    /**
-     * 
+    /** Add function to action callbacks.
+     * @param func The function to be added.
      */
     public fireOnAction(func) {
       this.action_callbacks.add(func);
@@ -84,7 +84,7 @@ module BP3D.Model {
 
       var scope = this;
 
-      Utils.forEach(this.adjacentCorners(), function (corner: Corner) {
+      Utils.forEach(this.adjacentCorners(), (corner) => {
         if (Math.abs(corner.x - scope.x) < tolerance) {
           scope.x = corner.x;
           snapped.x = true;
@@ -97,6 +97,10 @@ module BP3D.Model {
       return snapped;
     }
 
+    /** Moves corner relatively to new position.
+     * @param dx The delta x.
+     * @param dy The delta y.
+     */
     public relativeMove(dx: number, dy: number) {
       this.move(this.x + dx, this.y + dy);
     }
@@ -105,10 +109,12 @@ module BP3D.Model {
       this.action_callbacks.fire(action)
     }
 
+    /** Remove callback. Fires the delete callbacks. */
     private remove() {
       this.deleted_callbacks.fire(this);
     }
 
+    /** Removes all walls. */
     private removeAll() {
       for (var i = 0; i < this.wallStarts.length; i++) {
         this.wallStarts[i].remove();
@@ -119,8 +125,9 @@ module BP3D.Model {
       this.remove()
     }
 
-    /**
-     * 
+    /** Moves corner to new position.
+     * @param newX The new x position.
+     * @param newY The new y position.
      */
     private move(newX: number, newY: number) {
       this.x = newX;
@@ -135,10 +142,10 @@ module BP3D.Model {
       });
     }
 
-    /**
-     * 
+    /** Gets the adjacent corners.
+     * @returns Array of corners.
      */
-    public adjacentCorners() {
+    public adjacentCorners(): Corner[] {
       var retArray = [];
       for (var i = 0; i < this.wallStarts.length; i++) {
         retArray.push(this.wallStarts[i].getEnd());
@@ -149,10 +156,11 @@ module BP3D.Model {
       return retArray;
     }
 
-    /**
-     * 
+    /** Checks if a wall is connected.
+     * @param wall A wall.
+     * @returns True in case of connection.
      */
-    private isWallConnected(wall): boolean {
+    private isWallConnected(wall: Wall): boolean {
       for (var i = 0; i < this.wallStarts.length; i++) {
         if (this.wallStarts[i] == wall) {
           return true;
@@ -175,24 +183,26 @@ module BP3D.Model {
       return distance;
     }
 
-    /**
-     * 
+    /** Gets the distance from a wall.
+     * @param wall A wall.
+     * @returns The distance.
      */
-    public distanceFromWall(wall): number {
+    public distanceFromWall(wall: Wall): number {
       return wall.distanceFrom(this.x, this.y);
     }
 
-    /**
-     * 
+    /** Gets the distance from a corner.
+     * @param corner A corner.
+     * @returns The distance.
      */
-    public distanceFromCorner(corner): number {
+    public distanceFromCorner(corner: Corner): number {
       return this.distanceFrom(corner.x, corner.y);
     }
 
-    /**
-     * 
+    /** Detaches a wall.
+     * @param wall A wall.
      */
-    public detachWall(wall) {
+    public detachWall(wall: Wall) {
       Utils.removeValue(this.wallStarts, wall);
       Utils.removeValue(this.wallEnds, wall);
       if (this.wallStarts.length == 0 && this.wallEnds.length == 0) {
@@ -200,24 +210,25 @@ module BP3D.Model {
       }
     }
 
-    /**
-     * 
+    /** Attaches a start wall.
+     * @param wall A wall.
      */
-    public attachStart(wall) {
+    public attachStart(wall: Wall) {
       this.wallStarts.push(wall)
     }
 
-    /**
-     * 
+    /** Attaches an end wall.
+     * @param wall A wall.
      */
-    public attachEnd(wall) {
+    public attachEnd(wall: Wall) {
       this.wallEnds.push(wall)
     }
 
-    /** 
-     * Get wall to corner.
+    /** Get wall to corner.
+     * @param corner A corner.
+     * @return The associated wall or null.
      */
-    public wallTo(corner: Corner) {
+    public wallTo(corner: Corner): Wall {
       for (var i = 0; i < this.wallStarts.length; i++) {
         if (this.wallStarts[i].getEnd() === corner) {
           return this.wallStarts[i];
@@ -226,10 +237,11 @@ module BP3D.Model {
       return null;
     }
 
-    /**
-     * 
+    /** Get wall from corner.
+     * @param corner A corner.
+     * @return The associated wall or null.
      */
-    public wallFrom(corner: Corner) {
+    public wallFrom(corner: Corner): Wall {
       for (var i = 0; i < this.wallEnds.length; i++) {
         if (this.wallEnds[i].getStart() === corner) {
           return this.wallEnds[i];
@@ -238,10 +250,11 @@ module BP3D.Model {
       return null;
     }
 
-    /**
-     * 
+    /** Get wall to or from corner.
+     * @param corner A corner.
+     * @return The associated wall or null.
      */
-    public wallToOrFrom(corner: Corner) {
+    public wallToOrFrom(corner: Corner): Wall {
       return this.wallTo(corner) || this.wallFrom(corner);
     }
 
@@ -295,7 +308,7 @@ module BP3D.Model {
       return false;
     }
 
-    // ensure we do not have duplicate walls (i.e. same start and end points)
+    /** Ensure we do not have duplicate walls (i.e. same start and end points) */
     private removeDuplicateWalls() {
       // delete the wall between these corners, if it exists
       var wallEndpoints = {};

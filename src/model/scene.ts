@@ -27,7 +27,7 @@ module BP3D.Model {
     private scene: THREE.Scene;
 
     /** */
-    private items = [];
+    private items: Items.Item[] = [];
 
     /** */
     public needsUpdate = false;
@@ -73,11 +73,14 @@ module BP3D.Model {
       Utils.removeValue(this.items, mesh);
     }
 
-    public getScene() {
+    /**
+     * Gets the scene.
+     */
+    public getScene(): THREE.Scene {
       return this.scene;
     }
 
-    public getItems() {
+    public getItems(): Items.Item[] {
       return this.items;
     }
 
@@ -88,7 +91,7 @@ module BP3D.Model {
     public clearItems() {
       var items_copy = this.items
       var scope = this;
-      Utils.forEach(this.items, function (item) {
+      Utils.forEach(this.items, (item) => {
         scope.removeItem(item, true);
       });
       this.items = []

@@ -6,7 +6,7 @@
 module BP3D.Items {
   /** */
   export abstract class FloorItem extends Item {
-    constructor(model: Model.Model, metadata, geometry: THREE.Geometry, material: THREE.Material, position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
+    constructor(model: Model.Model, metadata, geometry: THREE.Geometry, material: THREE.MeshFaceMaterial, position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
       super(model, metadata, geometry, material, position, rotation, scale);
     };
 

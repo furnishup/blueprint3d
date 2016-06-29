@@ -154,7 +154,7 @@ module BP3D.Floorplanner {
     }
 
     /** */
-    private drawEdge(edge, hover) {
+    private drawEdge(edge: Model.HalfEdge, hover) {
       var color = edgeColor;
       if (hover && this.viewmodel.mode == floorplannerModes.DELETE) {
         color = deleteColor;

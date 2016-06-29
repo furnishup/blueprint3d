@@ -44,7 +44,7 @@ module BP3D.Items {
     protected allowRotate = true;
 
     /** */
-    private fixed = false;
+    public fixed = false;
 
     /** dragging */
     private dragOffset = new THREE.Vector3();
@@ -61,7 +61,7 @@ module BP3D.Items {
      * @param rotation TODO
      * @param scale TODO 
      */
-    constructor(protected model: Model.Model, private metadata, geometry: THREE.Geometry, material: THREE.Material, position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
+    constructor(protected model: Model.Model, public metadata, geometry: THREE.Geometry, material: THREE.MeshFaceMaterial, position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
       super();
 
       //this.three = three;
@@ -172,12 +172,9 @@ module BP3D.Items {
       var on = this.hover || this.selected;
       this.highlighted = on;
       var hex = on ? this.emissiveColor : 0x000000;
-      // TODO_Ekki
-      /*
-      Utils.forEach(this.material.materials, function (material) {
+      Utils.forEach((<THREE.MeshFaceMaterial>this.material).materials, function (material) {
         material.emissive.setHex(hex);
       });
-      */
     }
 
     /** */
@@ -338,7 +335,7 @@ module BP3D.Items {
     }
 
     /** */
-    public createGlow(color, opacity, ignoreDepth) {
+    public createGlow(color, opacity, ignoreDepth): THREE.Mesh {
       ignoreDepth = ignoreDepth || false
       opacity = opacity || 0.2;
       var glowMaterial = new THREE.MeshBasicMaterial({

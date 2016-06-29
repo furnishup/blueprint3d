@@ -61,7 +61,7 @@ module BP3D.Model {
     }
 
     // hack
-    public wallEdgePlanes() {
+    public wallEdgePlanes(): Wall[] {
       var planes = []
       Utils.forEach(this.walls, (wall) => {
         if (wall.frontEdge) {
