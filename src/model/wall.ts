@@ -1,57 +1,62 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../utils/utils.ts" />
+/// <reference path="../items/item.ts" />
 /// <reference path="corner.ts" />
 /// <reference path="half_edge.ts" />
 
 module BP3D.Model {
-  /** */
+  /** The default wall texture. */
   const defaultWallTexture = {
     url: "rooms/textures/wallmap.png",
     stretch: true,
     scale: 0
   }
 
-  /**  */
+  /** 
+   * A Wall is the basic element to create Rooms.
+   * 
+   * Walls consists of two half edges.
+   */
   export class Wall {
 
     /** The unique id of each wall. */
     private id: string;
 
-    /** Front is the plane from start to end */
+    /** Front is the plane from start to end. */
     public frontEdge: HalfEdge = null;
 
-    /** */
+    /** Back is the plane from end to start. */
     public backEdge: HalfEdge = null;
 
     /** */
     private orphan = false;
 
     /** Items attached to this wall */
-    private items = [];
+    private items: Items.Item[] = [];
 
     /** */
-    private onItems = [];
+    private onItems: Items.Item[] = [];
 
-    /** */
+    /** The front-side texture. */
     public frontTexture = defaultWallTexture;
 
-    /** */
+    /** The back-side texture. */
     public backTexture = defaultWallTexture;
 
-    /** */
+    /** Wall thickness. */
     public thickness = 10;
 
-    /** */
+    /** Wall height. */
     public height = 250;
 
-    /** */
+    /** Actions to be applied after movement. */
     private moved_callbacks = $.Callbacks();
 
-    /** */
+    /** Actions to be applied on removal. */
     private deleted_callbacks = $.Callbacks();
 
-    /** */
+    /** Actions to be applied explicitly. */
     private action_callbacks = $.Callbacks();
 
     /** 
@@ -66,7 +71,7 @@ module BP3D.Model {
       this.end.attachEnd(this);
     }
 
-    private getUuid() {
+    private getUuid(): string {
       return [this.start.id, this.end.id].join();
     }
 

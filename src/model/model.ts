@@ -5,7 +5,9 @@
 /// <reference path="scene.ts" />
 
 module BP3D.Model {
-  /** */
+  /** 
+   * A Model connects a Floorplan and a Scene. 
+   */
   export class Model {
 
     /** */

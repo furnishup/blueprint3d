@@ -20,7 +20,9 @@ module BP3D.Model {
     scale: 400
   }
 
-  /** */
+  /** 
+   * A Room is the combination of a Floorplan with a floor plane. 
+   */
   export class Room {
 
     /** */

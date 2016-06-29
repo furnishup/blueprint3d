@@ -7,7 +7,9 @@ module BP3D.Model {
   /** */
   const cornerTolerance: number = 20;
 
-  /** Corners are used to define walls. */
+  /**
+   * Corners are used to define Walls.
+   */
   export class Corner {
 
     /** Array of start walls. */

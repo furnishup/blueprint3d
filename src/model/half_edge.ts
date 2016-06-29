@@ -4,18 +4,18 @@
 
 module BP3D.Model {
   /*
-   * HalfEdge's are created by Room
-   * Once rooms have been identified, HalfEdge's
-   * are created for each interior wall.
-   * A wall can have two half edges if it is visible
-   * from both sides.
+   * Half Edges are created by Room.
+   * 
+   * Once rooms have been identified, Half Edges are created for each interior wall.
+   * 
+   * A wall can have two half edges if it is visible from both sides.
    */
   export class HalfEdge {
 
-    /** */
+    /** The successor edge in CCW ??? direction. */
     public next: HalfEdge;
 
-    /** */
+    /** The predecessor edge in CCW ??? direction. */
     public prev: HalfEdge;
 
     /** */

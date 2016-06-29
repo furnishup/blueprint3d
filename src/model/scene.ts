@@ -20,7 +20,9 @@ module BP3D.Model {
     9: Items.WallFloorItem
   };
 
-  /** */
+  /**
+   * The Scene is a manager of Items and also links to a ThreeJS scene.
+   */
   export class Scene {
 
     /** The associated ThreeJS scene. */
@@ -50,7 +52,6 @@ module BP3D.Model {
      * @param textureDir The directory from which to load the textures.
      */
     constructor(private model: Model, private textureDir: string) {
-
       this.scene = new THREE.Scene();
 
       // init item loader
