@@ -81,14 +81,28 @@ module BP3D.Floorplanner {
     /** */
     public draw() {
       this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+
       this.drawGrid();
-      Utils.forEach(this.floorplan.getRooms(), this.drawRoom);
-      Utils.forEach(this.floorplan.getWalls(), this.drawWall);
-      Utils.forEach(this.floorplan.getCorners(), this.drawCorner);
+
+      this.floorplan.getRooms().forEach((room) => {
+        this.drawRoom(room);
+      })
+
+      this.floorplan.getWalls().forEach((wall) => {
+        this.drawWall(wall);
+      });
+
+      this.floorplan.getCorners().forEach((corner) => {
+        this.drawCorner(corner);
+      });
+
       if (this.viewmodel.mode == floorplannerModes.DRAW) {
         this.drawTarget(this.viewmodel.targetX, this.viewmodel.targetY, this.viewmodel.lastNode);
       }
-      Utils.forEach(this.floorplan.getWalls(), this.drawWallLabels);
+
+      this.floorplan.getWalls().forEach((wall) => {
+        this.drawWallLabels(wall);
+      });
     }
 
     /** */
@@ -164,12 +178,14 @@ module BP3D.Floorplanner {
         color = edgeColorHover;
       }
       var corners = edge.corners();
+
+      var scope = this;
       this.drawPolygon(
         Utils.map(corners, function (corner) {
-          return this.viewmodel.convertX(corner.x);
+          return scope.viewmodel.convertX(corner.x);
         }),
         Utils.map(corners, function (corner) {
-          return this.viewmodel.convertY(corner.y);
+          return scope.viewmodel.convertY(corner.y);
         }),
         false,
         null,

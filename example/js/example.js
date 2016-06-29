@@ -424,15 +424,15 @@ var ViewerFloorplanner = function(blueprint3d) {
       $(draw).removeClass(activeStlye);
       $(remove).removeClass(activeStlye);
       $(move).removeClass(activeStlye);
-      if (mode == scope.floorplanner.modes.MOVE) {
+      if (mode == BP3D.Floorplanner.floorplannerModes.MOVE) {
           $(move).addClass(activeStlye);
-      } else if (mode == scope.floorplanner.modes.DRAW) {
+      } else if (mode == BP3D.Floorplanner.floorplannerModes.DRAW) {
           $(draw).addClass(activeStlye);
-      } else if (mode == scope.floorplanner.modes.DELETE) {
+      } else if (mode == BP3D.Floorplanner.floorplannerModes.DELETE) {
           $(remove).addClass(activeStlye);
       }
 
-      if (mode == scope.floorplanner.modes.DRAW) {
+      if (mode == BP3D.Floorplanner.floorplannerModes.DRAW) {
         $("#draw-walls-hint").show();
         scope.handleWindowResize();
       } else {
@@ -441,15 +441,15 @@ var ViewerFloorplanner = function(blueprint3d) {
     });
 
     $(move).click(function(){
-      scope.floorplanner.setMode(scope.floorplanner.modes.MOVE);
+      scope.floorplanner.setMode(BP3D.Floorplanner.floorplannerModes.MOVE);
     });
 
     $(draw).click(function(){
-      scope.floorplanner.setMode(scope.floorplanner.modes.DRAW);
+      scope.floorplanner.setMode(BP3D.Floorplanner.floorplannerModes.DRAW);
     });
 
     $(remove).click(function(){
-      scope.floorplanner.setMode(scope.floorplanner.modes.DELETE);
+      scope.floorplanner.setMode(BP3D.Floorplanner.floorplannerModes.DELETE);
     });
   }
 

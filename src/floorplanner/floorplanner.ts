@@ -106,7 +106,11 @@ module BP3D.Floorplanner {
           this.escapeKey();
         }
       });
-      floorplan.roomLoadedCallbacks.add(this.reset);
+
+      var scope = this;
+      floorplan.roomLoadedCallbacks.add(() => {
+        scope.reset()
+      });
     }
 
     /** */
