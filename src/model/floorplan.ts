@@ -35,7 +35,7 @@ module BP3D.Model {
     private updated_rooms = $.Callbacks();
 
     /** */
-    private roomLoadedCallbacks = $.Callbacks();
+    public roomLoadedCallbacks = $.Callbacks();
 
     /** */
     private floorTextures = {};
@@ -110,7 +110,7 @@ module BP3D.Model {
       this.update();
     }
 
-    private newCorner(x: number, y: number, id: string) {
+    public newCorner(x: number, y: number, id?: string) {
       var corner = new Corner(this, x, y, id);
       this.corners.push(corner);
       corner.fireOnDelete(this.removeCorner);
@@ -134,7 +134,7 @@ module BP3D.Model {
       return this.rooms;
     }
 
-    private overlappedCorner(x: number, y: number, tolerance: number): Corner {
+    public overlappedCorner(x: number, y: number, tolerance?: number): Corner {
       tolerance = tolerance || defaultFloorPlanTolerance;
       for (var i = 0; i < this.corners.length; i++) {
         if (this.corners[i].distanceFrom(x, y) < tolerance) {
@@ -145,7 +145,7 @@ module BP3D.Model {
       return null;
     }
 
-    private overlappedWall(x: number, y: number, tolerance: number): any {
+    public overlappedWall(x: number, y: number, tolerance?: number): Wall {
       tolerance = tolerance || defaultFloorPlanTolerance;
       for (var i = 0; i < this.walls.length; i++) {
         if (this.walls[i].distanceFrom(x, y) < tolerance) {

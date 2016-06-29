@@ -12,7 +12,7 @@ module BP3D {
     this.model = new Model.Model(opts.textureDir);
     this.three = new Three.Main(this.model, opts.threeElement, opts.threeCanvasElement, {});
     if (!opts.widget) {
-      this.floorplanner = new Floorplanner(opts.floorplannerElement, this.model.floorplan);
+      this.floorplanner = new Floorplanner.Floorplanner(opts.floorplannerElement, this.model.floorplan);
     }
     else {
       this.three.getController().enabled = false;

@@ -1,238 +1,284 @@
 /// <reference path="../../lib/jQuery.d.ts" />
+/// <reference path="../model/floorplan.ts" />
 /// <reference path="../utils/utils.ts" />
 /// <reference path="floorplanner_view.ts" />
 
-module BP3D {
-  export var Floorplanner = function (canvas, floorplan) {
+module BP3D.Floorplanner {
+  /** how much will we move a corner to make a wall axis aligned (cm) */
+  const snapTolerance = 25;
 
-    var scope = this;
-    var floorplan = floorplan;
+  /** */
+  export class Floorplanner {
 
-    this.modes = {
-      MOVE: 0,
-      DRAW: 1,
-      DELETE: 2
-    };
-    this.mode = 0;
-    var mouseDown = false;
-    var mouseMoved = false;
-    this.activeWall = null;
-    this.activeCorner = null;
+    /** */
+    public mode = 0;
 
-    this.originX = 0;
-    this.originY = 0;
+    /** */
+    public activeWall = null;
 
-    // how much will we move a corner to make a wall axis aligned (cm)
-    var snapTolerance = 25;
+    /** */
+    public activeCorner = null;
 
-    // these are in threeJS coords
-    var mouseX = 0;
-    var mouseY = 0;
-    var rawMouseX = 0;
-    var rawMouseY = 0;
+    /** */
+    public originX = 0;
 
-    // mouse position at last click
-    var lastX = 0;
-    var lastY = 0;
+    /** */
+    public originY = 0;
 
-    // drawing state
-    this.targetX = 0;
-    this.targetY = 0;
-    this.lastNode = null;
+    /** drawing state */
+    public targetX = 0;
 
-    this.modeResetCallbacks = $.Callbacks();
+    /** drawing state */
+    public targetY = 0;
 
-    var canvasElement = $("#" + canvas);
+    /** drawing state */
+    public lastNode = null;
 
-    var view = new FloorplannerView(floorplan, this, canvas);
+    /** */
+    private wallWidth: number;
 
-    var cmPerFoot = 30.48;
-    var pixelsPerFoot = 15.0;
-    var cmPerPixel = cmPerFoot * (1.0 / pixelsPerFoot);
-    var pixelsPerCm = 1.0 / cmPerPixel;
-    this.wallWidth = 10.0 * pixelsPerCm;
+    /** */
+    private modeResetCallbacks = $.Callbacks();
 
-    function init() {
-      scope.setMode(scope.modes.MOVE);
-      canvasElement.mousedown(mousedown);
-      canvasElement.mousemove(mousemove);
-      canvasElement.mouseup(mouseup);
-      canvasElement.mouseleave(mouseleave);
+    /** */
+    private canvasElement;
+
+    /** */
+    private view: FloorplannerView;
+
+    /** */
+    private mouseDown = false;
+
+    /** */
+    private mouseMoved = false;
+
+    /** in ThreeJS coords */
+    private mouseX = 0;
+
+    /** in ThreeJS coords */
+    private mouseY = 0;
+
+    /** in ThreeJS coords */
+    private rawMouseX = 0;
+
+    /** in ThreeJS coords */
+    private rawMouseY = 0;
+
+    /** mouse position at last click */
+    private lastX = 0;
+
+    /** mouse position at last click */
+    private lastY = 0;
+
+    /** */
+    private cmPerPixel: number;
+
+    /** */
+    private pixelsPerCm: number;
+
+    /** */
+    constructor(canvas: string, private floorplan: Model.Floorplan) {
+
+      this.canvasElement = $("#" + canvas);
+
+      this.view = new FloorplannerView(this.floorplan, this, canvas);
+
+      var cmPerFoot = 30.48;
+      var pixelsPerFoot = 15.0;
+      this.cmPerPixel = cmPerFoot * (1.0 / pixelsPerFoot);
+      this.pixelsPerCm = 1.0 / this.cmPerPixel;
+
+      this.wallWidth = 10.0 * this.pixelsPerCm;
+
+      // Initialization:
+
+      this.setMode(floorplannerModes.MOVE);
+
+      this.canvasElement.mousedown(this.mousedown);
+      this.canvasElement.mousemove(this.mousemove);
+      this.canvasElement.mouseup(this.mouseup);
+      this.canvasElement.mouseleave(this.mouseleave);
+
       $(document).keyup(function (e) {
         if (e.keyCode == 27) {
-          escapeKey();
+          this.escapeKey();
         }
       });
-      floorplan.roomLoadedCallbacks.add(scope.reset);
+      floorplan.roomLoadedCallbacks.add(this.reset);
     }
 
-    function escapeKey() {
-      scope.setMode(scope.modes.MOVE);
+    /** */
+    private escapeKey() {
+      this.setMode(floorplannerModes.MOVE);
     }
 
-    function updateTarget() {
-      if (scope.mode == scope.modes.DRAW && scope.lastNode) {
-        if (Math.abs(mouseX - scope.lastNode.x) < snapTolerance) {
-          scope.targetX = scope.lastNode.x;
+    /** */
+    private updateTarget() {
+      if (this.mode == floorplannerModes.DRAW && this.lastNode) {
+        if (Math.abs(this.mouseX - this.lastNode.x) < snapTolerance) {
+          this.targetX = this.lastNode.x;
         } else {
-          scope.targetX = mouseX;
+          this.targetX = this.mouseX;
         }
-        if (Math.abs(mouseY - scope.lastNode.y) < snapTolerance) {
-          scope.targetY = scope.lastNode.y;
+        if (Math.abs(this.mouseY - this.lastNode.y) < snapTolerance) {
+          this.targetY = this.lastNode.y;
         } else {
-          scope.targetY = mouseY;
+          this.targetY = this.mouseY;
         }
       } else {
-        scope.targetX = mouseX;
-        scope.targetY = mouseY;
+        this.targetX = this.mouseX;
+        this.targetY = this.mouseY;
       }
 
-      view.draw();
+      this.view.draw();
     }
 
-    function mousedown() {
-      mouseDown = true;
-      mouseMoved = false;
-      lastX = rawMouseX;
-      lastY = rawMouseY;
+    /** */
+    private mousedown() {
+      this.mouseDown = true;
+      this.mouseMoved = false;
+      this.lastX = this.rawMouseX;
+      this.lastY = this.rawMouseY;
 
       // delete
-      if (scope.mode == scope.modes.DELETE) {
-        if (scope.activeCorner) {
-          scope.activeCorner.removeAll();
-        } else if (scope.activeWall) {
-          scope.activeWall.remove();
+      if (this.mode == floorplannerModes.DELETE) {
+        if (this.activeCorner) {
+          this.activeCorner.removeAll();
+        } else if (this.activeWall) {
+          this.activeWall.remove();
         } else {
-          scope.setMode(scope.modes.MOVE);
+          this.setMode(floorplannerModes.MOVE);
         }
       }
     }
 
-    function mousemove(event) {
-      mouseMoved = true;
+    /** */
+    private mousemove(event) {
+      this.mouseMoved = true;
 
       // update mouse
-      rawMouseX = event.clientX;
-      rawMouseY = event.clientY;
+      this.rawMouseX = event.clientX;
+      this.rawMouseY = event.clientY;
 
-      mouseX = (event.clientX - canvasElement.offset().left) * cmPerPixel + scope.originX * cmPerPixel;
-      mouseY = (event.clientY - canvasElement.offset().top) * cmPerPixel + scope.originY * cmPerPixel;
+      this.mouseX = (event.clientX - this.canvasElement.offset().left) * this.cmPerPixel + this.originX * this.cmPerPixel;
+      this.mouseY = (event.clientY - this.canvasElement.offset().top) * this.cmPerPixel + this.originY * this.cmPerPixel;
 
       // update target (snapped position of actual mouse)
-      if (scope.mode == scope.modes.DRAW || (scope.mode == scope.modes.MOVE && mouseDown)) {
-        updateTarget();
+      if (this.mode == floorplannerModes.DRAW || (this.mode == floorplannerModes.MOVE && this.mouseDown)) {
+        this.updateTarget();
       }
 
       // update object target
-      if (scope.mode != scope.modes.DRAW && !mouseDown) {
-        var hoverCorner = floorplan.overlappedCorner(mouseX, mouseY);
-        var hoverWall = floorplan.overlappedWall(mouseX, mouseY);
+      if (this.mode != floorplannerModes.DRAW && !this.mouseDown) {
+        var hoverCorner = this.floorplan.overlappedCorner(this.mouseX, this.mouseY);
+        var hoverWall = this.floorplan.overlappedWall(this.mouseX, this.mouseY);
         var draw = false;
-        if (hoverCorner != scope.activeCorner) {
-          scope.activeCorner = hoverCorner;
+        if (hoverCorner != this.activeCorner) {
+          this.activeCorner = hoverCorner;
           draw = true;
         }
         // corner takes precendence
-        if (scope.activeCorner == null) {
-          if (hoverWall != scope.activeWall) {
-            scope.activeWall = hoverWall;
+        if (this.activeCorner == null) {
+          if (hoverWall != this.activeWall) {
+            this.activeWall = hoverWall;
             draw = true;
           }
         } else {
-          scope.activeWall = null;
+          this.activeWall = null;
         }
         if (draw) {
-          view.draw();
+          this.view.draw();
         }
       }
 
       // panning
-      if (mouseDown && !scope.activeCorner && !scope.activeWall) {
-        scope.originX += (lastX - rawMouseX);
-        scope.originY += (lastY - rawMouseY);
-        lastX = rawMouseX;
-        lastY = rawMouseY;
-        view.draw();
+      if (this.mouseDown && !this.activeCorner && !this.activeWall) {
+        this.originX += (this.lastX - this.rawMouseX);
+        this.originY += (this.lastY - this.rawMouseY);
+        this.lastX = this.rawMouseX;
+        this.lastY = this.rawMouseY;
+        this.view.draw();
       }
 
       // dragging
-      if (scope.mode == scope.modes.MOVE && mouseDown) {
-        if (scope.activeCorner) {
-          scope.activeCorner.move(mouseX, mouseY);
-          scope.activeCorner.snapToAxis(snapTolerance);
-        } else if (scope.activeWall) {
-          scope.activeWall.relativeMove(
-            (rawMouseX - lastX) * cmPerPixel,
-            (rawMouseY - lastY) * cmPerPixel
+      if (this.mode == floorplannerModes.MOVE && this.mouseDown) {
+        if (this.activeCorner) {
+          this.activeCorner.move(this.mouseX, this.mouseY);
+          this.activeCorner.snapToAxis(snapTolerance);
+        } else if (this.activeWall) {
+          this.activeWall.relativeMove(
+            (this.rawMouseX - this.lastX) * this.cmPerPixel,
+            (this.rawMouseY - this.lastY) * this.cmPerPixel
           );
-          scope.activeWall.snapToAxis(snapTolerance);
-          lastX = rawMouseX;
-          lastY = rawMouseY;
+          this.activeWall.snapToAxis(snapTolerance);
+          this.lastX = this.rawMouseX;
+          this.lastY = this.rawMouseY;
         }
-        view.draw();
+        this.view.draw();
       }
-
     }
 
-    function mouseup() {
-      mouseDown = false;
+    /** */
+    private mouseup() {
+      this.mouseDown = false;
 
       // drawing
-      if (scope.mode == scope.modes.DRAW && !mouseMoved) {
-        var corner = floorplan.newCorner(scope.targetX, scope.targetY);
-        if (scope.lastNode != null) {
-          floorplan.newWall(scope.lastNode, corner);
+      if (this.mode == floorplannerModes.DRAW && !this.mouseMoved) {
+        var corner = this.floorplan.newCorner(this.targetX, this.targetY);
+        if (this.lastNode != null) {
+          this.floorplan.newWall(this.lastNode, corner);
         }
-        if (corner.mergeWithIntersected() && scope.lastNode != null) {
-          scope.setMode(scope.modes.MOVE);
+        if (corner.mergeWithIntersected() && this.lastNode != null) {
+          this.setMode(floorplannerModes.MOVE);
         }
-        scope.lastNode = corner;
+        this.lastNode = corner;
       }
     }
 
-    function mouseleave() {
-      mouseDown = false;
+    /** */
+    private mouseleave() {
+      this.mouseDown = false;
       //scope.setMode(scope.modes.MOVE);
     }
 
-    this.reset = function () {
-      scope.resizeView();
-      scope.setMode(scope.modes.MOVE);
-      resetOrigin();
-      view.draw();
+    /** */
+    private reset = function () {
+      this.resizeView();
+      this.setMode(floorplannerModes.MOVE);
+      this.resetOrigin();
+      this.view.draw();
     }
 
-    this.resizeView = function () {
-      view.handleWindowResize();
+    /** */
+    private resizeView() {
+      this.view.handleWindowResize();
     }
 
-    this.setMode = function (mode) {
-      scope.lastNode = null;
-      scope.mode = mode;
-      scope.modeResetCallbacks.fire(mode);
-      updateTarget();
+    /** */
+    private setMode(mode: number) {
+      this.lastNode = null;
+      this.mode = mode;
+      this.modeResetCallbacks.fire(mode);
+      this.updateTarget();
     }
 
-    function resetOrigin() {
-      // sets the origin so that floorplan is centered
-      var canvasSel = $("#" + canvas);
-      var centerX = canvasSel.innerWidth() / 2.0;
-      var centerY = canvasSel.innerHeight() / 2.0;
-      var centerFloorplan = floorplan.getCenter();
-      scope.originX = centerFloorplan.x * pixelsPerCm - centerX;
-      scope.originY = centerFloorplan.z * pixelsPerCm - centerY;
+    /** Sets the origin so that floorplan is centered */
+    private resetOrigin() {
+      var centerX = this.canvasElement.innerWidth() / 2.0;
+      var centerY = this.canvasElement.innerHeight() / 2.0;
+      var centerFloorplan = this.floorplan.getCenter();
+      this.originX = centerFloorplan.x * this.pixelsPerCm - centerX;
+      this.originY = centerFloorplan.z * this.pixelsPerCm - centerY;
     }
 
-    this.convertX = function (x) {
-      // convert from THREEjs coords to canvas coords
-      return (x - scope.originX * cmPerPixel) * pixelsPerCm;
+    /** Convert from THREEjs coords to canvas coords. */
+    public convertX(x: number): number {
+      return (x - this.originX * this.cmPerPixel) * this.pixelsPerCm;
     }
 
-    this.convertY = function (y) {
-      // convert from THREEjs coords to canvas coords
-      return (y - scope.originY * cmPerPixel) * pixelsPerCm;
+    /** Convert from THREEjs coords to canvas coords. */
+    public convertY(y: number): number {
+      return (y - this.originY * this.cmPerPixel) * this.pixelsPerCm;
     }
-
-    init();
   }
 }

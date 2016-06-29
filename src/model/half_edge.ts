@@ -126,7 +126,7 @@ module BP3D.Model {
         this.exteriorStart(), this.exteriorEnd());
     }
 
-    private interiorDistance(): number {
+    public interiorDistance(): number {
       var start = this.interiorStart();
       var end = this.interiorEnd();
       return Utils.distance(start.x, start.y, end.x, end.y);
@@ -172,7 +172,7 @@ module BP3D.Model {
       }
     }
 
-    private getOppositeEdge() {
+    private getOppositeEdge(): HalfEdge {
       if (this.front) {
         return this.wall.backEdge;
       } else {
@@ -181,7 +181,7 @@ module BP3D.Model {
     }
 
     // these return an object with attributes x, y
-    private interiorEnd = function () {
+    public interiorEnd(): {x: number, y: number} {
       var vec = this.halfAngleVector(this, this.next);
       return {
         x: this.getEnd().x + vec.x,
@@ -189,7 +189,7 @@ module BP3D.Model {
       }
     }
 
-    private interiorStart = function () {
+    public interiorStart(): {x: number, y: number} {
       var vec = this.halfAngleVector(this.prev, this);
       return {
         x: this.getStart().x + vec.x,
@@ -197,14 +197,14 @@ module BP3D.Model {
       }
     }
 
-    private interiorCenter() {
+    public interiorCenter(): {x: number, y: number} {
       return {
         x: (this.interiorStart().x + this.interiorEnd().x) / 2.0,
         y: (this.interiorStart().y + this.interiorEnd().y) / 2.0,
       }
     }
 
-    private exteriorEnd() {
+    public exteriorEnd(): {x: number, y: number}  {
       var vec = this.halfAngleVector(this, this.next);
       return {
         x: this.getEnd().x - vec.x,
@@ -212,7 +212,7 @@ module BP3D.Model {
       }
     }
 
-    private exteriorStart() {
+    public exteriorStart(): {x: number, y: number}  {
       var vec = this.halfAngleVector(this.prev, this);
       return {
         x: this.getStart().x - vec.x,

@@ -265,7 +265,7 @@ module BP3D.Model {
       this.floorplan.update();
     }
 
-    private mergeWithIntersected(): boolean {
+    public mergeWithIntersected(): boolean {
       //console.log('mergeWithIntersected for object: ' + this.type);
       // check corners
       for (var i = 0; i < this.floorplan.getCorners().length; i++) {
