@@ -30,7 +30,7 @@ module BP3D.Model {
     private edgePointer = null;
 
     /** floor plane for intersection testing */
-    private floorPlane = null;
+    private floorPlane: THREE.Mesh = null;
 
     /** */
     private customTexture = false;
@@ -89,7 +89,7 @@ module BP3D.Model {
         }));
       this.floorPlane.visible = false;
       this.floorPlane.rotation.set(Math.PI / 2, 0, 0);
-      this.floorPlane.room = this; // js monkey patch
+      (<any>this.floorPlane).room = this; // js monkey patch
     }
 
     private cycleIndex(index) {

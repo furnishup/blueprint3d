@@ -229,7 +229,7 @@ module BP3D.Model {
       }
     }
 
-    // clear out obsolete floor textures
+    /** clear out obsolete floor textures */
     private updateFloorTextures() {
       var uuids = Utils.map(this.rooms, function (room) {
         return room.getUuid();

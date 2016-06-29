@@ -79,20 +79,20 @@ module BP3D.Model {
     private newRoom(floorplan: string, items) {
       this.scene.clearItems();
       this.floorplan.loadFloorplan(floorplan);
-      Utils.forEach(items, function (item) {
+      Utils.forEach(items, (item) => {
         var position = new THREE.Vector3(
-          item.xpos, item.ypos, item.zpos)
+          item.xpos, item.ypos, item.zpos);
         var metadata = {
           itemName: item.item_name,
           resizable: item.resizable,
           itemType: item.item_type,
           modelUrl: item.model_url
-        }
-        var scale = {
-          x: item.scale_x,
-          y: item.scale_y,
-          z: item.scale_z
-        }
+        };
+        var scale = new THREE.Vector3(
+          item.scale_x,
+          item.scale_y,
+          item.scale_z
+        );
         this.scene.addItem(
           item.item_type,
           item.model_url,

@@ -73,21 +73,22 @@ module BP3D.Model {
       Utils.removeValue(this.items, mesh);
     }
 
-    /**
-     * Gets the scene.
-     */
+    /** Gets the scene. */
     public getScene(): THREE.Scene {
       return this.scene;
     }
 
+    /** Gets the items. */
     public getItems(): Items.Item[] {
       return this.items;
     }
 
-    public itemCount() {
+    /** Gets the count of items. */
+    public itemCount(): number {
       return this.items.length
     }
 
+    /** Removes all items. */
     public clearItems() {
       var items_copy = this.items
       var scope = this;
@@ -97,7 +98,12 @@ module BP3D.Model {
       this.items = []
     }
 
-    public removeItem(item, dontRemove?) {
+    /**
+     * Removes an item.
+     * @param item The item to be removed.
+     * @param dontRemove If not set, also remove the item from the items list.
+     */
+    public removeItem(item: Items.Item, dontRemove?: boolean) {
       dontRemove = dontRemove || false;
       // use this for item meshes
       this.itemRemovedCallbacks.fire(item);
@@ -108,10 +114,19 @@ module BP3D.Model {
       }
     }
 
-    private addItem(itemType, fileName, metadata, position, rotation, scale, fixed) {
+    /**
+     * Creates an item and adds it to the scene.
+     * @param itemType The type of the item given by an enumerator.
+     * @param fileName The name of the file to load.
+     * @param metadata TODO
+     * @param position The initial position.
+     * @param rotation The initial rotation around the y axis.
+     * @param scale The initial scaling.
+     * @param fixed True if fixed.
+     */
+    public addItem(itemType: number, fileName: string, metadata, position: THREE.Vector3, rotation: number, scale: THREE.Vector3, fixed: boolean) {
       itemType = itemType || 1;
-
-      var loaderCallback = function (geometry, materials) {
+      var loaderCallback = function (geometry: THREE.Geometry, materials: THREE.Material[]) {
         var item = new item_types[itemType](
           this.model,
           metadata, geometry,
@@ -129,7 +144,7 @@ module BP3D.Model {
       this.loader.load(
         fileName,
         loaderCallback,
-        undefined // TODO_Ekki this.textureDir
+        undefined // TODO_Ekki 
       );
     }
   }
