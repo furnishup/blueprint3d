@@ -1,10 +1,10 @@
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../core/configuration.ts" />
+/// <reference path="../core/dimensioning.ts" />
 /// <reference path="../model/floorplan.ts" />
 /// <reference path="../model/half_edge.ts" />
 /// <reference path="../model/model.ts" />
 /// <reference path="../model/wall.ts" />
-/// <reference path="../utils/dimensioning.ts" />
 /// <reference path="../utils/utils.ts" />
 /// <reference path="floorplanner.ts" />
 
@@ -155,10 +155,10 @@ module BP3D.Floorplanner {
       this.context.strokeStyle = "#ffffff";
       this.context.lineWidth = 4;
 
-      this.context.strokeText(Dimensioning.cmToMeasure(length),
+      this.context.strokeText(Core.Dimensioning.cmToMeasure(length),
         this.viewmodel.convertX(pos.x),
         this.viewmodel.convertY(pos.y));
-      this.context.fillText(Dimensioning.cmToMeasure(length),
+      this.context.fillText(Core.Dimensioning.cmToMeasure(length),
         this.viewmodel.convertX(pos.x),
         this.viewmodel.convertY(pos.y));
     }

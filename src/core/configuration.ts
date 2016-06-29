@@ -1,4 +1,4 @@
-/// <reference path="../utils/dimensioning.ts" />
+/// <reference path="dimensioning.ts" />
 
 module BP3D.Core {
   /** Key for dimensiung unit. */
@@ -8,7 +8,7 @@ module BP3D.Core {
   export class Configuration {
     /** Configuration data loaded from/stored to extern. */
     private static data: {[key: string]: any} = {
-      dimUnit: Dimensioning.dimInch
+      dimUnit: dimInch
     };
 
     // Dimensioning Unit:
