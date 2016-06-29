@@ -334,11 +334,12 @@ module BP3D.Model {
     /*
      * Find the "rooms" in our planar straight-line graph.
      * Rooms are set of the smallest (by area) possible cycles in this graph.
+     * @param corners The corners of the floorplan.
+     * @returns The rooms, each room as an array of corners.
      */
-    // corners has attributes: id, x, y, adjacents
-    findRooms(corners: Corner[]) {
+    public findRooms(corners: Corner[]): Corner[][] {
 
-      function calculateTheta(previousCorner, currentCorner, nextCorner) {
+      function _calculateTheta(previousCorner: Corner, currentCorner: Corner, nextCorner: Corner) {
         var theta = Utils.angle2pi(
           previousCorner.x - currentCorner.x,
           previousCorner.y - currentCorner.y,
@@ -347,8 +348,8 @@ module BP3D.Model {
         return theta;
       }
 
-      function removeDuplicateRooms(roomArray) {
-        var results = [];
+      function _removeDuplicateRooms(roomArray: Corner[][]): Corner[][] {
+        var results: Corner[][] = [];
         var lookup = {};
         var hashFunc = function (corner) {
           return corner.id
@@ -373,8 +374,12 @@ module BP3D.Model {
         return results;
       }
 
-      function findTightestCycle(firstCorner, secondCorner) {
-        var stack = [];
+      function _findTightestCycle(firstCorner: Corner, secondCorner: Corner): Corner[] {
+        var stack: {
+          corner: Corner,
+          previousCorners: Corner[]
+        }[] = [];
+
         var next = {
           corner: secondCorner,
           previousCorners: [firstCorner]
@@ -392,7 +397,7 @@ module BP3D.Model {
             return next.previousCorners;
           }
 
-          var addToStack = [];
+          var addToStack: Corner[] = [];
           var adjacentCorners = next.corner.adjacentCorners();
           for (var i = 0; i < adjacentCorners.length; i++) {
             var nextCorner = adjacentCorners[i];
@@ -414,8 +419,8 @@ module BP3D.Model {
             // visit the ones with smallest theta first
             var previousCorner = next.previousCorners[next.previousCorners.length - 1];
             addToStack.sort(function (a, b) {
-              return (calculateTheta(previousCorner, currentCorner, b) -
-                calculateTheta(previousCorner, currentCorner, a));
+              return (_calculateTheta(previousCorner, currentCorner, b) -
+                _calculateTheta(previousCorner, currentCorner, a));
             });
           }
 
@@ -437,17 +442,16 @@ module BP3D.Model {
 
       // find tightest loops, for each corner, for each adjacent
       // TODO: optimize this, only check corners with > 2 adjacents, or isolated cycles
-      var loops = [];
-      for (var i = 0; i < corners.length; i++) {
-        var firstCorner = corners[i];
-        var adjacentCorners = firstCorner.adjacentCorners();
-        for (var j = 0; j < adjacentCorners.length; j++) {
-          var secondCorner = adjacentCorners[j];
-          loops.push(findTightestCycle(firstCorner, secondCorner));
-        }
-      }
+      var loops: Corner[][] = [];
+
+      corners.forEach((firstCorner) => {
+        firstCorner.adjacentCorners().forEach((secondCorner) => {
+          loops.push(_findTightestCycle(firstCorner, secondCorner));
+        });
+      });
+
       // remove duplicates
-      var uniqueLoops = removeDuplicateRooms(loops);
+      var uniqueLoops = _removeDuplicateRooms(loops);
       //remove CW loops
       var uniqueCCWLoops = Utils.removeIf(uniqueLoops, Utils.isClockwise);
 
