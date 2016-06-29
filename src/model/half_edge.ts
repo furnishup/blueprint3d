@@ -31,7 +31,7 @@ module BP3D.Model {
     private interiorTransform = new THREE.Matrix4();
 
     /** transform from world coords to wall planes (z=0) */
-    private nvInteriorTransform = new THREE.Matrix4();
+    private invInteriorTransform = new THREE.Matrix4();
 
     /** transform from world coords to wall planes (z=0) */
     private exteriorTransform = new THREE.Matrix4();

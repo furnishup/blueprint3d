@@ -516,7 +516,7 @@ $(document).ready(function() {
     textureDir: "models/textures/",
     widget: false
   }
-  var blueprint3d = new Blueprint3d(opts);
+  var blueprint3d = new BP3D.Blueprint3d(opts);
 
   var modalEffects = new ModalEffects(blueprint3d);
   var viewerFloorplanner = new ViewerFloorplanner(blueprint3d);
