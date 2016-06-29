@@ -13,7 +13,7 @@ module BP3D {
      * @returns The distance.
      */
     public static pointDistanceFromLine(x: number, y: number, x1: number, y1: number, x2: number, y2: number): number {
-      var tPoint = this.closestPointOnLine(x, y, x1, y1, x2, y2);
+      var tPoint = Utils.closestPointOnLine(x, y, x1, y1, x2, y2);
       var tDx = x - tPoint.x;
       var tDy = y - tPoint.y;
       return Math.sqrt(tDx * tDx + tDy * tDy);
@@ -85,7 +85,7 @@ module BP3D {
 
     /** shifts angle to be 0 to 2pi */
     static angle2pi(x1: number, y1: number, x2: number, y2: number) {
-      var tTheta = this.angle(x1, y1, x2, y2);
+      var tTheta = Utils.angle(x1, y1, x2, y2);
       if (tTheta < 0) {
         tTheta += 2 * Math.PI;
       }
@@ -98,14 +98,14 @@ module BP3D {
      */
     static isClockwise(points): boolean {
       // make positive
-      let tSubX = Math.min(0, Math.min.apply(null, this.map(points, function (p) {
+      let tSubX = Math.min(0, Math.min.apply(null, Utils.map(points, function (p) {
         return p.x;
       })))
-      let tSubY = Math.min(0, Math.min.apply(null, this.map(points, function (p) {
+      let tSubY = Math.min(0, Math.min.apply(null, Utils.map(points, function (p) {
         return p.x;
       })))
 
-      var tNewPoints = this.map(points, function (p) {
+      var tNewPoints = Utils.map(points, function (p) {
         return {
           x: p.x - tSubX,
           y: p.y - tSubY
@@ -158,7 +158,7 @@ module BP3D {
           tSecondCorner = firstCorners[tI + 1];
         }
 
-        if (this.linePolygonIntersect(
+        if (Utils.linePolygonIntersect(
           tFirstCorner.x, tFirstCorner.y,
           tSecondCorner.x, tSecondCorner.y,
           secondCorners)) {
@@ -180,7 +180,7 @@ module BP3D {
           tSecondCorner = corners[tI + 1];
         }
 
-        if (this.lineLineIntersect(x1, y1, x2, y2,
+        if (Utils.lineLineIntersect(x1, y1, x2, y2,
           tFirstCorner.x, tFirstCorner.y,
           tSecondCorner.x, tSecondCorner.y)) {
           return true;
@@ -241,7 +241,7 @@ module BP3D {
           tSecondCorner = corners[tI + 1];
         }
 
-        if (this.lineLineIntersect(startX, startY, x, y,
+        if (Utils.lineLineIntersect(startX, startY, x, y,
           tFirstCorner.x, tFirstCorner.y,
           tSecondCorner.x, tSecondCorner.y)) {
           tIntersects++;
@@ -259,12 +259,12 @@ module BP3D {
       startY = startY || 0;
 
       //console.log("checking polygon in polygon");
-      this.forEach(outsideCorners, function (c) { console.log(c.x + ", " + c.y) });
+      Utils.forEach(outsideCorners, function (c) { console.log(c.x + ", " + c.y) });
 
       for (var tI = 0; tI < insideCorners.length; tI++) {
         //console.log("checking point: " + insideCorners[i].x + ", " + insideCorners[i].y);
 
-        if (!this.pointInPolygon(
+        if (!Utils.pointInPolygon(
           insideCorners[tI].x, insideCorners[tI].y,
           outsideCorners,
           startX, startY)) {
@@ -280,7 +280,7 @@ module BP3D {
       startY = startY || 0;
 
       for (var tI = 0; tI < insideCorners.length; tI++) {
-        if (this.pointInPolygon(
+        if (Utils.pointInPolygon(
           insideCorners[tI].x, insideCorners[tI].y,
           outsideCorners,
           startX, startY)) {
@@ -306,7 +306,7 @@ module BP3D {
 
     static map(array, func) {
       var tResult = [];
-      this.forEach(array, function (element) {
+      Utils.forEach(array, function (element) {
         tResult.push(func(element));
       });
       return tResult;
@@ -315,7 +315,7 @@ module BP3D {
     /** Remove elements in array if func(element) returns true */
     static removeIf(array, func) {
       var tResult = [];
-      this.forEach(array, function (element) {
+      Utils.forEach(array, function (element) {
         if (!func(element)) {
           tResult.push(element);
         }
@@ -366,8 +366,8 @@ module BP3D {
 
     /** Subtracts the elements in subArray from array */s
     static subtract(array, subArray) {
-      return this.removeIf(array, function (el) {
-        return this.hasValue(subArray, el);
+      return Utils.removeIf(array, function (el) {
+        return Utils.hasValue(subArray, el);
       });
     }
   }

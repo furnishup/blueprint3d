@@ -4,7 +4,7 @@
 /// <reference path="../model/model.ts" />
 /// <reference path="../model/wall.ts" />
 /// <reference path="../utils/utils.ts" />
-/// <reference path="Floorplanner.ts" />
+/// <reference path="floorplanner.ts" />
 
 module BP3D.Floorplanner {
   /** Converts cm to feet string. */
