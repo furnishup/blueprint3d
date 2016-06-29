@@ -289,8 +289,8 @@ module BP3D.Model {
       var roomCorners = this.findRooms(this.corners);
       this.rooms = [];
       var scope = this;
-      Utils.forEach(roomCorners, function (corners) {
-        this.rooms.push(new Room(scope, corners));
+      Utils.forEach(roomCorners, (corners: Corner[]) => {
+        scope.rooms.push(new Room(scope, corners));
       });
       this.assignOrphanEdges();
 

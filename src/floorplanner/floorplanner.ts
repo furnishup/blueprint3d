@@ -244,7 +244,7 @@ module BP3D.Floorplanner {
     }
 
     /** */
-    private reset = function () {
+    private reset() {
       this.resizeView();
       this.setMode(floorplannerModes.MOVE);
       this.resetOrigin();

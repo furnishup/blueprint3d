@@ -181,12 +181,13 @@ module BP3D.Floorplanner {
 
     /** */
     private drawRoom(room: Model.Room) {
+      var scope = this;
       this.drawPolygon(
-        Utils.map(room.corners, function (corner) {
-          return this.viewmodel.convertX(corner.x);
+        Utils.map(room.corners, (corner: Model.Corner) => {
+          return scope.viewmodel.convertX(corner.x);
         }),
-        Utils.map(room.corners, function (corner) {
-          return this.viewmodel.convertY(corner.y);
+        Utils.map(room.corners, (corner: Model.Corner) =>  {
+          return scope.viewmodel.convertY(corner.y);
         }),
         true,
         roomColor
