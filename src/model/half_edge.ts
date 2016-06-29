@@ -25,7 +25,7 @@ module BP3D.Model {
     private height: number;
 
     /** used for intersection testing... not convinced this belongs here */
-    private plane = null;
+    public plane: THREE.Mesh = null;
 
     /** transform from world coords to wall planes (z=0) */
     private interiorTransform = new THREE.Matrix4();

@@ -47,9 +47,9 @@ module BP3D.Model {
     }
 
     // hack
-    public wallEdges() {
+    public wallEdges(): HalfEdge[] {
       var edges = []
-      Utils.forEach(this.walls, (wall) => {
+      Utils.forEach(this.walls, (wall: Wall) => {
         if (wall.frontEdge) {
           edges.push(wall.frontEdge);
         }
@@ -61,9 +61,9 @@ module BP3D.Model {
     }
 
     // hack
-    public wallEdgePlanes(): Wall[] {
+    public wallEdgePlanes(): THREE.Mesh[] {
       var planes = []
-      Utils.forEach(this.walls, (wall) => {
+      Utils.forEach(this.walls, (wall: Wall) => {
         if (wall.frontEdge) {
           planes.push(wall.frontEdge.plane);
         }
@@ -74,8 +74,8 @@ module BP3D.Model {
       return planes;
     }
 
-    private floorPlanes() {
-      return Utils.map(this.rooms, (room) => {
+    private floorPlanes(): THREE.Mesh[] {
+      return Utils.map(this.rooms, (room: Room) => {
         return room.floorPlane;
       });
     }
@@ -96,7 +96,13 @@ module BP3D.Model {
       this.updated_rooms.add(callback);
     }
 
-    public newWall(start: Corner, end: Corner) {
+    /**
+     * Creates a new wall.
+     * @param start The start corner.
+     * @param end he end corner.
+     * @returns The new wall.
+     */
+    public newWall(start: Corner, end: Corner): Wall {
       var wall = new Wall(start, end);
       this.walls.push(wall)
       wall.fireOnDelete(this.removeWall);
@@ -105,12 +111,22 @@ module BP3D.Model {
       return wall;
     }
 
-    private removeWall(wall) {
+    /** Removes a wall.
+     * @param wall The wall to be removed.
+     */
+    private removeWall(wall: Wall) {
       Utils.removeValue(this.walls, wall);
       this.update();
     }
 
-    public newCorner(x: number, y: number, id?: string) {
+    /**
+     * Creates a new corner.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param id An optional id. If unspecified, the id will be created internally.
+     * @returns The new corner.
+     */
+    public newCorner(x: number, y: number, id?: string): Corner {
       var corner = new Corner(this, x, y, id);
       this.corners.push(corner);
       corner.fireOnDelete(this.removeCorner);
@@ -118,19 +134,25 @@ module BP3D.Model {
       return corner;
     }
 
+    /** Removes a corner.
+     * @param corner The corner to be removed.
+     */
     private removeCorner(corner: Corner) {
       Utils.removeValue(this.corners, corner);
     }
 
-    public getWalls() {
+    /** Gets the walls. */
+    public getWalls(): Wall[] {
       return this.walls;
     }
 
-    public getCorners() {
+    /** Gets the corners. */
+    public getCorners(): Corner[] {
       return this.corners;
     }
 
-    public getRooms() {
+    /** Gets the rooms. */
+    public getRooms(): Room[] {
       return this.rooms;
     }
 
