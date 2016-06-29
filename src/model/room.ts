@@ -24,7 +24,7 @@ module BP3D.Model {
   export class Room {
 
     /** */
-    private interiorCorners = [];
+    public interiorCorners: Corner[] = [];
 
     /** */
     private edgePointer = null;

@@ -30,7 +30,7 @@ module BP3D.Model {
     private items = [];
 
     /** */
-    private needsUpdate = false;
+    public needsUpdate = false;
 
     /** The Json loader. */
     private loader: THREE.JSONLoader;
@@ -58,13 +58,17 @@ module BP3D.Model {
       this.loader.crossOrigin = "";
     }
 
-    private add(mesh) {
-      // only use this for non-items
+    /**
+     * Only use this for non-items.
+     */
+    public add(mesh) {
       this.scene.add(mesh);
     }
 
-    private remove(mesh) {
-      // only use  this for non-items
+    /**
+     * Only use this for non-items.
+     */
+    public remove(mesh) {
       this.scene.remove(mesh);
       Utils.removeValue(this.items, mesh);
     }
@@ -90,7 +94,7 @@ module BP3D.Model {
       this.items = []
     }
 
-    private removeItem(item, dontRemove) {
+    public removeItem(item, dontRemove?) {
       dontRemove = dontRemove || false;
       // use this for item meshes
       this.itemRemovedCallbacks.fire(item);

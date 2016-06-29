@@ -9,10 +9,10 @@ module BP3D.Model {
   export class Model {
 
     /** */
-    private floorplan: Floorplan;
+    public floorplan: Floorplan;
 
     /** */
-    private scene: Scene;
+    public scene: Scene;
 
     /** */
     private roomLoadingCallbacks = $.Callbacks();

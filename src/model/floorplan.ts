@@ -42,13 +42,12 @@ module BP3D.Model {
 
     /** Constructs a floorplan. */
     constructor() {
-
       // Track floor textures here, since rooms are destroyed and
       // created each time we change the floorplan.
     }
 
     // hack
-    private wallEdges() {
+    public wallEdges() {
       var edges = []
       Utils.forEach(this.walls, (wall) => {
         if (wall.frontEdge) {
@@ -62,7 +61,7 @@ module BP3D.Model {
     }
 
     // hack
-    private wallEdgePlanes() {
+    public wallEdgePlanes() {
       var planes = []
       Utils.forEach(this.walls, (wall) => {
         if (wall.frontEdge) {
@@ -278,15 +277,15 @@ module BP3D.Model {
     /** 
      * Returns the center of the floorplan in the y plane
      */
-    private getCenter() {
+    public getCenter() {
       return this.getDimensions(true);
     }
 
-    private getSize() {
+    public getSize() {
       return this.getDimensions(false);
     }
 
-    private getDimensions(center) {
+    public getDimensions(center) {
       center = center || false; // otherwise, get size
 
       var xMin = Infinity;
