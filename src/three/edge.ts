@@ -31,14 +31,14 @@ module BP3D.Three {
     function init() {
       edge.redrawCallbacks.add(redraw);
       controls.cameraMovedCallbacks.add(updateVisibility);
-      // updateTexture(); // TODO_Ekki
+      updateTexture();
       updatePlanes();
       addToScene();
     }
 
     function redraw() {
       removeFromScene();
-      // updateTexture(); // TODO_Ekki
+      updateTexture();
       updatePlanes();
       addToScene();
     }
@@ -106,7 +106,7 @@ module BP3D.Three {
     }
 
 
-    function updateTexture(callback) {
+    function updateTexture(callback?) {
       // callback is fired when texture loads
       callback = callback || function () {
         scene.needsUpdate = true;

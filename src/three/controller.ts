@@ -66,7 +66,7 @@ module BP3D.Three {
       item.position_set = true;
     }
 
-    function clickPressed(vec2) {
+    function clickPressed(vec2?) {
       vec2 = vec2 || mouse;
       var intersection = scope.itemIntersection(mouse, selectedObject);
       if (intersection) {
@@ -74,7 +74,7 @@ module BP3D.Three {
       }
     }
 
-    function clickDragged(vec2) {
+    function clickDragged(vec2?) {
       vec2 = vec2 || mouse;
       var intersection = scope.itemIntersection(mouse, selectedObject);
       if (intersection) {
@@ -106,7 +106,7 @@ module BP3D.Three {
       scene.add(plane);
     }
 
-    function checkWallsAndFloors(event) {
+    function checkWallsAndFloors(event?) {
 
       // double click on a wall or floor brings up texture change modal
       if (state == states.UNSELECTED && mouseoverObject == null) {
@@ -158,7 +158,7 @@ module BP3D.Three {
           case states.DRAGGING:
           case states.ROTATING:
           case states.ROTATING_FREE:
-            // clickDragged(); TODO_Ekki
+            clickDragged();
             hud.update();
             scope.needsUpdate = true;
             break;
@@ -224,13 +224,13 @@ module BP3D.Three {
             break;
           case states.UNSELECTED:
             if (!mouseMoved) {
-              // checkWallsAndFloors(); TODO_Ekki
+              checkWallsAndFloors();
             }
             break;
           case states.SELECTED:
             if (intersectedObject == null && !mouseMoved) {
               switchState(states.UNSELECTED);
-              // checkWallsAndFloors(); TODO_Ekki
+              checkWallsAndFloors();
             }
             break;
           case states.ROTATING_FREE:
@@ -261,7 +261,7 @@ module BP3D.Three {
           break;
         case states.DRAGGING:
           three.setCursorStyle("move");
-          // clickPressed(); TODO_Ekki
+          clickPressed();
           controls.enabled = false;
           break;
       }
