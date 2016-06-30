@@ -108,7 +108,10 @@ module BP3D.Model {
     public newWall(start: Corner, end: Corner): Wall {
       var wall = new Wall(start, end);
       this.walls.push(wall)
-      wall.fireOnDelete(this.removeWall);
+      var scope = this;
+      wall.fireOnDelete(() => {
+        scope.removeWall(wall);
+      });
       this.new_wall_callbacks.fire(wall);
       this.update();
       return wall;
