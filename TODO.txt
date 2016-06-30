@@ -1,0 +1,12 @@
+
+- refactor three/* - use of classes, standard forEach(), lambdas
+
+- update to current threejs
+
+- introduce a more formal persistency format
+
+- put all relevant settings into Core.Configuration to make them read-/writeable, User settings?
+
+- complete type docs for all entities
+
+- there're a few TODO_Ekki's left, kill them all
