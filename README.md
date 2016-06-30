@@ -47,6 +47,22 @@ This project requires a lot more work. In general, it was rushed through various
 
 Please contact us if you are interested in contributing.
 
+### Todos
+
+- More complete documentation (based on the TypeDoc comments)
+- Test suite (e.g. jasmine)
+- Make it easier to build a complete application using blueprint3d (cleaner API, more inclusive base, easier integration with a backend)
+- Better serialization format for saving/loading "designs"
+- Remove the dependency on jquery from the core source!
+- Better use of npm conventions and packaging
+- Various bug fixes
+- refactor three/* - use of classes, lambdas
+- update to current threejs
+- introduce a more formal persistency format
+- put all relevant settings into Core.Configuration to make them read-/writeable, User settings?
+- complete type docs for all entities
+- there're a few TODO_Ekki's left, kill them all
+
 ## Directory Structure
 
 ### `src/` Directory
