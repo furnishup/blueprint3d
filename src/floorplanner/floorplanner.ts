@@ -96,18 +96,27 @@ module BP3D.Floorplanner {
 
       this.setMode(floorplannerModes.MOVE);
 
-      this.canvasElement.mousedown(this.mousedown);
-      this.canvasElement.mousemove(this.mousemove);
-      this.canvasElement.mouseup(this.mouseup);
-      this.canvasElement.mouseleave(this.mouseleave);
+      var scope = this;
 
-      $(document).keyup(function (e) {
+      this.canvasElement.mousedown(() => {
+        scope.mousedown();
+      });
+      this.canvasElement.mousemove((event) => {
+        scope.mousemove(event);
+      });
+      this.canvasElement.mouseup(() => {
+        scope.mouseup();
+      });
+      this.canvasElement.mouseleave(() => {
+        scope.mouseleave();
+      });
+
+      $(document).keyup((e) => {
         if (e.keyCode == 27) {
-          this.escapeKey();
+          scope.escapeKey();
         }
       });
 
-      var scope = this;
       floorplan.roomLoadedCallbacks.add(() => {
         scope.reset()
       });
