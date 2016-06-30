@@ -30,10 +30,10 @@ module BP3D.Core {
         case dimMilliMeter:
           return "" + Math.round(10 * cm) + " mm";
         case dimCentiMeter:
-          return "" + cm + " cm";
+          return "" + Math.round(10 * cm) / 10 + " cm";
         case dimMeter:
         default:
-          return "" + (0.01 * cm) + " m";
+          return "" + Math.round(10 * cm) / 1000 + " m";
       }
     }
   }
