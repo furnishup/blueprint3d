@@ -44,10 +44,10 @@ module BP3D.Three {
     }
 
     function removeFromScene() {
-      Core.Utils.forEach(planes, function (plane) {
+      planes.forEach((plane) => {
         scene.remove(plane);
       });
-      Core.Utils.forEach(basePlanes, function (plane) {
+      basePlanes.forEach((plane) => {
         scene.remove(plane);
       });
       planes = [];
@@ -55,10 +55,10 @@ module BP3D.Three {
     }
 
     function addToScene() {
-      Core.Utils.forEach(planes, function (plane) {
+      planes.forEach((plane) => {
         scene.add(plane);
       });
-      Core.Utils.forEach(basePlanes, function (plane) {
+      basePlanes.forEach((plane) => {
         scene.add(plane);
       });
       updateVisibility();
@@ -89,7 +89,7 @@ module BP3D.Three {
       scope.visible = (dot >= 0);
 
       // show or hide plans
-      Core.Utils.forEach(planes, function (plane) {
+      planes.forEach((plane) => {
         plane.visible = scope.visible;
       });
 
@@ -97,14 +97,13 @@ module BP3D.Three {
     }
 
     function updateObjectVisibility() {
-      Core.Utils.forEach(wall.items, function (item) {
+      wall.items.forEach((item) => {
         item.updateEdgeVisibility(scope.visible, front);
       });
-      Core.Utils.forEach(wall.onItems, function (item) {
+      wall.onItems.forEach((item) => {
         item.updateEdgeVisibility(scope.visible, front);
       });
     }
-
 
     function updateTexture(callback?) {
       // callback is fired when texture loads
@@ -189,7 +188,7 @@ module BP3D.Three {
 
       var points = [v1.clone(), v2.clone(), v3.clone(), v4.clone()];
 
-      Core.Utils.forEach(points, function (p) {
+      points.forEach((p) => {
         p.applyMatrix4(transform);
       });
 
@@ -201,7 +200,7 @@ module BP3D.Three {
       ]);
 
       // add holes for each wall item
-      Core.Utils.forEach(wall.items, function (item) {
+      wall.items.forEach((item) => {
         var pos = item.position.clone();
         pos.applyMatrix4(transform)
         var halfSize = item.halfSize;
@@ -222,7 +221,7 @@ module BP3D.Three {
 
       var geometry = new THREE.ShapeGeometry(shape);
 
-      Core.Utils.forEach(geometry.vertices, function (v) {
+      geometry.vertices.forEach((v) => {
         v.applyMatrix4(invTransform);
       });
 
@@ -237,7 +236,7 @@ module BP3D.Three {
         return new THREE.Vector2(x, y);
       }
 
-      Core.Utils.forEach(geometry.faces, function (face) {
+      geometry.faces.forEach((face) => {
         var vertA = geometry.vertices[face.a];
         var vertB = geometry.vertices[face.b];
         var vertC = geometry.vertices[face.c];
@@ -268,7 +267,7 @@ module BP3D.Three {
       ];
 
       var geometry = new THREE.Geometry();
-      Core.Utils.forEach(points, function (p) {
+      points.forEach((p) => {
         geometry.vertices.push(p);
       });
       geometry.faces.push(new THREE.Face3(0, 1, 2));
