@@ -11,4 +11,6 @@
   (2) Internal references from other directories, alphabetically ordered
   (3) Internal references from the current directory, alphabetically ordered
 
+  Sometimes, however, you need to modify this sequence to avoid bootstrap issues.
+
 - place an empty line after the references
