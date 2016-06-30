@@ -1,25 +1,9 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
+/// <reference path="../items/factory.ts" />
 /// <reference path="../utils/utils.ts" />
-/// <reference path="../items/floor_item.ts" />
-/// <reference path="../items/in_wall_floor_item.ts" />
-/// <reference path="../items/in_wall_item.ts" />
-/// <reference path="../items/item.ts" />
-/// <reference path="../items/on_floor_item.ts" />
-/// <reference path="../items/wall_floor_item.ts" />
-/// <reference path="../items/wall_item.ts" />
 
 module BP3D.Model {
-  /** */
-  const item_types = {
-    1: Items.FloorItem,
-    2: Items.WallItem,
-    3: Items.InWallItem,
-    7: Items.InWallFloorItem,
-    8: Items.OnFloorItem,
-    9: Items.WallFloorItem
-  };
-
   /**
    * The Scene is a manager of Items and also links to a ThreeJS scene.
    */
@@ -133,9 +117,10 @@ module BP3D.Model {
      */
     public addItem(itemType: number, fileName: string, metadata, position: THREE.Vector3, rotation: number, scale: THREE.Vector3, fixed: boolean) {
       itemType = itemType || 1;
+      var scope = this.model;
       var loaderCallback = function (geometry: THREE.Geometry, materials: THREE.Material[]) {
-        var item = new item_types[itemType](
-          this.model,
+        var item = new (Items.Factory.getClass(itemType))(
+          scope,
           metadata, geometry,
           new THREE.MeshFaceMaterial(materials),
           position, rotation, scale

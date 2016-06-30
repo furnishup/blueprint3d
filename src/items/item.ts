@@ -1,6 +1,5 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../model/model.ts" />
-/// <reference path="../model/scene.ts" />
 /// <reference path="../utils/utils.ts" />
 /// <reference path="metadata.ts" />
 
