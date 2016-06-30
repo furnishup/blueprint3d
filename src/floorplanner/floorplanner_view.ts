@@ -57,7 +57,10 @@ module BP3D.Floorplanner {
       this.canvasElement = <HTMLCanvasElement>document.getElementById(canvas);
       this.context = this.canvasElement.getContext('2d');
 
-      $(window).resize(this.handleWindowResize);
+      var scope = this;
+      $(window).resize(() => {
+        scope.handleWindowResize();
+      });
       this.handleWindowResize();
     }
 

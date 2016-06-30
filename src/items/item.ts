@@ -164,7 +164,8 @@ module BP3D.Items {
     };
 
     /** */
-    public abstract removed();
+    public removed() {
+    }
 
     /** on is a bool */
     public updateHighlight() {
