@@ -117,19 +117,19 @@ module BP3D.Model {
      */
     public addItem(itemType: number, fileName: string, metadata, position: THREE.Vector3, rotation: number, scale: THREE.Vector3, fixed: boolean) {
       itemType = itemType || 1;
-      var scope = this.model;
+      var scope = this;
       var loaderCallback = function (geometry: THREE.Geometry, materials: THREE.Material[]) {
         var item = new (Items.Factory.getClass(itemType))(
-          scope,
+          scope.model,
           metadata, geometry,
           new THREE.MeshFaceMaterial(materials),
           position, rotation, scale
         );
         item.fixed = fixed || false;
-        this.items.push(item);
-        this.scope.add(item);
+        scope.items.push(item);
+        scope.add(item);
         item.initObject();
-        this.scope.itemLoadedCallbacks.fire(item);
+        scope.itemLoadedCallbacks.fire(item);
       }
 
       this.itemLoadingCallbacks.fire();

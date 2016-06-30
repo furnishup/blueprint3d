@@ -78,7 +78,8 @@ module BP3D.Items {
       this.castShadow = true;
       this.receiveShadow = false;
 
-      THREE.Mesh.call(this, geometry, material);
+      this.geometry = geometry;
+      this.material = material;
 
       if (position) {
         this.position.copy(position);
