@@ -2,6 +2,7 @@
   "name": "blueprint3d",
   "version": "0.0.1",
   "description": "",
+  "license": "(MIT OR Apache-2.0)",
   "main": "main.js",
   "dependencies": {
     "bootstrap": "^3.3.1",
@@ -15,11 +16,23 @@
     "vec2": "^1.6.0"
   },
   "devDependencies": {
-    "browserify": "^8.0.2"
+    "browserify": "^8.0.2",
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-string-replace": "^1.2.1",
+    "grunt-subgrunt": "^1.2.0",
+    "grunt-typedoc": "^0.2.4",
+    "grunt-typescript": "^0.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ekki/blueprint3d.git"
   },
   "scripts": {
     "build": "browserify src/blueprint3d.js > example/js/blueprint3d.js --verbose"
   },
-  "author": "",
-  "license": ""
+  "author": ""
 }
