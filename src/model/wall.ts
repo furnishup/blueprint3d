@@ -31,7 +31,7 @@ module BP3D.Model {
     public backEdge: HalfEdge = null;
 
     /** */
-    private orphan = false;
+    public orphan = false;
 
     /** Items attached to this wall */
     public items: Items.Item[] = [];
@@ -76,7 +76,7 @@ module BP3D.Model {
       return [this.start.id, this.end.id].join();
     }
 
-    private resetFrontBack(func) {
+    public resetFrontBack() {
       this.frontEdge = null;
       this.backEdge = null;
       this.orphan = false;

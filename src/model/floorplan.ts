@@ -51,7 +51,8 @@ module BP3D.Model {
     // hack
     public wallEdges(): HalfEdge[] {
       var edges = []
-      Utils.forEach(this.walls, (wall: Wall) => {
+
+      this.walls.forEach((wall) => {
         if (wall.frontEdge) {
           edges.push(wall.frontEdge);
         }
@@ -65,7 +66,7 @@ module BP3D.Model {
     // hack
     public wallEdgePlanes(): THREE.Mesh[] {
       var planes = []
-      Utils.forEach(this.walls, (wall: Wall) => {
+      this.walls.forEach((wall) => {
         if (wall.frontEdge) {
           planes.push(wall.frontEdge.plane);
         }
@@ -189,13 +190,15 @@ module BP3D.Model {
         floorTextures: {},
         newFloorTextures: {}
       }
-      Utils.forEach(this.corners, function (corner) {
+
+      this.corners.forEach((corner) => {
         floorplan.corners[corner.id] = {
           'x': corner.x,
           'y': corner.y
         };
       });
-      Utils.forEach(this.walls, function (wall) {
+
+      this.walls.forEach((wall) => {
         floorplan.walls.push({
           'corner1': wall.getStart().id,
           'corner2': wall.getEnd().id,
@@ -265,14 +268,15 @@ module BP3D.Model {
       }
     }
 
+    /** */
     private reset() {
       var tmpCorners = this.corners.slice(0);
       var tmpWalls = this.walls.slice(0);
-      Utils.forEach(tmpCorners, function (c) {
-        c.remove();
+      tmpCorners.forEach((corner) => {
+        corner.remove();
       })
-      Utils.forEach(tmpWalls, function (w) {
-        w.remove();
+      tmpWalls.forEach((wall) => {
+        wall.remove();
       })
       this.corners = [];
       this.walls = [];
@@ -282,14 +286,14 @@ module BP3D.Model {
      * Update rooms
      */
     public update() {
-      Utils.forEach(this.walls, function (wall) {
+      this.walls.forEach((wall) => {
         wall.resetFrontBack();
       });
 
       var roomCorners = this.findRooms(this.corners);
       this.rooms = [];
       var scope = this;
-      Utils.forEach(roomCorners, (corners: Corner[]) => {
+      roomCorners.forEach((corners) => {
         scope.rooms.push(new Room(scope, corners));
       });
       this.assignOrphanEdges();
@@ -316,11 +320,11 @@ module BP3D.Model {
       var xMax = -Infinity;
       var zMin = Infinity;
       var zMax = -Infinity;
-      Utils.forEach(this.corners, function (c) {
-        if (c.x < xMin) xMin = c.x;
-        if (c.x > xMax) xMax = c.x;
-        if (c.y < zMin) zMin = c.y;
-        if (c.y > zMax) zMax = c.y;
+      this.corners.forEach((corner) => {
+        if (corner.x < xMin) xMin = corner.x;
+        if (corner.x > xMax) xMax = corner.x;
+        if (corner.y < zMin) zMin = corner.y;
+        if (corner.y > zMax) zMax = corner.y;
       });
       var ret;
       if (xMin == Infinity || xMax == -Infinity || zMin == Infinity || zMax == -Infinity) {
@@ -342,7 +346,7 @@ module BP3D.Model {
       // find orphaned wall segments (i.e. not part of rooms) and
       // give them edges
       var orphanWalls = []
-      Utils.forEach(this.walls, function (wall) {
+      this.walls.forEach((wall) => {
         if (!wall.backEdge && !wall.frontEdge) {
           wall.orphan = true;
           var back = new HalfEdge(null, wall, false);
@@ -450,7 +454,7 @@ module BP3D.Model {
 
           if (addToStack.length > 0) {
             // add to the stack
-            Utils.forEach(addToStack, function (corner) {
+            addToStack.forEach((corner) => {
               stack.push({
                 corner: corner,
                 previousCorners: previousCorners
@@ -479,12 +483,6 @@ module BP3D.Model {
       //remove CW loops
       var uniqueCCWLoops = Utils.removeIf(uniqueLoops, Utils.isClockwise);
 
-      //Utils.forEach(uniqueCCWLoops, function(loop) {
-      //  console.log("LOOP");
-      //  Utils.forEach(loop, function(corner) {
-      //    console.log(corner.id);
-      //  });
-      //});
       return uniqueCCWLoops;
     }
   }

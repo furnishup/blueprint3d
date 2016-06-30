@@ -86,7 +86,7 @@ module BP3D.Model {
 
       var scope = this;
 
-      Utils.forEach(this.adjacentCorners(), (corner) => {
+      this.adjacentCorners().forEach((corner) => {
         if (Math.abs(corner.x - scope.x) < tolerance) {
           scope.x = corner.x;
           snapped.x = true;
@@ -112,7 +112,7 @@ module BP3D.Model {
     }
 
     /** Remove callback. Fires the delete callbacks. */
-    private remove() {
+    public remove() {
       this.deleted_callbacks.fire(this);
     }
 
@@ -136,10 +136,12 @@ module BP3D.Model {
       this.y = newY;
       this.mergeWithIntersected();
       this.moved_callbacks.fire(this.x, this.y);
-      Utils.forEach(this.wallStarts, function (wall) {
+
+      this.wallStarts.forEach((wall) => {
         wall.fireMoved();
       });
-      Utils.forEach(this.wallEnds, function (wall) {
+
+      this.wallEnds.forEach((wall) => {
         wall.fireMoved();
       });
     }

@@ -83,7 +83,7 @@ module BP3D.Model {
     public clearItems() {
       var items_copy = this.items
       var scope = this;
-      Utils.forEach(this.items, (item) => {
+      this.items.forEach((item) => {
         scope.removeItem(item, true);
       });
       this.items = []

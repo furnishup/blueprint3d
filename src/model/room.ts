@@ -78,7 +78,7 @@ module BP3D.Model {
 
     private generatePlane() {
       var points = [];
-      Utils.forEach(this.interiorCorners, function (corner) {
+      this.interiorCorners.forEach((corner) => {
         points.push(new THREE.Vector2(
           corner.x,
           corner.y));

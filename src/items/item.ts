@@ -171,8 +171,9 @@ module BP3D.Items {
       var on = this.hover || this.selected;
       this.highlighted = on;
       var hex = on ? this.emissiveColor : 0x000000;
-      Utils.forEach((<THREE.MeshFaceMaterial>this.material).materials, function (material) {
-        material.emissive.setHex(hex);
+      (<THREE.MeshFaceMaterial>this.material).materials.forEach((material) => {
+        // TODO_Ekki emissive doesn't exist anymore?
+        (<any>material).emissive.setHex(hex);
       });
     }
 
