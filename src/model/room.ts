@@ -1,6 +1,6 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
-/// <reference path="../utils/utils.ts" />
+/// <reference path="../core/utils.ts" />
 /// <reference path="corner.ts" />
 /// <reference path="floorplan.ts" />
 /// <reference path="half_edge.ts" />
@@ -50,7 +50,7 @@ module BP3D.Model {
     }
 
     private getUuid(): string {
-      var cornerUuids = Utils.map(this.corners, function (c) {
+      var cornerUuids = Core.Utils.map(this.corners, function (c) {
         return c.id;
       });
       cornerUuids.sort();

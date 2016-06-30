@@ -1,5 +1,5 @@
 /// <reference path="../../lib/three.d.ts" />
-/// <reference path="../utils/utils.ts" />
+/// <reference path="../core/utils.ts" />
 
 module BP3D.Three {
   /**
@@ -71,7 +71,7 @@ module BP3D.Three {
 
     function setColor() {
       if (activeObject) {
-        Utils.forEach(activeObject.children, function (obj) {
+        activeObject.children.forEach((obj) => {
           obj.material.color.set(getColor());
         });
       }

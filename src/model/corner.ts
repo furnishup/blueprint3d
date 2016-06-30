@@ -1,5 +1,5 @@
 /// <reference path="../../lib/jQuery.d.ts" />
-/// <reference path="../utils/utils.ts" />
+/// <reference path="../core/utils.ts" />
 /// <reference path="floorplan.ts" />
 /// <reference path="wall.ts" />
 
@@ -34,7 +34,7 @@ module BP3D.Model {
      * @param id An optional unique id. If not set, created internally.
      */
     constructor(private floorplan: Floorplan, public x: number, public y: number, public id?: string) {
-      this.id = id || Utils.guid();
+      this.id = id || Core.Utils.guid();
     }
 
     /** Add function to moved callbacks.
@@ -182,7 +182,7 @@ module BP3D.Model {
      * 
      */
     public distanceFrom(x: number, y: number): number {
-      var distance = Utils.distance(x, y, this.x, this.y);
+      var distance = Core.Utils.distance(x, y, this.x, this.y);
       //console.log('x,y ' + x + ',' + y + ' to ' + this.getX() + ',' + this.getY() + ' is ' + distance);
       return distance;
     }
@@ -207,8 +207,8 @@ module BP3D.Model {
      * @param wall A wall.
      */
     public detachWall(wall: Wall) {
-      Utils.removeValue(this.wallStarts, wall);
-      Utils.removeValue(this.wallEnds, wall);
+      Core.Utils.removeValue(this.wallStarts, wall);
+      Core.Utils.removeValue(this.wallEnds, wall);
       if (this.wallStarts.length == 0 && this.wallEnds.length == 0) {
         this.remove();
       }
@@ -297,7 +297,7 @@ module BP3D.Model {
         var wall = this.floorplan.getWalls()[i];
         if (this.distanceFromWall(wall) < cornerTolerance && !this.isWallConnected(wall)) {
           // update position to be on wall
-          var intersection = Utils.closestPointOnLine(this.x, this.y,
+          var intersection = Core.Utils.closestPointOnLine(this.x, this.y,
             wall.getStart().x, wall.getStart().y,
             wall.getEnd().x, wall.getEnd().y);
           this.x = intersection.x;

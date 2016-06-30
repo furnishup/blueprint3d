@@ -1,6 +1,6 @@
 /// <reference path="../../lib/three.d.ts" />
+/// <reference path="../core/utils.ts" />
 /// <reference path="../model/model.ts" />
-/// <reference path="../utils/utils.ts" />
 /// <reference path="metadata.ts" />
 
 module BP3D.Items {
@@ -218,7 +218,7 @@ module BP3D.Items {
     /** */
     public rotate(intersection) {
       if (intersection) {
-        var angle = Utils.angle(
+        var angle = Core.Utils.angle(
           0,
           1,
           intersection.point.x - this.position.x,

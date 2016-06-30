@@ -1,7 +1,7 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
+/// <reference path="../core/utils.ts" />
 /// <reference path="../items/factory.ts" />
-/// <reference path="../utils/utils.ts" />
 
 module BP3D.Model {
   /**
@@ -55,7 +55,7 @@ module BP3D.Model {
      */
     public remove(mesh: THREE.Mesh) {
       this.scene.remove(mesh);
-      Utils.removeValue(this.items, mesh);
+      Core.Utils.removeValue(this.items, mesh);
     }
 
     /** Gets the scene.
@@ -101,7 +101,7 @@ module BP3D.Model {
       item.removed();
       this.scene.remove(item);
       if (!dontRemove) {
-        Utils.removeValue(this.items, item);
+        Core.Utils.removeValue(this.items, item);
       }
     }
 

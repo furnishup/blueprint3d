@@ -1,6 +1,5 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../model/model.ts" />
-/// <reference path="../utils/utils.ts" />
 /// <reference path="item.ts" />
 /// <reference path="metadata.ts" />
 
@@ -49,8 +48,8 @@ module BP3D.Items {
       var rooms = this.model.floorplan.getRooms();
       var isInARoom = false;
       for (var i = 0; i < rooms.length; i++) {
-        if (Utils.pointInPolygon(vec3.x, vec3.z, rooms[i].interiorCorners) &&
-          !Utils.polygonPolygonIntersect(corners, rooms[i].interiorCorners)) {
+        if (Core.Utils.pointInPolygon(vec3.x, vec3.z, rooms[i].interiorCorners) &&
+          !Core.Utils.polygonPolygonIntersect(corners, rooms[i].interiorCorners)) {
           isInARoom = true;
         }
       }

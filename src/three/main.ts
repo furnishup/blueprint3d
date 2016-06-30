@@ -5,7 +5,6 @@
 /// <reference path="lights.ts" />
 /// <reference path="skybox.ts" />
 /// <reference path="controls.ts" />
-// Canvas
 /// <reference path="hud.ts" />
 
 module BP3D.Three {

@@ -1,7 +1,7 @@
 /// <reference path="../../lib/three.d.ts" />
+/// <reference path="../core/utils.ts" />
 /// <reference path="../model/half_edge.ts" />
 /// <reference path="../model/model.ts" />
-/// <reference path="../utils/utils.ts" />
 /// <reference path="item.ts" />
 /// <reference path="metadata.ts" />
 
@@ -76,7 +76,7 @@ namespace BP3D.Items {
     /** */
     public removed() {
       if (this.currentWallEdge != null && this.addToWall) {
-        Utils.removeValue(this.currentWallEdge.wall.items, this);
+        Core.Utils.removeValue(this.currentWallEdge.wall.items, this);
         this.redrawWall();
       }
     }
@@ -151,10 +151,10 @@ namespace BP3D.Items {
     private changeWallEdge(wallEdge) {
       if (this.currentWallEdge != null) {
         if (this.addToWall) {
-          Utils.removeValue(this.currentWallEdge.wall.items, this);
+          Core.Utils.removeValue(this.currentWallEdge.wall.items, this);
           this.redrawWall();
         } else {
-          Utils.removeValue(this.currentWallEdge.wall.onItems, this);
+          Core.Utils.removeValue(this.currentWallEdge.wall.onItems, this);
         }
       }
 
@@ -170,7 +170,7 @@ namespace BP3D.Items {
       normal2.x = normal3.x;
       normal2.y = normal3.z;
 
-      var angle = Utils.angle(
+      var angle = Core.Utils.angle(
         this.refVec.x, this.refVec.y,
         normal2.x, normal2.y);
       this.rotation.y = angle;

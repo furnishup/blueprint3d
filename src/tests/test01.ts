@@ -2,7 +2,6 @@
 /// <reference path="../model/corner.ts" />
 /// <reference path="../model/floorplan.ts" />
 /// <reference path="../model/wall.ts" />
-/// <reference path="../utils/utils.ts" />
 
 // TODO Tests should be removed sooner or later, and put into separate package.
 

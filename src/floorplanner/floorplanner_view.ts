@@ -1,11 +1,11 @@
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../core/configuration.ts" />
 /// <reference path="../core/dimensioning.ts" />
+/// <reference path="../core/utils.ts" />
 /// <reference path="../model/floorplan.ts" />
 /// <reference path="../model/half_edge.ts" />
 /// <reference path="../model/model.ts" />
 /// <reference path="../model/wall.ts" />
-/// <reference path="../utils/utils.ts" />
 /// <reference path="floorplanner.ts" />
 
 module BP3D.Floorplanner {
@@ -175,10 +175,10 @@ module BP3D.Floorplanner {
 
       var scope = this;
       this.drawPolygon(
-        Utils.map(corners, function (corner) {
+        Core.Utils.map(corners, function (corner) {
           return scope.viewmodel.convertX(corner.x);
         }),
-        Utils.map(corners, function (corner) {
+        Core.Utils.map(corners, function (corner) {
           return scope.viewmodel.convertY(corner.y);
         }),
         false,
@@ -193,10 +193,10 @@ module BP3D.Floorplanner {
     private drawRoom(room: Model.Room) {
       var scope = this;
       this.drawPolygon(
-        Utils.map(room.corners, (corner: Model.Corner) => {
+        Core.Utils.map(room.corners, (corner: Model.Corner) => {
           return scope.viewmodel.convertX(corner.x);
         }),
-        Utils.map(room.corners, (corner: Model.Corner) =>  {
+        Core.Utils.map(room.corners, (corner: Model.Corner) =>  {
           return scope.viewmodel.convertY(corner.y);
         }),
         true,

@@ -1,5 +1,5 @@
 /// <reference path="../../lib/three.d.ts" />
-/// <reference path="../Utils/Utils.ts" />
+/// <reference path="../core/utils.ts" />
 
 module BP3D.Three {
   export var Floor = function (scene, room) {
@@ -47,7 +47,7 @@ module BP3D.Three {
       // scale down coords to fit 0 -> 1, then rescale
 
       var points = [];
-      Utils.forEach(scope.room.interiorCorners, function (corner) {
+      scope.room.interiorCorners.forEach((corner) => {
         points.push(new THREE.Vector2(
           corner.x / textureScale,
           corner.y / textureScale));
@@ -73,7 +73,7 @@ module BP3D.Three {
       });
 
       var points = [];
-      Utils.forEach(scope.room.interiorCorners, function (corner) {
+      scope.room.interiorCorners.forEach((corner) => {
         points.push(new THREE.Vector2(
           corner.x,
           corner.y));

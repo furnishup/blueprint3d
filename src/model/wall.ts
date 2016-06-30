@@ -1,7 +1,7 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../core/configuration.ts" />
-/// <reference path="../utils/utils.ts" />
+/// <reference path="../core/utils.ts" />
 /// <reference path="../items/item.ts" />
 /// <reference path="corner.ts" />
 /// <reference path="half_edge.ts" />
@@ -171,7 +171,7 @@ module BP3D.Model {
     }
 
     public distanceFrom(x: number, y: number): number {
-      return Utils.pointDistanceFromLine(x, y,
+      return Core.Utils.pointDistanceFromLine(x, y,
         this.getStartX(), this.getStartY(),
         this.getEndX(), this.getEndY());
     }

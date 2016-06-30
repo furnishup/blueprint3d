@@ -1,6 +1,6 @@
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../../lib/three.d.ts" />
-/// <reference path="../utils/utils.ts" />
+/// <reference path="../core/utils.ts" />
 
 module BP3D.Three {
   export var Controller = function (three, model, camera, element, controls, hud) {
@@ -313,7 +313,7 @@ module BP3D.Three {
 
       // check objects
       var items = model.scene.getItems();
-      /*items = utils.removeIf(items, function(item) {
+      /*items = Core.Utils.removeIf(items, function(item) {
         var remove = item.fixed && !three.options().canMoveFixedItems;
         //alert("remove!");
         return remove;
@@ -388,14 +388,14 @@ module BP3D.Three {
       }
       // filter by visible, if true
       if (onlyVisible) {
-        intersections = Utils.removeIf(intersections, function (intersection) {
+        intersections = Core.Utils.removeIf(intersections, function (intersection) {
           return !intersection.object.visible;
         });
       }
 
       // filter by normals, if true
       if (filterByNormals) {
-        intersections = Utils.removeIf(intersections, function (intersection) {
+        intersections = Core.Utils.removeIf(intersections, function (intersection) {
           var dot = intersection.face.normal.dot(direction);
           return (dot > 0)
         });

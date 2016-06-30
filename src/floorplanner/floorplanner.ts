@@ -1,6 +1,5 @@
 /// <reference path="../../lib/jQuery.d.ts" />
 /// <reference path="../model/floorplan.ts" />
-/// <reference path="../utils/utils.ts" />
 /// <reference path="floorplanner_view.ts" />
 
 module BP3D.Floorplanner {

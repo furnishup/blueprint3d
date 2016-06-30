@@ -53,6 +53,8 @@ Please contact us if you are interested in contributing.
 
 The `src` directory contains the core of the project. Here is a description of the various sub-directories:
 
+`core` - basic stuff like logging, plus some shared functions that are mostly deprecated in favor of functionality provided by various npm modules
+
 `floorplanner` - 2D view/controller for editing the floorplan
 
 `items` - Various types of items that can go in rooms
@@ -60,8 +62,6 @@ The `src` directory contains the core of the project. Here is a description of t
 `model` - Data model representing both the 2D floorplan and all of the items in it
 
 `three` - 3D view/controller for viewing and modifying item placement
-
-`utils` - some shared functions that are mostly deprecated in favor of functionality provided by various npm modules
 
 
 ### `example/` Directory

@@ -1,4 +1,3 @@
-/// <reference path="item.ts" />
 /// <reference path="floor_item.ts" />
 /// <reference path="in_wall_floor_item.ts" />
 /// <reference path="in_wall_item.ts" />

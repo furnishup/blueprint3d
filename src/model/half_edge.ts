@@ -1,6 +1,6 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
-/// <reference path="../utils/utils.ts" />
+/// <reference path="../core/utils.ts" />
 
 module BP3D.Model {
   /**
@@ -129,7 +129,7 @@ module BP3D.Model {
     public interiorDistance(): number {
       var start = this.interiorStart();
       var end = this.interiorEnd();
-      return Utils.distance(start.x, start.y, end.x, end.y);
+      return Core.Utils.distance(start.x, start.y, end.x, end.y);
     }
 
     private computeTransforms(transform, invTransform, start, end) {
@@ -137,7 +137,7 @@ module BP3D.Model {
       var v1 = start;
       var v2 = end;
 
-      var angle = Utils.angle(1, 0, v2.x - v1.x, v2.y - v1.y);
+      var angle = Core.Utils.angle(1, 0, v2.x - v1.x, v2.y - v1.y);
 
       var tt = new THREE.Matrix4();
       tt.makeTranslation(-v1.x, 0, -v1.y);
@@ -154,7 +154,7 @@ module BP3D.Model {
      */
     public distanceTo(x: number, y: number): number {
       // x, y, x1, y1, x2, y2
-      return Utils.pointDistanceFromLine(x, y,
+      return Core.Utils.pointDistanceFromLine(x, y,
         this.interiorStart().x,
         this.interiorStart().y,
         this.interiorEnd().x,
@@ -263,7 +263,7 @@ module BP3D.Model {
       }
 
       // CCW angle between edges
-      var theta = Utils.angle2pi(
+      var theta = Core.Utils.angle2pi(
         v1startX - v1endX,
         v1startY - v1endY,
         v2endX - v1endX,
@@ -281,7 +281,7 @@ module BP3D.Model {
       var vy = v2dx * sn + v2dy * cs;
 
       // normalize
-      var mag = Utils.distance(0, 0, vx, vy);
+      var mag = Core.Utils.distance(0, 0, vx, vy);
       var desiredMag = (this.offset) / sn;
       var scalar = desiredMag / mag;
 
