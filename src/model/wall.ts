@@ -1,5 +1,6 @@
 /// <reference path="../../lib/three.d.ts" />
 /// <reference path="../../lib/jQuery.d.ts" />
+/// <reference path="../core/configuration.ts" />
 /// <reference path="../utils/utils.ts" />
 /// <reference path="../items/item.ts" />
 /// <reference path="corner.ts" />
@@ -45,10 +46,10 @@ module BP3D.Model {
     public backTexture = defaultWallTexture;
 
     /** Wall thickness. */
-    public thickness = 10;
+    public thickness = Core.Configuration.getNumericValue(Core.configWallThickness);
 
     /** Wall height. */
-    public height = 250;
+    public height = Core.Configuration.getNumericValue(Core.configWallHeight);
 
     /** Actions to be applied after movement. */
     private moved_callbacks = $.Callbacks();

@@ -21,7 +21,7 @@ module BP3D.Core {
      * @returns String representation.
      */
     public static cmToMeasure(cm: number): string {
-      switch (Core.Configuration.getDimensioningUnit()) {
+      switch (Core.Configuration.getStringValue(Core.configDimUnit)) {
         case dimInch:
           var realFeet = ((cm * 0.393700) / 12);
           var feet = Math.floor(realFeet);
