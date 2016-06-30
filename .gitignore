@@ -9,3 +9,4 @@ build
 .vscode
 bin
 doc
+dist
