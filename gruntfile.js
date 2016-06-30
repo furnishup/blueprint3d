@@ -2,26 +2,26 @@ module.exports = function (grunt) {
 
   require("matchdep").filterAll("grunt-*").forEach(grunt.loadNpmTasks);
 
-  var tSources = ["src/*.ts", "stc/*/*.ts"]
+  var tSources = ["src/*.ts", "src/*/*.ts"]
 
   var globalConfig = {
-    moduleName: 'blueprint3d',
-    docDir: 'doc',
-    outDir: 'dist',
-    exampleDir: 'example/js/',
-    sources: ["src/*.ts", "stc/*/*.ts"]
+    moduleName: "blueprint3d",
+    docDir: "doc",
+    outDir: "dist",
+    exampleDir: "example/js/",
+    sources: tSources
   };
 
   grunt.initConfig({
 
     globalConfig: globalConfig,
 
-    clean: ["<%= globalConfig.outDir %>", "<%= globalConfig.docDir %>"],
+    clean: [globalConfig.outDir, globalConfig.docDir],
 
     copy: {
-      "<%= globalConfig.moduleName %>": {
-        src: "<%= globalConfig.outDir %>/<%= globalConfig.moduleName %>.js",
-        dest: "<%= globalConfig.exampleDir %>/<%= globalConfig.moduleName %>.js"
+      blueprint3d: {
+        src: globalConfig.outDir + "/" + globalConfig.moduleName + ".js",
+        dest: globalConfig.exampleDir + "/" + globalConfig.moduleName + ".js"
       }
     },
 
@@ -33,24 +33,24 @@ module.exports = function (grunt) {
         removeComments: false
       },
 
-      "<%= globalConfig.moduleName %>": {
+      blueprint3d: {
         src: globalConfig.sources,
-        dest: "<%= globalConfig.outDir %>/<%= globalConfig.moduleName %>.js"
+        dest: globalConfig.outDir + "/" + globalConfig.moduleName + ".js"
       }
     },
 
    typedoc: {
       options: {
-        name: "<%= globalConfig.moduleName %>",
+        name: globalConfig.moduleName,
         target: "es5",
         mode: "file",
         readme: "none"
       },
 
-      "<%= globalConfig.moduleName %>": {
+      blueprint3d: {
         options: {
-          out: "<%= globalConfig.docDir %>/<%= globalConfig.moduleName %>",
-          name: "<%= globalConfig.moduleName %>"
+          out: globalConfig.docDir + "/" + globalConfig.moduleName,
+          name: globalConfig.moduleName
         },
         src: tSources
       }
@@ -62,27 +62,28 @@ module.exports = function (grunt) {
         beautify: false,
         sourceMap: true
       },
-      "<%= globalConfig.moduleName %>": {
+
+      blueprint3d: {
         files: {
-          '<%= globalConfig.outDir %>/<%= globalConfig.moduleName %>.min.js': '<%= globalConfig.outDir %>/<%= globalConfig.moduleName %>.js'
+          "dist/blueprint3d.min.js": globalConfig.outDir + "/" + globalConfig.moduleName +".js"
         }
       }
     }
   });
 
   grunt.registerTask("debug", [
-    "typescript:<%= globalConfig.moduleName %>"
+    "typescript:" + globalConfig.moduleName
   ]);
 
   grunt.registerTask("example", [
-    "copy:<%= globalConfig.moduleName %>"
+    "copy:" + globalConfig.moduleName
   ]);
 
   grunt.registerTask("release", [
     "clean",
     "debug",
-    "uglify:<%= globalConfig.moduleName %>",
-    "typedoc:<%= globalConfig.moduleName %>"
+    "uglify:" + globalConfig.moduleName,
+    "typedoc:" + globalConfig.moduleName
   ]);
 
   grunt.registerTask("default", [
