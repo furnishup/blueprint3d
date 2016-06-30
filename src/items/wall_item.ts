@@ -11,7 +11,7 @@ namespace BP3D.Items {
    */
   export abstract class WallItem extends Item {
     /** The currently applied wall edge. */
-    protected currentWallEdge = null;
+    protected currentWallEdge: Model.HalfEdge = null;
     /* TODO:
        This caused a huge headache.
        HalfEdges get destroyed/created every time floorplan is edited.
@@ -62,7 +62,7 @@ namespace BP3D.Items {
       var itemX = this.position.x;
       var itemZ = this.position.z;
 
-      Utils.forEach(wallEdges, function (edge) {
+      wallEdges.forEach((edge: Model.HalfEdge) => {
         var distance = edge.distanceTo(itemX, itemZ);
         if (minDistance === null || distance < minDistance) {
           minDistance = distance;

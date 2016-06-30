@@ -19,19 +19,19 @@ module BP3D.Model {
     public prev: HalfEdge;
 
     /** */
-    private offset: number;
+    public offset: number;
 
     /** */
-    private height: number;
+    public height: number;
 
     /** used for intersection testing... not convinced this belongs here */
     public plane: THREE.Mesh = null;
 
     /** transform from world coords to wall planes (z=0) */
-    private interiorTransform = new THREE.Matrix4();
+    public interiorTransform = new THREE.Matrix4();
 
     /** transform from world coords to wall planes (z=0) */
-    private invInteriorTransform = new THREE.Matrix4();
+    public invInteriorTransform = new THREE.Matrix4();
 
     /** transform from world coords to wall planes (z=0) */
     private exteriorTransform = new THREE.Matrix4();
@@ -147,7 +147,12 @@ module BP3D.Model {
       invTransform.getInverse(transform);
     }
 
-    private distanceTo(x: number, y: number) {
+    /** Gets the distance from specified point.
+     * @param x X coordinate of the point.
+     * @param y Y coordinate of the point.
+     * @returns The distance.
+     */
+    public distanceTo(x: number, y: number): number {
       // x, y, x1, y1, x2, y2
       return Utils.pointDistanceFromLine(x, y,
         this.interiorStart().x,

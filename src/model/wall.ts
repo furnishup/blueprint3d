@@ -34,10 +34,10 @@ module BP3D.Model {
     private orphan = false;
 
     /** Items attached to this wall */
-    private items: Items.Item[] = [];
+    public items: Items.Item[] = [];
 
     /** */
-    private onItems: Items.Item[] = [];
+    public onItems: Items.Item[] = [];
 
     /** The front-side texture. */
     public frontTexture = defaultWallTexture;
@@ -117,7 +117,7 @@ module BP3D.Model {
       this.moved_callbacks.fire();
     }
 
-    public fireRedrawpublic() {
+    public fireRedraw() {
       if (this.frontEdge) {
         this.frontEdge.redrawCallbacks.fire();
       }
