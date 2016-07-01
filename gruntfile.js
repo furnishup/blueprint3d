@@ -2,74 +2,66 @@ module.exports = function (grunt) {
 
   require("matchdep").filterAll("grunt-*").forEach(grunt.loadNpmTasks);
 
-  var tSources = ["src/*.ts", "src/*/*.ts"]
-
   var globalConfig = {
     moduleName: "blueprint3d",
-    docDir: "doc",
+    sources: ["src/*.ts", "src/*/*.ts"],
     outDir: "dist",
-    exampleDir: "example/js/",
-    sources: tSources
+    docDir: "doc",
+    exampleDir: "example/js/"
   };
 
-  grunt.initConfig({
+  var configuration = {
+    clean: [globalConfig.outDir, globalConfig.docDir]
+  };
 
-    globalConfig: globalConfig,
+  configuration.copy = {};
+  configuration.copy[globalConfig.moduleName] = {
+    src: globalConfig.outDir + "/" + globalConfig.moduleName + ".js",
+    dest: globalConfig.exampleDir + "/" + globalConfig.moduleName + ".js"
+  };
 
-    clean: [globalConfig.outDir, globalConfig.docDir],
-
-    copy: {
-      blueprint3d: {
-        src: globalConfig.outDir + "/" + globalConfig.moduleName + ".js",
-        dest: globalConfig.exampleDir + "/" + globalConfig.moduleName + ".js"
-      }
-    },
-
-    typescript: {
-      options: {
-        target: "es5",
-        declaration: true,
-        sourceMap: true,
-        removeComments: false
-      },
-
-      blueprint3d: {
-        src: globalConfig.sources,
-        dest: globalConfig.outDir + "/" + globalConfig.moduleName + ".js"
-      }
-    },
-
-   typedoc: {
-      options: {
-        name: globalConfig.moduleName,
-        target: "es5",
-        mode: "file",
-        readme: "none"
-      },
-
-      blueprint3d: {
-        options: {
-          out: globalConfig.docDir + "/" + globalConfig.moduleName,
-          name: globalConfig.moduleName
-        },
-        src: tSources
-      }
-    },
-
-    uglify: {
-      options: {
-        mangle: true,
-        beautify: false,
-        sourceMap: true
-      },
-
-      blueprint3d: {
-        files: {
-          "dist/blueprint3d.min.js": globalConfig.outDir + "/" + globalConfig.moduleName +".js"
-        }
-      }
+  configuration.typescript = {
+    options: {
+      target: "es5",
+      declaration: true,
+      sourceMap: true,
+      removeComments: false
     }
-  });
+  };
+  configuration.typescript[globalConfig.moduleName] = {
+    src: globalConfig.sources,
+    dest: globalConfig.outDir + "/" + globalConfig.moduleName + ".js"
+  };
+
+  configuration.typedoc = {
+    options: {
+      name: globalConfig.moduleName,
+      target: "es5",
+      mode: "file",
+      readme: "none"
+    }
+  }
+  configuration.typedoc[globalConfig.moduleName] = {
+    options: {
+      out: globalConfig.docDir + "/" + globalConfig.moduleName,
+      name: globalConfig.moduleName
+    },
+    src: globalConfig.sources
+  };
+
+  configuration.uglify = {
+    options: {
+      mangle: true,
+      beautify: false,
+      sourceMap: true
+    }
+  }
+  configuration.uglify[globalConfig.moduleName] = {
+    files: {}
+  }
+  configuration.uglify[globalConfig.moduleName].files["dist/" + globalConfig.moduleName + ".min.js"] = globalConfig.outDir + "/" + globalConfig.moduleName +".js";
+
+  grunt.initConfig(configuration);
 
   grunt.registerTask("debug", [
     "typescript:" + globalConfig.moduleName
@@ -87,6 +79,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask("default", [
-    "debug"
+    "debug",
+    "example"
   ]);
 };

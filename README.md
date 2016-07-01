@@ -26,7 +26,6 @@ To get started, clone the repository and ensure you npm installed, then run:
 
     npm install / update
     grunt
-    grunt example
 
 The latter command generates `example/js/blueprint3d.js` from `src`.
 
