@@ -6,3 +6,4 @@ build
 *.sublime-project
 *.log
 
+example/js/blueprint3d.js
