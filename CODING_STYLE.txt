@@ -1,3 +1,9 @@
+In general, follow the Google Javascript Style recommendations:
+
+https://google.github.io/styleguide/javascriptguide.xml#JavaScript_Style_Rules
+
+Highlights:
+
 - use (two) spaces, not Tabs
 
 - use lowercase for all TS files, use camelcase for the related TS types
