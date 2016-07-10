@@ -39,13 +39,16 @@ module BP3D.Model {
     /** */
     public roomLoadedCallbacks = $.Callbacks();
 
-    /** */
+    /** 
+    * Floor textures are owned by the floorplan, because room objects are 
+    * destroyed and created each time we change the floorplan.
+    * floorTextures is a map of room UUIDs (string) to a object with
+    * url and scale attributes.
+    */
     private floorTextures = {};
 
     /** Constructs a floorplan. */
     constructor() {
-      // Track floor textures here, since rooms are destroyed and
-      // created each time we change the floorplan.
     }
 
     // hack
@@ -135,7 +138,9 @@ module BP3D.Model {
     public newCorner(x: number, y: number, id?: string): Corner {
       var corner = new Corner(this, x, y, id);
       this.corners.push(corner);
-      corner.fireOnDelete(this.removeCorner);
+      corner.fireOnDelete(() => {
+        this.removeCorner;
+      });
       this.new_corner_callbacks.fire(corner);
       return corner;
     }
@@ -166,7 +171,6 @@ module BP3D.Model {
       tolerance = tolerance || defaultFloorPlanTolerance;
       for (var i = 0; i < this.corners.length; i++) {
         if (this.corners[i].distanceFrom(x, y) < tolerance) {
-          //console.log("got corner")
           return this.corners[i];
         }
       }

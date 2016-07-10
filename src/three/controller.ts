@@ -313,11 +313,6 @@ module BP3D.Three {
 
       // check objects
       var items = model.scene.getItems();
-      /*items = Core.Utils.removeIf(items, function(item) {
-        var remove = item.fixed && !three.options().canMoveFixedItems;
-        //alert("remove!");
-        return remove;
-      });*/
       var intersects = scope.getIntersections(
         mouse,
         items,

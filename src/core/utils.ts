@@ -29,7 +29,7 @@ module BP3D.Core {
      * @returns The point.
      */
     static closestPointOnLine(x: number, y: number, x1: number, y1: number, x2: number, y2: number): { x: number, y: number } {
-      // thanks, http://stackoverflow.com/a/6853926
+      // Inspired by: http://stackoverflow.com/a/6853926
       var tA = x - x1;
       var tB = y - y1;
       var tC = x2 - x1;
@@ -139,10 +139,8 @@ module BP3D.Core {
           .substring(1);
       }
 
-      // return function () {
-        return tS4() + tS4() + '-' + tS4() + '-' + tS4() + '-' +
-          tS4() + '-' + tS4() + tS4() + tS4();
-      // };
+      return tS4() + tS4() + '-' + tS4() + '-' + tS4() + '-' +
+        tS4() + '-' + tS4() + tS4() + tS4();
     }
 
     /** both arguments are arrays of corners with x,y attributes */
@@ -248,8 +246,6 @@ module BP3D.Core {
         }
       }
       // odd intersections means the point is in the polygon
-      //console.log("intersects: " + intersects);
-
       return ((tIntersects % 2) == 1);
     }
 
@@ -258,14 +254,7 @@ module BP3D.Core {
       startX = startX || 0;
       startY = startY || 0;
 
-      //console.log("checking polygon in polygon");
-      outsideCorners.forEach((corner) => {
-        console.log(corner.x + ", " + corner.y)
-      });
-
       for (var tI = 0; tI < insideCorners.length; tI++) {
-        //console.log("checking point: " + insideCorners[i].x + ", " + insideCorners[i].y);
-
         if (!Utils.pointInPolygon(
           insideCorners[tI].x, insideCorners[tI].y,
           outsideCorners,
@@ -348,10 +337,11 @@ module BP3D.Core {
       return tResults;
     }
 
-    static removeValue(arr, value) {
-      for (var tI = arr.length - 1; tI >= 0; tI--) {
-        if (arr[tI] === value) {
-          arr.splice(tI, 1);
+    /** Remove value from array, if it is present */
+    static removeValue(array, value) {
+      for (var tI = array.length - 1; tI >= 0; tI--) {
+        if (array[tI] === value) {
+          array.splice(tI, 1);
         }
       }
     }
@@ -366,7 +356,7 @@ module BP3D.Core {
       return false;
     }
 
-    /** Subtracts the elements in subArray from array */s
+    /** Subtracts the elements in subArray from array */
     static subtract(array, subArray) {
       return Utils.removeIf(array, function (el) {
         return Utils.hasValue(subArray, el);
