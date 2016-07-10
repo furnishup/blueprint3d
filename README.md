@@ -22,9 +22,9 @@ This is a customizable application built on three.js that allows users to design
 
 ## Developing and Running Locally
 
-To get started, clone the repository and ensure you npm installed, then run:
+To get started, clone the repository and ensure you npm >= 3 and grunt installed, then run:
 
-    npm install / update
+    npm install
     grunt
 
 The latter command generates `example/js/blueprint3d.js` from `src`.
@@ -69,7 +69,7 @@ Please contact us if you are interested in contributing.
 
 The `src` directory contains the core of the project. Here is a description of the various sub-directories:
 
-`core` - basic stuff like logging, plus some shared functions that are mostly deprecated in favor of functionality provided by various npm modules
+`core` - Basic utilities such as logging and generic functions
 
 `floorplanner` - 2D view/controller for editing the floorplan
 
